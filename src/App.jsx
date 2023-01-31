@@ -1,12 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Canvas } from '@react-three/fiber';
 
+// Room elements
 import Floor from './components/room_elements/Floor'
+
+// Furniture
 import Coach from './components/furniture/Coach'
 import Test2x1 from './components/furniture/Test2x1'
 import Test2x2 from './components/furniture/Test2x2'
 import Plant from './components/furniture/Plant'
 import Vending_machine from './components/furniture/Vending_machine'
+
+// Selectors
 import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSelector1x1'
 import FurnitureSelector2x1 from './components/furniture_selectors/FurnitureSelector2x1'
 import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSelector2x2'
