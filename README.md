@@ -5,5 +5,5 @@ A simple application for designing a room. It is highly inspired by Animal Cross
 
 The room is grid-based in a square of 7x7 witch can be customizable with furniture with the sizes of 1x1, 2x1 and 2x2.
 
-Right now, the project is in barebones. This is just a concept and a way for me to train with React and Three js
+Right now, the project is in barebones. This is just a concept and a way for me to learn and get better with React and Three js
 
