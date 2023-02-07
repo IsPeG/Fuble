@@ -4,7 +4,9 @@
     box-sizing: border-box;
     font-family: "Varela Round", sans-serif;
     font-size: bold;
-  }
+
+    cursor: url(dot.png) 8 7, auto;
+}
   
 html,
 body,
