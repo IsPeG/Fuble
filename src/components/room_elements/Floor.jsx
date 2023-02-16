@@ -7,7 +7,7 @@ import { RepeatWrapping, sRGBEncoding, NearestFilter, LinearMipMapLinearFilter, 
 function Texture () {
     const texture = useLoader(TextureLoader, '/textures/wood.png')
     
-    texture.repeat.set(7,7);
+    texture.repeat.set(8,8);
     texture.wrapS = texture.wrapT = RepeatWrapping; // tileable image
     texture.encoding = sRGBEncoding // image encoding for better rendering
     texture.magFilter = NearestFilter; // pixel perfect

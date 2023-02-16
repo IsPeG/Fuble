@@ -18,10 +18,11 @@ import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSele
 
 import "./styles.css"
 
-const south = -Math.PI / 1
-const west = Math.PI / 2
+// Variables
+const south = -Math.PI / 1 //-3.14...
+const west = Math.PI / 2 //1.57...
 const north = 0
-const east = -Math.PI / 2
+const east = -Math.PI / 2 //-1.57...
 
 const roomDataExample = [
   {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0]},
@@ -35,7 +36,7 @@ function App() {
 
   const [roomData, setRoomData] = useState(roomDataExample)
   const [placingFurniture, setPlacingFurniture] = useState(false)
-  const [placingFurnitureSize, setPlacingFurnitureSize] = useState('2x1')
+  const [placingFurnitureSize, setPlacingFurnitureSize] = useState('2x2')
   const setFurnitureHelperRef = useRef()
 
   const directions = [north, west, south, east]
@@ -78,31 +79,91 @@ function App() {
     const helperPosition = setFurnitureHelperRef.current.position;
     setRoomData([...roomData, {model: Test2x1, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, directions[placingFurnitureDirection], 0]}]);
     setPlacingFurniture(false);
-    placingFurnitureDirection = 0
+    placingFurnitureDirection = 0;
   }
 
   const rotateFurnitureButtonHandler = (rotateDirection) => {
+
+    const furnitureHelperPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
+    console.log('-r-' + furnitureHelperPosition)
+
     if (rotateDirection === 'left') {
       placingFurnitureDirection++
       if (placingFurnitureDirection >= 4) placingFurnitureDirection = 0
     } else {
       placingFurnitureDirection--
       if (placingFurnitureDirection < 0) placingFurnitureDirection = 3
-    }   
+    }
 
+    if (placingFurnitureSize == '2x2') {
+      switch (furnitureHelperPosition[2]) {
+        case south: setFurnitureHelperRef.current.position.z -= 1; break;
+        case west: setFurnitureHelperRef.current.position.x += 1; break;
+        case north: setFurnitureHelperRef.current.position.z += 1; break;
+        case east: setFurnitureHelperRef.current.position.x -= 1; break;
+      }
+    }
+
+    if (placingFurnitureSize == '2x1') {
+      
+      let blockedRotation = false
+
+      if (furnitureHelperPosition[1] == -3 && placingFurnitureDirection == 3 ) { //top right
+        placingFurnitureDirection = 2;
+        setFurnitureHelperRef.current.position.x -= 1;
+        blockedRotation = true;
+      }
+  
+      if (furnitureHelperPosition[0] == -3 && placingFurnitureDirection == 0 && !blockedRotation) { //top left
+        placingFurnitureDirection = 3;
+        setFurnitureHelperRef.current.position.z += 1;
+        blockedRotation = true;
+      } 
+  
+      if (furnitureHelperPosition[0] == 4 && placingFurnitureDirection == 2 && !blockedRotation) { //bottom right
+        placingFurnitureDirection = 1;
+        setFurnitureHelperRef.current.position.z -= 1;
+        blockedRotation = true;
+      } 
+  
+      if (furnitureHelperPosition[1] == 4 && placingFurnitureDirection == 1 && !blockedRotation) { //bottom left
+        placingFurnitureDirection = 0;
+        setFurnitureHelperRef.current.position.x += 1;
+      } 
+    }
+    
     setFurnitureHelperRef.current.rotation.y = directions[placingFurnitureDirection]
   }
 
   const furnitureHelperMoveButtonHandler = (move) => {
 
-    const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z]
-    let invalidMove = false
+    const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
+    let invalidMove = false;
+
+    console.log(move)
+    console.log('from ' + lastPosition + ' - ' + setFurnitureHelperRef.current.rotation.y)
 
     switch (move) {
-      case 'left':  if (lastPosition[0]-1 == -4) invalidMove = true; break;
-      case 'right': if (lastPosition[0]+1 == 5) invalidMove = true; break;
-      case 'up':    if (lastPosition[1]-1 == -4) invalidMove = true; break;
-      case 'down':  if (lastPosition[1]+1 == 5) invalidMove = true; break;
+      case 'left':
+        if (lastPosition[0]-1 == -4) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && (lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0])) invalidMove = true;
+        break;
+      case 'right':
+        if (lastPosition[0]+1 == 5) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && (lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2])) invalidMove = true;
+        break;
+      case 'up':
+        if (lastPosition[1]-1 == -4) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && (lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3])) invalidMove = true;
+        break;
+      case 'down':
+        if (lastPosition[1]+1 == 5) invalidMove = true; 
+        if (placingFurnitureSize == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && (lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1])) invalidMove = true;
+        break;
     }
 
     if (invalidMove) return;
@@ -113,6 +174,9 @@ function App() {
       case 'up':    setFurnitureHelperRef.current.position.z -= 1; break;
       case 'down':  setFurnitureHelperRef.current.position.z += 1; break;
     }
+
+    console.log('to ' + [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z] + ' - ' + setFurnitureHelperRef.current.rotation.y)
+
   }
 
   return (
