@@ -19,8 +19,8 @@ function Texture () {
 }
 
 const Floor = () => (
-  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -.13, 0]} receiveShadow>
-    <boxBufferGeometry attach="geometry" args={[7, 7, .25]} />
+  <mesh rotation={[-Math.PI / 2, 0, 0]} position={[.5, -.13, .5]} receiveShadow>
+    <boxBufferGeometry attach="geometry" args={[8, 8, .25]} />
     <Texture />
   </mesh>
 );

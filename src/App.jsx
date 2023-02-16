@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Canvas } from '@react-three/fiber';
 
 // Room elements
@@ -41,6 +41,22 @@ function App() {
   const directions = [north, west, south, east]
   var placingFurnitureDirection = 0
 
+  useEffect(() => {
+    const keyHandler = (e) => {
+      switch (e.key) {
+        case 'ArrowRight': furnitureHelperMoveButtonHandler('right'); break;
+        case 'ArrowLeft': furnitureHelperMoveButtonHandler('left'); break;
+        case 'ArrowUp': furnitureHelperMoveButtonHandler('up'); break;
+        case 'ArrowDown': furnitureHelperMoveButtonHandler('down'); break;
+        case 'r': rotateFurnitureButtonHandler('right'); break;
+      
+        default: break;
+      }
+    }
+    window.addEventListener('keydown', keyHandler, false)
+  }, [])
+  
+
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
 
     const selectorSwitch = () => {
@@ -78,6 +94,19 @@ function App() {
   }
 
   const furnitureHelperMoveButtonHandler = (move) => {
+
+    const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z]
+    let invalidMove = false
+
+    switch (move) {
+      case 'left':  if (lastPosition[0]-1 == -4) invalidMove = true; break;
+      case 'right': if (lastPosition[0]+1 == 5) invalidMove = true; break;
+      case 'up':    if (lastPosition[1]-1 == -4) invalidMove = true; break;
+      case 'down':  if (lastPosition[1]+1 == 5) invalidMove = true; break;
+    }
+
+    if (invalidMove) return;
+
     switch (move) {
       case 'left':  setFurnitureHelperRef.current.position.x -= 1; break;
       case 'right': setFurnitureHelperRef.current.position.x += 1; break;
@@ -106,7 +135,7 @@ function App() {
         
       </div>
       
-      <Canvas orthographic camera={{ position: [8,8,8], zoom: 100 }} style={{ background: "#0a0a0a" }} dpr={[1, 2]}>
+      <Canvas orthographic camera={{ position: [7,7,7], zoom: 100 }} style={{ background: "#0a0a0a" }} dpr={[1, 2]}>
         <group>
           {roomData.map((furniture, key) => <furniture.model key={key} position={furniture.position} rotation={furniture.rotation} />)}
         </group>
