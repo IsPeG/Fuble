@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 
 // Room elements
 import Floor from './components/room_elements/Floor'
@@ -35,11 +35,14 @@ const roomDataExample = [
 function App() {
 
   const [roomData, setRoomData] = useState(roomDataExample)
+  const [cameraIndex, setCameraIndex] = useState(0)
   const [placingFurniture, setPlacingFurniture] = useState(false)
   const [placingFurnitureSize, setPlacingFurnitureSize] = useState('2x2')
   const setFurnitureHelperRef = useRef()
 
   const directions = [north, west, south, east]
+  const cameraPositions = [[7,7,7], [6.5,6.5,-5.5], [-7,8,-7], [-5.5,6.5,6.5]]
+  const lookAtCameraPositions = [[0,0,0], [.5,.5,.5], [-.5,1.5,-.5], [.5,.5,.5]]
   var placingFurnitureDirection = 0
 
   useEffect(() => {
@@ -50,20 +53,19 @@ function App() {
         case 'ArrowUp': furnitureHelperMoveButtonHandler('up'); break;
         case 'ArrowDown': furnitureHelperMoveButtonHandler('down'); break;
         case 'r': rotateFurnitureButtonHandler('right'); break;
-      
+
         default: break;
       }
     }
     window.addEventListener('keydown', keyHandler, false)
   }, [])
-  
 
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
 
     const selectorSwitch = () => {
       switch(placingFurnitureSize) {
         case '1x1': return <FurnitureSelector1x1 />;
-        case '2x1': return <FurnitureSelector2x1 />; 
+        case '2x1': return <FurnitureSelector2x1 />;
         case '2x2': return <FurnitureSelector2x2 />;
       }
     }
@@ -77,7 +79,7 @@ function App() {
 
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
-    setRoomData([...roomData, {model: Test2x1, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, directions[placingFurnitureDirection], 0]}]);
+    setRoomData([...roomData, {model: Test2x2, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
     setPlacingFurniture(false);
     placingFurnitureDirection = 0;
   }
@@ -105,7 +107,7 @@ function App() {
     }
 
     if (placingFurnitureSize == '2x1') {
-      
+
       let blockedRotation = false
 
       if (furnitureHelperPosition[1] == -3 && placingFurnitureDirection == 3 ) { //top right
@@ -113,26 +115,42 @@ function App() {
         setFurnitureHelperRef.current.position.x -= 1;
         blockedRotation = true;
       }
-  
+
       if (furnitureHelperPosition[0] == -3 && placingFurnitureDirection == 0 && !blockedRotation) { //top left
         placingFurnitureDirection = 3;
         setFurnitureHelperRef.current.position.z += 1;
         blockedRotation = true;
-      } 
-  
+      }
+
       if (furnitureHelperPosition[0] == 4 && placingFurnitureDirection == 2 && !blockedRotation) { //bottom right
         placingFurnitureDirection = 1;
         setFurnitureHelperRef.current.position.z -= 1;
         blockedRotation = true;
-      } 
-  
+      }
+
       if (furnitureHelperPosition[1] == 4 && placingFurnitureDirection == 1 && !blockedRotation) { //bottom left
         placingFurnitureDirection = 0;
         setFurnitureHelperRef.current.position.x += 1;
-      } 
+      }
+    }
+
+    setFurnitureHelperRef.current.rotation.y = directions[placingFurnitureDirection]
+  }
+
+  const changeCameraPosition = (move) => {
+
+    let index = cameraIndex
+
+    if (move === 'right') {
+      index++
+      if (index >= 4) index = 0
+    } else if (move === 'left') {
+      index--
+      if (index < 0) index = 3
     }
     
-    setFurnitureHelperRef.current.rotation.y = directions[placingFurnitureDirection]
+    setCameraIndex(index)
+
   }
 
   const furnitureHelperMoveButtonHandler = (move) => {
@@ -160,7 +178,7 @@ function App() {
         if (placingFurnitureSize == '2x2' && (lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3])) invalidMove = true;
         break;
       case 'down':
-        if (lastPosition[1]+1 == 5) invalidMove = true; 
+        if (lastPosition[1]+1 == 5) invalidMove = true;
         if (placingFurnitureSize == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
         if (placingFurnitureSize == '2x2' && (lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1])) invalidMove = true;
         break;
@@ -179,12 +197,22 @@ function App() {
 
   }
 
+  function CameraRig({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) {
+    useFrame((state) => {
+      state.camera.position.lerp({ x, y, z }, 0.05)
+      state.camera.lookAt(x2, y2, z2)
+      state.camera.updateProjectionMatrix()
+    })
+  }
+
   return (
     <>
       <div className="buttonsContainer">
-        <button className="button" onClick={() => setPlacingFurniture(!placingFurniture)}>Add furniture</button>
+        <button className="button" onClick={(e) => setPlacingFurniture(!placingFurniture, e)}>Add furniture</button>
+        <button className="button" onClick={(e) => changeCameraPosition('left', e)}>Camera left</button>
+        <button className="button" onClick={(e) => changeCameraPosition('right', e)}>Camera right</button>
 
-        {placingFurniture ? 
+        {placingFurniture ?
           <div className="movesContainer">
             <button onClick={(e) => furnitureHelperMoveButtonHandler('left', e)}>ᐊ</button>
             <button onClick={(e) => furnitureHelperMoveButtonHandler('right', e)}>ᐅ</button>
@@ -196,19 +224,24 @@ function App() {
           </div>
           : null
         }
-        
+
       </div>
-      
-      <Canvas orthographic camera={{ position: [7,7,7], zoom: 100 }} style={{ background: "#0a0a0a" }} dpr={[1, 2]}>
+
+      <Canvas orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
+
+        <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
+
         <group>
           {roomData.map((furniture, key) => <furniture.model key={key} position={furniture.position} rotation={furniture.rotation} />)}
         </group>
 
         <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
+
         <spotLight angle={30} intensity={2} position={[0,5,0]} color={'#ffd187'} distance={40} decay={10} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
         <ambientLight intensity={0.1} />
+
         <Floor />
-        
+
         {/* <gridHelper args={[7, 7, "blue", "blue"]} /> */}
       </Canvas>
     </>
