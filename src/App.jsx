@@ -19,17 +19,17 @@ import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSele
 import "./styles.css"
 
 // Variables
-const south = -Math.PI / 1 //-3.14...
-const west = Math.PI / 2 //1.57...
-const north = 0
-const east = -Math.PI / 2 //-1.57...
+const south = -Math.PI / 1 //-3.14... down
+const west = Math.PI / 2 //1.57... left
+const north = 0 // up
+const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0]},
-  {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0]},
-  {model: Plant, position: [-3,0,3], rotation: [0, east, 0]},
-  {model: Coach, position: [1,0,0], rotation: [0, east, 0]},
-  {model: Coach, position: [0,0,-1], rotation: [0, north, 0]},
+  // {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0]},
+  // {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0]},
+  // {model: Plant, position: [-3,0,3], rotation: [0, east, 0]},
+  // {model: Coach, position: [1,0,0], rotation: [0, east, 0]},
+  // {model: Coach, position: [0,0,-1], rotation: [0, north, 0]},
 ]
 
 function App() {
@@ -83,15 +83,94 @@ function App() {
 
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
-    setRoomData([...roomData, {model: Test2x2, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
-    setPlacingFurniture(false);
-    placingFurnitureDirection = 0;
+    if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
+      setRoomData([...roomData, {model: Test2x2, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
+      setPlacingFurniture(false);
+      placingFurnitureDirection = 0;
+    } else {
+      console.log('Furniture can\'t be placed in this position')
+    }
+  }
+
+  const checkIfFurnitureCanBePlaced = (helper) => {
+
+    const checkSpaces2x2Item = (element) => {
+      let elementSpaces = null
+
+      let rotation = element.rotation[1];
+      let position = element.position;
+
+      if (rotation == undefined) { // the furniture helper doesn't have rotation as an array, but as an euler
+        rotation = element.rotation.y
+      } else {
+        position = {x: element.position[0], y: element.position[1], z: element.position[2]};
+      }
+
+      switch (rotation) {
+          case north:
+            elementSpaces = [
+              [position.x-1, position.y, position.z],
+              [position.x, position.y, position.z+1],
+              [position.x-1, position.y, position.z+1],
+              [position.x, position.y, position.z],
+            ];
+            break;
+          case east:
+            elementSpaces = [
+              [position.x, position.y, position.z],
+              [position.x-1, position.y, position.z-1],
+              [position.x-1, position.y, position.z],
+              [position.x, position.y, position.z-1],
+            ];
+            break;
+          case south:
+            elementSpaces = [
+              [position.x, position.y, position.z-1],
+              [position.x+1, position.y, position.z],
+              [position.x, position.y, position.z],
+              [position.x+1, position.y, position.z-1],
+            ];
+            break;
+          case west:
+            elementSpaces = [
+              [position.x, position.y, position.z],
+              [position.x+1, position.y, position.z+1],
+              [position.x, position.y, position.z+1],
+              [position.x+1, position.y, position.z],
+            ];
+            break;
+      }
+      return elementSpaces;
+    } // checkIn2x2 end
+
+    let canBePlaced = true
+
+    switch (placingFurnitureSize) {
+      case '2x2':
+        const helperSpaces = checkSpaces2x2Item(helper);
+        roomData.forEach((furElement) => {
+          const furElementSpaces = checkSpaces2x2Item(furElement);
+          console.log('helperSpaces: ' + JSON.stringify(helperSpaces))
+          console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
+          for (let i = 0; i < helperSpaces.length; i++) {
+            for (let j = 0; j < furElementSpaces.length; j++) {
+              // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
+              if (helperSpaces[i].toString() == furElementSpaces[j].toString()) {
+                canBePlaced = false;
+                return;
+              }              
+            }
+          }
+        });
+        break;
+    }
+    
+    return canBePlaced;
   }
 
   const rotateFurnitureButtonHandler = (rotateDirection) => {
 
     const furnitureHelperPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
-    console.log('-r-' + furnitureHelperPosition)
 
     if (rotateDirection === 'left') {
       placingFurnitureDirection++
@@ -204,14 +283,7 @@ function App() {
     const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
     let invalidMove = false;
 
-    console.log(move)
-    console.log('from ' + lastPosition + ' - ' + setFurnitureHelperRef.current.rotation.y)
-
-    if (cameraIndex > 0) {
-      move = changeMoveFromCameraIndex(cameraIndex, move)
-    }
-
-    console.log('camera index: ' + cameraIndex)
+    if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move)
 
     switch (move) {
       case 'left':
@@ -244,8 +316,6 @@ function App() {
       case 'up':    setFurnitureHelperRef.current.position.z -= 1; break;
       case 'down':  setFurnitureHelperRef.current.position.z += 1; break;
     }
-
-    console.log('to ' + [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z] + ' - ' + setFurnitureHelperRef.current.rotation.y)
 
   }
 
@@ -294,7 +364,7 @@ function App() {
 
         <Floor />
 
-        {/* <gridHelper args={[7, 7, "blue", "blue"]} /> */}
+        <gridHelper args={[9, 9, "blue", "blue"]} />
       </Canvas>
     </>
   );
