@@ -36,6 +36,7 @@ function App() {
 
   const [roomData, setRoomData] = useState(roomDataExample)
   const [cameraIndex, setCameraIndex] = useState(0)
+  const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
   const [placingFurnitureSize, setPlacingFurnitureSize] = useState('2x2')
   const setFurnitureHelperRef = useRef()
@@ -45,7 +46,10 @@ function App() {
   const lookAtCameraPositions = [[0,0,0], [.5,.5,.5], [-.5,1.5,-.5], [.5,.5,.5]]
   var placingFurnitureDirection = 0
 
+  cameraIndexRef.current = cameraIndex
+
   useEffect(() => {
+    
     const keyHandler = (e) => {
       switch (e.key) {
         case 'ArrowRight': furnitureHelperMoveButtonHandler('right'); break;
@@ -57,7 +61,7 @@ function App() {
         default: break;
       }
     }
-    window.addEventListener('keydown', keyHandler, false)
+    window.addEventListener('keydown', keyHandler)
   }, [])
 
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
@@ -155,11 +159,59 @@ function App() {
 
   const furnitureHelperMoveButtonHandler = (move) => {
 
+    const changeMoveFromCameraIndex = (cameraIndex, move) => {
+
+      //  left /  \ up
+      //  down \  / right
+
+      //when index 0 = moves normal
+      //when index 1 (camera right 1) = up > right, right > down, down > left, left > up
+      //when index 2 (camera right 2) = up > down, right > left, down > up, left > right
+      //when index 3 (camera right 3) = up > left, right > up, down > right, left, down
+
+      let newMove = move;
+
+      switch (cameraIndex) {
+        case 1: switch (move) {
+          case 'up': newMove = 'left'; break;
+          case 'right': newMove = 'up'; break;
+          case 'down': newMove = 'right'; break;
+          case 'left': newMove = 'down'; break;
+        }; break;
+        
+        case 2: switch (move) {
+          case 'up': newMove = 'down'; break;
+          case 'right': newMove = 'left'; break;
+          case 'down': newMove = 'up'; break;
+          case 'left': newMove = 'right'; break;
+        }; break;
+
+        case 3: switch (move) {
+          case 'up': newMove = 'right'; break;
+          case 'right': newMove = 'down'; break;
+          case 'down': newMove = 'left'; break;
+          case 'left': newMove = 'up'; break;
+        }; break;
+
+        default: break;
+
+      }
+
+      return newMove;
+
+    }
+    const cameraIndex = cameraIndexRef.current
     const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
     let invalidMove = false;
 
     console.log(move)
     console.log('from ' + lastPosition + ' - ' + setFurnitureHelperRef.current.rotation.y)
+
+    if (cameraIndex > 0) {
+      move = changeMoveFromCameraIndex(cameraIndex, move)
+    }
+
+    console.log('camera index: ' + cameraIndex)
 
     switch (move) {
       case 'left':
