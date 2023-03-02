@@ -25,11 +25,11 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  // {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0]},
-  // {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0]},
-  // {model: Plant, position: [-3,0,3], rotation: [0, east, 0]},
-  // {model: Coach, position: [1,0,0], rotation: [0, east, 0]},
-  // {model: Coach, position: [0,0,-1], rotation: [0, north, 0]},
+  {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
+  {model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
+  {model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
 ]
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
   const [cameraIndex, setCameraIndex] = useState(0)
   const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
-  const [placingFurnitureSize, setPlacingFurnitureSize] = useState('2x2')
+  const [placingFurnitureSize, setPlacingFurnitureSize] = useState('1x1')
   const setFurnitureHelperRef = useRef()
 
   const directions = [north, west, south, east]
@@ -84,7 +84,7 @@ function App() {
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
     if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
-      setRoomData([...roomData, {model: Test2x2, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
+      setRoomData([...roomData, {model: Coach, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
       setPlacingFurniture(false);
       placingFurnitureDirection = 0;
     } else {
@@ -94,7 +94,7 @@ function App() {
 
   const checkIfFurnitureCanBePlaced = (helper) => {
 
-    const checkSpaces2x2Item = (element) => {
+    const checkSpaces2x2or2x1Item = (element, furType) => {
       let elementSpaces = null
 
       let rotation = element.rotation[1];
@@ -106,63 +106,109 @@ function App() {
         position = {x: element.position[0], y: element.position[1], z: element.position[2]};
       }
 
-      switch (rotation) {
+      if (furType == '2x2') { //2x2 furniture
+        switch (rotation) {
+        case north:
+          elementSpaces = [
+            [position.x-1, position.y, position.z],
+            [position.x, position.y, position.z+1],
+            [position.x-1, position.y, position.z+1],
+            [position.x, position.y, position.z]
+          ];
+          break;
+        case east:
+          elementSpaces = [
+            [position.x, position.y, position.z],
+            [position.x-1, position.y, position.z-1],
+            [position.x-1, position.y, position.z],
+            [position.x, position.y, position.z-1]
+          ];
+          break;
+        case south:
+          elementSpaces = [
+            [position.x, position.y, position.z-1],
+            [position.x+1, position.y, position.z],
+            [position.x, position.y, position.z],
+            [position.x+1, position.y, position.z-1]
+          ];
+          break;
+        case west:
+          elementSpaces = [
+            [position.x, position.y, position.z],
+            [position.x+1, position.y, position.z+1],
+            [position.x, position.y, position.z+1],
+            [position.x+1, position.y, position.z]
+          ];
+          break;
+        }
+      } else if ('2x1') { //2x1 furniture
+        switch (rotation) {
           case north:
             elementSpaces = [
-              [position.x-1, position.y, position.z],
-              [position.x, position.y, position.z+1],
-              [position.x-1, position.y, position.z+1],
               [position.x, position.y, position.z],
+              [position.x-1, position.y, position.z]
             ];
             break;
           case east:
             elementSpaces = [
               [position.x, position.y, position.z],
-              [position.x-1, position.y, position.z-1],
-              [position.x-1, position.y, position.z],
-              [position.x, position.y, position.z-1],
+              [position.x, position.y, position.z-1]
             ];
             break;
           case south:
             elementSpaces = [
-              [position.x, position.y, position.z-1],
-              [position.x+1, position.y, position.z],
               [position.x, position.y, position.z],
-              [position.x+1, position.y, position.z-1],
+              [position.x+1, position.y, position.z]
             ];
             break;
           case west:
             elementSpaces = [
               [position.x, position.y, position.z],
-              [position.x+1, position.y, position.z+1],
-              [position.x, position.y, position.z+1],
-              [position.x+1, position.y, position.z],
+              [position.x, position.y, position.z+1]
             ];
             break;
+          }
+      } else {
+        console.log('error')
       }
+      
       return elementSpaces;
-    } // checkIn2x2 end
+    } // checkSpaces2x2or2x1Item end
 
     let canBePlaced = true
 
-    switch (placingFurnitureSize) {
-      case '2x2':
-        const helperSpaces = checkSpaces2x2Item(helper);
-        roomData.forEach((furElement) => {
-          const furElementSpaces = checkSpaces2x2Item(furElement);
-          console.log('helperSpaces: ' + JSON.stringify(helperSpaces))
-          console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
-          for (let i = 0; i < helperSpaces.length; i++) {
-            for (let j = 0; j < furElementSpaces.length; j++) {
-              // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
-              if (helperSpaces[i].toString() == furElementSpaces[j].toString()) {
-                canBePlaced = false;
-                return;
-              }              
-            }
+    if (placingFurnitureSize != '1x1') {
+      const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureSize);
+
+      roomData.forEach((furElement) => {
+        const furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        console.log('helperSpaces: ' + JSON.stringify(helperSpaces))
+        console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
+        for (let i = 0; i < helperSpaces.length; i++) {
+          for (let j = 0; j < furElementSpaces.length; j++) {
+            // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
+            if (helperSpaces[i].toString() == furElementSpaces[j].toString()) {
+              canBePlaced = false;
+              return;
+            }              
           }
-        });
-        break;
+        }
+      });
+    } else {
+      const helperSpace = [helper.position.x, helper.position.y, helper.position.z];
+
+      roomData.forEach((furElement) => {
+        const furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        console.log('helperSpace: ' + JSON.stringify(helperSpace))
+        console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
+        for (let i = 0; i < furElementSpaces.length; i++) {
+          // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
+          if (helperSpace.toString() == furElementSpaces[i].toString()) {
+            canBePlaced = false;
+            return;
+          }              
+        }
+      });
     }
     
     return canBePlaced;
@@ -284,27 +330,26 @@ function App() {
     let invalidMove = false;
 
     if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move)
-
     switch (move) {
       case 'left':
-        if (lastPosition[0]-1 == -4) invalidMove = true;
+        if (placingFurnitureSize == '1x1' && lastPosition[0]-1 == -4) invalidMove = true; 
         if (placingFurnitureSize == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && (lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0])) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0]))) invalidMove = true;
         break;
       case 'right':
-        if (lastPosition[0]+1 == 5) invalidMove = true;
+        if (placingFurnitureSize == '1x1' && lastPosition[0]+1 == 5) invalidMove = true;
         if (placingFurnitureSize == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && (lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2])) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2]))) invalidMove = true;
         break;
       case 'up':
-        if (lastPosition[1]-1 == -4) invalidMove = true;
+        if (placingFurnitureSize == '1x1' && lastPosition[1]-1 == -4) invalidMove = true;
         if (placingFurnitureSize == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && (lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3])) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3]))) invalidMove = true;
         break;
       case 'down':
-        if (lastPosition[1]+1 == 5) invalidMove = true;
+        if (placingFurnitureSize == '1x1' && lastPosition[1]+1 == 5) invalidMove = true;
         if (placingFurnitureSize == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && (lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1])) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1]))) invalidMove = true;
         break;
     }
 
@@ -354,7 +399,7 @@ function App() {
         <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 
         <group>
-          {roomData.map((furniture, key) => <furniture.model key={key} position={furniture.position} rotation={furniture.rotation} />)}
+          {roomData.map((furniture, key) => <furniture.model key={key} position={furniture.position} rotation={furniture.rotation} size={furniture.size} />)}
         </group>
 
         <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
@@ -364,7 +409,7 @@ function App() {
 
         <Floor />
 
-        <gridHelper args={[9, 9, "blue", "blue"]} />
+        {/* <gridHelper args={[9, 9, "blue", "blue"]} /> */}
       </Canvas>
     </>
   );
