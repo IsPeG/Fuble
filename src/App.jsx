@@ -28,6 +28,8 @@ const roomDataExample = [
   {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
   {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
   {model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
+  {model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
+  {model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
   {model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
   {model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
 ]
@@ -178,6 +180,7 @@ function App() {
     let canBePlaced = true
 
     if (placingFurnitureSize != '1x1') {
+      console.log('esto no deberia aparecer')
       const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureSize);
 
       roomData.forEach((furElement) => {
@@ -195,10 +198,16 @@ function App() {
         }
       });
     } else {
+      console.log('este si xd')
       const helperSpace = [helper.position.x, helper.position.y, helper.position.z];
 
       roomData.forEach((furElement) => {
-        const furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        let furElementSpaces = null;
+        if (furElement.size == '1x1') {
+          furElementSpaces = [furElement.position[0], furElement.position[1], furElement.position[2]];
+        } else {
+          furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        }
         console.log('helperSpace: ' + JSON.stringify(helperSpace))
         console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
         for (let i = 0; i < furElementSpaces.length; i++) {
