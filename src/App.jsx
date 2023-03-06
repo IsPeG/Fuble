@@ -16,6 +16,9 @@ import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSele
 import FurnitureSelector2x1 from './components/furniture_selectors/FurnitureSelector2x1'
 import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSelector2x2'
 
+// UI
+import FurMenu from "./components/ui/furMenu";
+
 import "./styles.css"
 
 // Variables
@@ -25,19 +28,20 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
-  {model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
-  {model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
-  {model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
-  {model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
+  {key: 1, model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 2, model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 3, model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
+  {key: 4, model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
+  {key: 5, model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
+  {key: 6, model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
+  {key: 7, model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
 ]
 
 function App() {
 
-  const [roomData, setRoomData] = useState(roomDataExample)
+  const [roomData, setRoomData] = useState([])
   const [cameraIndex, setCameraIndex] = useState(0)
+  const [furMenuOpen, setFurMenuOpen] = useState(false)
   const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
   const [placingFurnitureSize, setPlacingFurnitureSize] = useState('1x1')
@@ -51,6 +55,8 @@ function App() {
   cameraIndexRef.current = cameraIndex
 
   useEffect(() => {
+
+    setRoomData(roomDataExample)
     
     const keyHandler = (e) => {
       switch (e.key) {
@@ -59,6 +65,7 @@ function App() {
         case 'ArrowUp': furnitureHelperMoveButtonHandler('up'); break;
         case 'ArrowDown': furnitureHelperMoveButtonHandler('down'); break;
         case 'r': rotateFurnitureButtonHandler('right'); break;
+        case 'Escape': setFurMenuOpen(false); break;
 
         default: break;
       }
@@ -86,7 +93,8 @@ function App() {
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
     if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
-      setRoomData([...roomData, {model: Coach, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
+      const lastKey = roomData.slice(-1).key;
+      setRoomData([...roomData, {key: lastKey + 1, model: Coach, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
       setPlacingFurniture(false);
       placingFurnitureDirection = 0;
     } else {
@@ -373,12 +381,31 @@ function App() {
 
   }
 
-  function CameraRig({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) {
+  const CameraRig = ({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) => {
     useFrame((state) => {
       state.camera.position.lerp({ x, y, z }, 0.05)
       state.camera.lookAt(x2, y2, z2)
       state.camera.updateProjectionMatrix()
     })
+  }
+
+  const handleFurnitureClick = (e, key) => {
+    e.stopPropagation();
+    setFurMenuOpen({
+      x: e.pageX,
+      y: e.pageY,
+      key: key
+    })
+    //console.log(roomData.find((element) => element.key == key));
+  }
+
+  const generateFurMenu = () => {
+    return <FurMenu x={furMenuOpen.x} y={furMenuOpen.y} refKey={furMenuOpen.key} removeFur={removeFur} />
+  }
+
+  const removeFur = (key) => {
+    setRoomData(roomData.filter((element) => element.key != key))
+    setFurMenuOpen(false)
   }
 
   return (
@@ -400,15 +427,25 @@ function App() {
           </div>
           : null
         }
-
       </div>
+
+      { furMenuOpen ?
+        generateFurMenu()
+      : null }
 
       <Canvas orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
 
         <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 
         <group>
-          {roomData.map((furniture, key) => <furniture.model key={key} position={furniture.position} rotation={furniture.rotation} size={furniture.size} />)}
+          {roomData.map((furniture) => 
+            <furniture.model 
+            key={furniture.key} 
+            position={furniture.position} 
+            rotation={furniture.rotation} 
+            size={furniture.size}
+            onPointerDown={(e) => handleFurnitureClick(e, furniture.key)}
+          />)}
         </group>
 
         <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
