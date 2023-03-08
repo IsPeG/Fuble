@@ -1,0 +1,37 @@
+.furMenu {
+    color: #12100f;
+    position: fixed;
+    z-index: 200;
+    font-weight: bold;
+    border-radius: 1rem;
+    
+    padding-top: 0.5rem;
+    background: #dcc4a2;
+    border-radius: 1em;
+    box-shadow: 0 0 0 .4em #342613;
+    top: .5rem;
+    left: .5rem;
+    display: inline-block;
+}
+
+.furMenu > span {
+    margin: .8rem;
+    font-size: 1.03rem;
+}
+
+.furMenu > ol {
+    list-style: none;
+    margin: .5rem 0 0 0;
+    padding: .5rem .8rem;
+    border-radius: 1rem;
+    background-color: #c1ab8a;
+}
+
+.furMenu > ol > li {
+    margin: .3rem 0;
+    border-bottom: #866b54 solid .1rem;
+}
+
+.furMenu > ol > li:hover {
+    color: #866b54;
+}

@@ -2,8 +2,10 @@ import * as THREE from 'three'
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { useGLTF, useHelper } from '@react-three/drei'
 
-export default function Vending_machine(props) {
-  const { nodes, materials } = useGLTF('/models/furniture/vending_machine.gltf')
+const modelsPath = '/src/assets/models'
+
+export default function VendingMachine(props) {
+  const { nodes, materials } = useGLTF(modelsPath+'/furniture/vending_machine.gltf')
   const spotLightRef = useRef()
 
   const south = -Math.PI / 1
@@ -43,4 +45,4 @@ export default function Vending_machine(props) {
   )
 }
 
-useGLTF.preload('./models/furniture/vending_machine.gltf')
+useGLTF.preload(modelsPath+'/furniture/vending_machine.gltf')

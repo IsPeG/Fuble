@@ -9,7 +9,7 @@ import Coach from './components/furniture/Coach'
 import Test2x1 from './components/furniture/Test2x1'
 import Test2x2 from './components/furniture/Test2x2'
 import Plant from './components/furniture/Plant'
-import Vending_machine from './components/furniture/Vending_machine'
+import VendingMachine from './components/furniture/VendingMachine'
 
 // Selectors
 import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSelector1x1'
@@ -19,7 +19,7 @@ import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSele
 // UI
 import FurMenu from "./components/ui/furMenu";
 
-import "./styles.css"
+import "/src/assets/styles/global.css"
 
 // Variables
 const south = -Math.PI / 1 //-3.14... down
@@ -28,13 +28,13 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {key: 1, model: Vending_machine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {key: 2, model: Vending_machine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {key: 3, model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
-  {key: 4, model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
-  {key: 5, model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
-  {key: 6, model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
-  {key: 7, model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
+  {key: 1, name: 'Vending machine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 2, name: 'Vending machine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 3, name: 'Plant', model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
+  {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
+  {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
+  {key: 6, name: 'Coach', model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
+  {key: 7, name: 'Coach', model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
 ]
 
 function App() {
@@ -389,18 +389,19 @@ function App() {
     })
   }
 
-  const handleFurnitureClick = (e, key) => {
+  const handleFurnitureClick = (e, key, name) => {
     e.stopPropagation();
     setFurMenuOpen({
       x: e.pageX,
       y: e.pageY,
-      key: key
+      key: key,
+      furName: name.replace(/([A-Z])/g, ' $1').trim()
     })
     //console.log(roomData.find((element) => element.key == key));
   }
 
   const generateFurMenu = () => {
-    return <FurMenu x={furMenuOpen.x} y={furMenuOpen.y} refKey={furMenuOpen.key} removeFur={removeFur} />
+    return <FurMenu furName={furMenuOpen.furName} x={furMenuOpen.x} y={furMenuOpen.y} refKey={furMenuOpen.key} removeFur={removeFur} />
   }
 
   const removeFur = (key) => {
@@ -444,7 +445,7 @@ function App() {
             position={furniture.position} 
             rotation={furniture.rotation} 
             size={furniture.size}
-            onPointerDown={(e) => handleFurnitureClick(e, furniture.key)}
+            onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name)}
           />)}
         </group>
 

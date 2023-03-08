@@ -5,7 +5,7 @@ import { TextureLoader } from 'three'
 import { RepeatWrapping, sRGBEncoding, NearestFilter, LinearMipMapLinearFilter, BoxGeometry } from "three";
 
 function Texture () {
-    const texture = useLoader(TextureLoader, '/textures/wood.png')
+    const texture = useLoader(TextureLoader, '/src/assets/textures/floor/wood.png')
     
     texture.repeat.set(8,8);
     texture.wrapS = texture.wrapT = RepeatWrapping; // tileable image
