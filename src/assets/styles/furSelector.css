@@ -1,0 +1,31 @@
+.furSelector {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    max-height: 100%;
+    width: 25rem;
+    scrollbar-width: none;
+    scrollbar-color: #6e5b4a #353130;
+}
+
+/* Chrome, Edge, and Safari */
+.furSelector::-webkit-scrollbar {
+width: 16px;
+}
+
+.furSelector::-webkit-scrollbar-track {
+background: #353130;
+}
+
+.furSelector::-webkit-scrollbar-thumb {
+background-color: #171717;
+border-radius: 3px;
+}
+
+.furSelectorWrapper {
+    height: 100%;
+    z-index: 101;
+    right: 0;
+    position: fixed;
+    background-color: #353130;
+}

@@ -1,0 +1,15 @@
+.furSelectorItem {
+    margin: .7rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    background-size: cover;
+    background-color: #171717;
+    /* background-color: #00000090; */
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.furSelectorItemImage {
+    width: 4.5rem;
+    height: 4.5rem;
+}

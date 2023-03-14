@@ -20,6 +20,7 @@ import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSele
 import FurMenu from "./components/ui/furMenu";
 
 import "/src/assets/styles/global.css"
+import FurSelector from "./components/ui/FurSelector";
 
 // Variables
 const south = -Math.PI / 1 //-3.14... down
@@ -42,6 +43,7 @@ function App() {
   const [roomData, setRoomData] = useState([])
   const [cameraIndex, setCameraIndex] = useState(0)
   const [furMenuOpen, setFurMenuOpen] = useState(false)
+  const [selectingFurniture, setSelectingFurniture] = useState(false)
   const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
   const [placingFurnitureSize, setPlacingFurnitureSize] = useState('1x1')
@@ -404,15 +406,23 @@ function App() {
     return <FurMenu furName={furMenuOpen.furName} x={furMenuOpen.x} y={furMenuOpen.y} refKey={furMenuOpen.key} removeFur={removeFur} />
   }
 
+  const generateSelectingFurniture = () => {
+    return <FurSelector />
+  }
+
   const removeFur = (key) => {
     setRoomData(roomData.filter((element) => element.key != key))
     setFurMenuOpen(false)
   }
 
+  const handleAddFurnitureClick = (e) => {
+    setSelectingFurniture(true)
+  }
+
   return (
     <>
       <div className="buttonsContainer">
-        <button className="button" onClick={(e) => setPlacingFurniture(!placingFurniture, e)}>Add furniture</button>
+        <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>Add furniture</button>
         <button className="button" onClick={(e) => changeCameraPosition('left', e)}>Camera left</button>
         <button className="button" onClick={(e) => changeCameraPosition('right', e)}>Camera right</button>
 
@@ -432,6 +442,10 @@ function App() {
 
       { furMenuOpen ?
         generateFurMenu()
+      : null }
+
+      { selectingFurniture ?
+        generateSelectingFurniture()
       : null }
 
       <Canvas orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
