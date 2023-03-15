@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, extend } from '@react-three/fiber';
 
 // Room elements
 import Floor from './components/room_elements/Floor'
@@ -10,6 +10,8 @@ import Test2x1 from './components/furniture/Test2x1'
 import Test2x2 from './components/furniture/Test2x2'
 import Plant from './components/furniture/Plant'
 import VendingMachine from './components/furniture/VendingMachine'
+
+const componentsMap = {Coach, Test2x2, Test2x1, Plant, VendingMachine}
 
 // Selectors
 import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSelector1x1'
@@ -38,6 +40,8 @@ const roomDataExample = [
   {key: 7, name: 'Coach', model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
 ]
 
+import furnitureData from './furnitureData/data.json'
+
 function App() {
 
   const [roomData, setRoomData] = useState([])
@@ -46,7 +50,7 @@ function App() {
   const [selectingFurniture, setSelectingFurniture] = useState(false)
   const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
-  const [placingFurnitureSize, setPlacingFurnitureSize] = useState('1x1')
+  const [placingFurnitureData, setPlacingFurnitureData] = useState({})
   const setFurnitureHelperRef = useRef()
 
   const directions = [north, west, south, east]
@@ -75,10 +79,12 @@ function App() {
     window.addEventListener('keydown', keyHandler)
   }, [])
 
+  console.log(roomData)
+
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
 
     const selectorSwitch = () => {
-      switch(placingFurnitureSize) {
+      switch(placingFurnitureData.size) {
         case '1x1': return <FurnitureSelector1x1 />;
         case '2x1': return <FurnitureSelector2x1 />;
         case '2x2': return <FurnitureSelector2x2 />;
@@ -95,8 +101,17 @@ function App() {
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
     if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
-      const lastKey = roomData.slice(-1).key;
-      setRoomData([...roomData, {key: lastKey + 1, model: Coach, position: [helperPosition.x, 0, helperPosition.z], rotation: [0, setFurnitureHelperRef.current.rotation.y, 0]}]);
+      const lastKey = roomData.slice(-1)[0].key;
+      setRoomData([...roomData, 
+        {
+          key: lastKey + 1, 
+          model: placingFurnitureData.component, 
+          name: placingFurnitureData.name, 
+          position: [helperPosition.x, 0, helperPosition.z], 
+          rotation: [0, setFurnitureHelperRef.current.rotation.y, 0], 
+          size: placingFurnitureData.size
+        }
+      ]);
       setPlacingFurniture(false);
       placingFurnitureDirection = 0;
     } else {
@@ -106,8 +121,15 @@ function App() {
 
   const checkIfFurnitureCanBePlaced = (helper) => {
 
+    console.log('placingFurnitureData.size')
+    console.log(placingFurnitureData.size)
+
     const checkSpaces2x2or2x1Item = (element, furType) => {
       let elementSpaces = null
+
+      console.log('KEKEWEKEKWE')
+      console.log(element)
+      console.log(furType)
 
       let rotation = element.rotation[1];
       let position = element.position;
@@ -189,9 +211,9 @@ function App() {
 
     let canBePlaced = true
 
-    if (placingFurnitureSize != '1x1') {
+    if (placingFurnitureData.size != '1x1') {
       console.log('esto no deberia aparecer')
-      const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureSize);
+      const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureData.size);
 
       roomData.forEach((furElement) => {
         const furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
@@ -245,7 +267,7 @@ function App() {
       if (placingFurnitureDirection < 0) placingFurnitureDirection = 3
     }
 
-    if (placingFurnitureSize == '2x2') {
+    if (placingFurnitureData.size == '2x2') {
       switch (furnitureHelperPosition[2]) {
         case south: setFurnitureHelperRef.current.position.z -= 1; break;
         case west: setFurnitureHelperRef.current.position.x += 1; break;
@@ -254,7 +276,7 @@ function App() {
       }
     }
 
-    if (placingFurnitureSize == '2x1') {
+    if (placingFurnitureData.size == '2x1') {
 
       let blockedRotation = false
 
@@ -305,6 +327,8 @@ function App() {
 
     const changeMoveFromCameraIndex = (cameraIndex, move) => {
 
+      console.log(placingFurnitureData.size)
+
       //  left /  \ up
       //  down \  / right
 
@@ -351,24 +375,24 @@ function App() {
     if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move)
     switch (move) {
       case 'left':
-        if (placingFurnitureSize == '1x1' && lastPosition[0]-1 == -4) invalidMove = true; 
-        if (placingFurnitureSize == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0]))) invalidMove = true;
+        if (placingFurnitureData.size == '1x1' && lastPosition[0]-1 == -4) invalidMove = true; 
+        if (placingFurnitureData.size == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
+        if (placingFurnitureData.size == '2x2' && ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0]))) invalidMove = true;
         break;
       case 'right':
-        if (placingFurnitureSize == '1x1' && lastPosition[0]+1 == 5) invalidMove = true;
-        if (placingFurnitureSize == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2]))) invalidMove = true;
+        if (placingFurnitureData.size == '1x1' && lastPosition[0]+1 == 5) invalidMove = true;
+        if (placingFurnitureData.size == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
+        if (placingFurnitureData.size == '2x2' && ((lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2]))) invalidMove = true;
         break;
       case 'up':
-        if (placingFurnitureSize == '1x1' && lastPosition[1]-1 == -4) invalidMove = true;
-        if (placingFurnitureSize == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3]))) invalidMove = true;
+        if (placingFurnitureData.size == '1x1' && lastPosition[1]-1 == -4) invalidMove = true;
+        if (placingFurnitureData.size == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
+        if (placingFurnitureData.size == '2x2' && ((lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3]))) invalidMove = true;
         break;
       case 'down':
-        if (placingFurnitureSize == '1x1' && lastPosition[1]+1 == 5) invalidMove = true;
-        if (placingFurnitureSize == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
-        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1]))) invalidMove = true;
+        if (placingFurnitureData.size == '1x1' && lastPosition[1]+1 == 5) invalidMove = true;
+        if (placingFurnitureData.size == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
+        if (placingFurnitureData.size == '2x2' && ((lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1]))) invalidMove = true;
         break;
     }
 
@@ -407,7 +431,14 @@ function App() {
   }
 
   const generateSelectingFurniture = () => {
-    return <FurSelector />
+    return <FurSelector handleItemClick={handleItemClick} />
+  }
+  
+  const handleItemClick = (furId) => {
+    setSelectingFurniture(false)
+    const furSelected = furnitureData.find((element) => element.id == furId)
+    setPlacingFurniture(true)
+    setPlacingFurnitureData({size: furSelected.size, component: componentsMap[furSelected.name], name: furSelected.name})
   }
 
   const removeFur = (key) => {

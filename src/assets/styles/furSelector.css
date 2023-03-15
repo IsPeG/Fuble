@@ -1,11 +1,13 @@
 .furSelector {
     display: flex;
     flex-wrap: wrap;
-    overflow: auto;
+    overflow: hidden;
     max-height: 100%;
-    width: 25rem;
+    width: 23.6rem;
+    margin: 0 .5rem 0 .5rem;
     scrollbar-width: none;
     scrollbar-color: #6e5b4a #353130;
+    justify-content: space-between;
 }
 
 /* Chrome, Edge, and Safari */
@@ -28,4 +30,10 @@ border-radius: 3px;
     right: 0;
     position: fixed;
     background-color: #353130;
+}
+
+.filtersContainer {
+    border-bottom: #171717 .2rem solid;
+    display: flex;
+    margin: 0 .5rem 1rem .5rem;
 }
