@@ -85,9 +85,9 @@ function App() {
 
     const selectorSwitch = () => {
       switch(placingFurnitureData.size) {
-        case '1x1': return <FurnitureSelector1x1 />;
-        case '2x1': return <FurnitureSelector2x1 />;
-        case '2x2': return <FurnitureSelector2x2 />;
+        case '1x1': return <FurnitureSelector1x1 name={'1x1'} />;
+        case '2x1': return <FurnitureSelector2x1 name={'2x1'}/>;
+        case '2x2': return <FurnitureSelector2x2 name={'2x2'}/>;
       }
     }
 
@@ -205,6 +205,8 @@ function App() {
       } else {
         console.log('error')
       }
+
+      console.log('checkSpaces2x2or2x1Item is going to return ', elementSpaces)
       
       return elementSpaces;
     } // checkSpaces2x2or2x1Item end
@@ -216,7 +218,18 @@ function App() {
       const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureData.size);
 
       roomData.forEach((furElement) => {
-        const furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        let furElementSpaces = null;
+        if (furElement.size == '1x1') {
+          furElementSpaces = [furElement.position[0], furElement.position[1], furElement.position[2]];
+          for (let i = 0; i < helperSpaces.length; i++) {
+            if (helperSpaces[i].toString() == furElementSpaces.toString()) {
+              canBePlaced = false;
+              return;
+            }   
+          }
+        } else {
+          furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+        }
         console.log('helperSpaces: ' + JSON.stringify(helperSpaces))
         console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
         for (let i = 0; i < helperSpaces.length; i++) {
@@ -237,17 +250,18 @@ function App() {
         let furElementSpaces = null;
         if (furElement.size == '1x1') {
           furElementSpaces = [furElement.position[0], furElement.position[1], furElement.position[2]];
-        } else {
-          furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
-        }
-        console.log('helperSpace: ' + JSON.stringify(helperSpace))
-        console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
-        for (let i = 0; i < furElementSpaces.length; i++) {
-          // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
-          if (helperSpace.toString() == furElementSpaces[i].toString()) {
+          if (helperSpace.toString() == furElementSpaces.toString()) {
             canBePlaced = false;
             return;
-          }              
+          }
+        } else {
+          furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+          for (let i = 0; i < furElementSpaces.length; i++) {
+            if (helperSpace.toString() == furElementSpaces[i].toString()) {
+              canBePlaced = false;
+              return;
+            }              
+          }
         }
       });
     }
@@ -258,6 +272,7 @@ function App() {
   const rotateFurnitureButtonHandler = (rotateDirection) => {
 
     const furnitureHelperPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
+    const placingFurnitureSize = setFurnitureHelperRef.current.children[0].name;
 
     if (rotateDirection === 'left') {
       placingFurnitureDirection++
@@ -267,7 +282,7 @@ function App() {
       if (placingFurnitureDirection < 0) placingFurnitureDirection = 3
     }
 
-    if (placingFurnitureData.size == '2x2') {
+    if (placingFurnitureSize == '2x2') {
       switch (furnitureHelperPosition[2]) {
         case south: setFurnitureHelperRef.current.position.z -= 1; break;
         case west: setFurnitureHelperRef.current.position.x += 1; break;
@@ -276,7 +291,7 @@ function App() {
       }
     }
 
-    if (placingFurnitureData.size == '2x1') {
+    if (placingFurnitureSize == '2x1') {
 
       let blockedRotation = false
 
@@ -323,7 +338,7 @@ function App() {
 
   }
 
-  const furnitureHelperMoveButtonHandler = (move) => {
+  const furnitureHelperMoveButtonHandler = (move, size) => {
 
     const changeMoveFromCameraIndex = (cameraIndex, move) => {
 
@@ -364,35 +379,42 @@ function App() {
         default: break;
 
       }
-
       return newMove;
+    } // end changeMoveFromCameraIndex
 
-    }
     const cameraIndex = cameraIndexRef.current
     const lastPosition = [setFurnitureHelperRef.current.position.x, setFurnitureHelperRef.current.position.z, setFurnitureHelperRef.current.rotation.y]
+    const placingFurnitureSize = setFurnitureHelperRef.current.children[0].name;
     let invalidMove = false;
 
     if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move)
+
+    console.log(move, placingFurnitureSize, lastPosition)
+    // const directions = [north, west, south, east]
+    // const south = -Math.PI / 1 //-3.14... down
+    // const west = Math.PI / 2 //1.57... left
+    // const north = 0 // up
+    // const east = -Math.PI / 2 //-1.57... right
     switch (move) {
       case 'left':
-        if (placingFurnitureData.size == '1x1' && lastPosition[0]-1 == -4) invalidMove = true; 
-        if (placingFurnitureData.size == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
-        if (placingFurnitureData.size == '2x2' && ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0]))) invalidMove = true;
+        if (lastPosition[0]-1 == -4) invalidMove = true; 
+        if (placingFurnitureSize == '2x1' && lastPosition[0] == -2 && lastPosition[2] == directions[0]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) || (lastPosition[0] == -2 && lastPosition[2] == directions[0]))) invalidMove = true;
         break;
       case 'right':
-        if (placingFurnitureData.size == '1x1' && lastPosition[0]+1 == 5) invalidMove = true;
-        if (placingFurnitureData.size == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
-        if (placingFurnitureData.size == '2x2' && ((lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2]))) invalidMove = true;
+        if (lastPosition[0]+1 == 5) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[0] == 3 && lastPosition[2] == directions[2]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[0] == 3 && lastPosition[2] == directions[1]) || (lastPosition[0] == 3 && lastPosition[2] == directions[2]))) invalidMove = true;
         break;
       case 'up':
-        if (placingFurnitureData.size == '1x1' && lastPosition[1]-1 == -4) invalidMove = true;
-        if (placingFurnitureData.size == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
-        if (placingFurnitureData.size == '2x2' && ((lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3]))) invalidMove = true;
+        if (lastPosition[1]-1 == -4) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[1] == -2 && lastPosition[2] == directions[3]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == -2 && lastPosition[2] == directions[2]) || (lastPosition[1] == -2 && lastPosition[2] == directions[3]))) invalidMove = true;
         break;
       case 'down':
-        if (placingFurnitureData.size == '1x1' && lastPosition[1]+1 == 5) invalidMove = true;
-        if (placingFurnitureData.size == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
-        if (placingFurnitureData.size == '2x2' && ((lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1]))) invalidMove = true;
+        if (lastPosition[1]+1 == 5) invalidMove = true;
+        if (placingFurnitureSize == '2x1' && lastPosition[1] == 3 && lastPosition[2] == directions[1]) invalidMove = true;
+        if (placingFurnitureSize == '2x2' && ((lastPosition[1] == 3 && lastPosition[2] == directions[0]) || (lastPosition[1] == 3 && lastPosition[2] == directions[1]))) invalidMove = true;
         break;
     }
 

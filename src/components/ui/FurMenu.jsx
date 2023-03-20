@@ -8,9 +8,6 @@ export default function FurMenu(props) {
         <span>{props.furName}</span>
         <ol>
           <li onPointerDown={() => props.removeFur(props.refKey)}>Remove</li>
-          <li>One more</li>
-          <li>Another one</li>
-          <li>One more why not</li>
         </ol>
       </div>
     )
