@@ -71,7 +71,7 @@ function App() {
         case 'ArrowUp': furnitureHelperMoveButtonHandler('up'); break;
         case 'ArrowDown': furnitureHelperMoveButtonHandler('down'); break;
         case 'r': rotateFurnitureButtonHandler('right'); break;
-        case 'Escape': setFurMenuOpen(false); break;
+        case 'Escape': escKeyHandler(); break;
 
         default: break;
       }
@@ -79,7 +79,11 @@ function App() {
     window.addEventListener('keydown', keyHandler)
   }, [])
 
-  console.log(roomData)
+  // console.log(roomData)
+ 
+  const escKeyHandler = () => {
+    setFurMenuOpen(false)
+  }
 
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
 
@@ -469,13 +473,13 @@ function App() {
   }
 
   const handleAddFurnitureClick = (e) => {
-    setSelectingFurniture(true)
+    setSelectingFurniture(!selectingFurniture)
   }
 
   return (
     <>
       <div className="buttonsContainer">
-        <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>Add furniture</button>
+        <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>{selectingFurniture || placingFurniture ? 'Cancel' : 'Add furniture'}</button>
         <button className="button" onClick={(e) => changeCameraPosition('left', e)}>Camera left</button>
         <button className="button" onClick={(e) => changeCameraPosition('right', e)}>Camera right</button>
 
@@ -501,7 +505,7 @@ function App() {
         generateSelectingFurniture()
       : null }
 
-      <Canvas orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
+      <Canvas shadows colorManagement orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
 
         <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 
@@ -518,7 +522,20 @@ function App() {
 
         <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
 
-        <spotLight angle={30} intensity={2} position={[0,5,0]} color={'#ffd187'} distance={40} decay={10} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
+        <spotLight 
+          angle={30} 
+          intensity={2} 
+          position={[0,5,0]} 
+          color={'#ffd187'} 
+          distance={40} 
+          decay={10} 
+          castShadow 
+          shadow-mapSize-height={2048}
+          shadow-mapSize-width={2048}
+          shadow-radius={10}
+          shadow-bias={-0.005}
+        />
+        {/* <directionalLight angle={30} intensity={.3} position={[0,5,0]} color={'#ffd187'} distance={0} decay={5} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} /> */}
         <ambientLight intensity={0.1} />
 
         <Floor />

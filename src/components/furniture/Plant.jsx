@@ -7,7 +7,7 @@ export default function Plant(props) {
   const { nodes, materials } = useGLTF(modelsPath+'/furniture/plant.gltf')
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.tube.geometry} material={nodes.tube.material} />
+      <mesh geometry={nodes.tube.geometry} material={nodes.tube.material} castShadow receiveShadow/>
     </group>
   )
 }

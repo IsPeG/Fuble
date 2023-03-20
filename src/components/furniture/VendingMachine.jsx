@@ -37,9 +37,13 @@ export default function VendingMachine(props) {
         color={'#3debeb'}
         distance={1.4}
         castShadow
+        shadow-mapSize-height={2048}
+        shadow-mapSize-width={2048}
+        shadow-radius={10}
+        shadow-bias={-0.005}
       />  
     <group {...props} dispose={null} receiveShadow>
-      <mesh geometry={nodes.main.geometry} material={nodes.main.material} />
+      <mesh geometry={nodes.main.geometry} material={nodes.main.material} castShadow receiveShadow/>
     </group>
     </>
   )

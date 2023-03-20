@@ -7,7 +7,7 @@ export default function Test2x2(props) {
   const { nodes, materials } = useGLTF(modelsPath+'/furniture/test2x2.gltf')
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.cube.geometry} material={nodes.cube.material} />
+      <mesh geometry={nodes.cube.geometry} material={nodes.cube.material} castShadow receiveShadow/>
     </group>
   )
 }

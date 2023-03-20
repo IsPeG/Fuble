@@ -29,19 +29,21 @@ export default function FurSelector(props) {
     }
 
     return (
-    <div className='furSelectorWrapper'>
-      <Filters />
-      <div className='furSelector'>
-        {furData.map((furniture, key) => 
-            <FurSelectorItem
-              key={key}
-              furId={furniture.id}
-              furName={furniture.name}
-              furSize={furniture.size}
-              handleItemClick={props.handleItemClick}
-            />
-        )}
+    <>
+      <div className='furSelectorWrapper'>
+        <Filters />
+        <div className='furSelector'>
+          {furData.map((furniture, key) => 
+              <FurSelectorItem
+                key={key}
+                furId={furniture.id}
+                furName={furniture.name}
+                furSize={furniture.size}
+                handleItemClick={props.handleItemClick}
+              />
+          )}
+        </div>
       </div>
-    </div>  
+    </>
     )
 }
