@@ -1,0 +1,62 @@
+.saveRoomRoot {
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 500;
+}
+
+.saveRoomBackground {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0000008c;
+    position: fixed;
+    z-index: 501;
+    display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.saveRoomMainContainer {
+    background-color: var(--container-bg-color);
+    z-index: 502;
+    width: 20rem;
+    height: 20rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0 0 0 .45em #271c0e;
+}
+
+.saveRoomMainContainer h1 {
+    color: var(--text-color-black);
+}
+
+.saveRoomMainContainer input {
+    background: var(--button-bg-color);
+    padding: 1rem;
+    text-align: center;
+    border-radius: 1rem;
+    width: 100%;
+    transform: translateY(0);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #565656;
+    outline: none;
+    border:0px solid #000000; 
+}
+
+.saveRoomMainContainer button {
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+.saveRoomMainContainer p {
+    color: #726957;
+    margin: .2rem 0 .2rem 0;
+}

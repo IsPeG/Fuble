@@ -1,0 +1,39 @@
+/* Button styles made by https://www.sololearn.com/compiler-playground/WZX4urB7sdT5/ */
+
+.button { 
+  background: var(--button-bg-color);
+  text-align: center;
+  border: 1px solid #c1b695;
+  border-radius: 10px;
+  box-shadow: 0 3px var(--button-shadow-color);
+  transform: translateY(0);
+  text-decoration: none;
+  color: var(--button-text-color);
+  font-weight: bold;
+  font-size: .9rem;
+  padding: .6rem 1.4rem .6rem 1.4rem;
+}
+
+.button[type='file'] {
+  display: none;
+}
+  
+.button:active {
+  transform: translateY(3px);
+  background: #e7dbc7;
+  box-shadow: 0 0 #c1b695;
+}
+
+.button.blue {
+  color: var(--button-blue-text-color);
+  box-shadow: 0 3px var(--button-blue-shadow-color);
+  background: var(--button-blue-bg-color);
+  border: var(--button-blue-border-color) 1px solid;
+}
+
+.button.blue:active {
+  box-shadow: 0 0 #01333d;
+  background: #00424d;
+  color: #58bca9;
+  transform: translateY(3px);
+}

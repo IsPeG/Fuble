@@ -21,8 +21,9 @@ import FurnitureSelector2x2 from './components/furniture_selectors/FurnitureSele
 
 // UI
 import FurMenu from "./components/ui/furMenu";
+import SaveRoomMenu from "./components/ui/SaveRoomMenu";
 
-import "/src/assets/styles/global.css"
+import "./assets/styles/global.css"
 import FurSelector from "./components/ui/FurSelector";
 
 // Variables
@@ -32,8 +33,8 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {key: 1, name: 'Vending machine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {key: 2, name: 'Vending machine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 1, name: 'VendingMachine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
+  {key: 2, name: 'VendingMachine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
   {key: 3, name: 'Plant', model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
   {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
   {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
@@ -45,9 +46,10 @@ import furnitureData from './furnitureData/data.json'
 
 function App() {
 
-  const [roomData, setRoomData] = useState([])
   const [cameraIndex, setCameraIndex] = useState(0)
+  const [roomData, setRoomData] = useState([])
   const [furMenuOpen, setFurMenuOpen] = useState(false)
+  const [saveRoomMenuOpen, setSaveRoomMenuOpen] = useState(false)
   const [selectingFurniture, setSelectingFurniture] = useState(false)
   const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
@@ -106,7 +108,7 @@ function App() {
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
     if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
-      const lastKey = roomData.slice(-1)[0].key;
+      const lastKey = (roomData.slice(-1)[0]?.key ?? 0)
       setRoomData([...roomData, 
         {
           key: lastKey + 1, 
@@ -476,6 +478,26 @@ function App() {
   const handleAddFurnitureClick = (e) => {
     setSelectingFurniture(!selectingFurniture)
   }
+  
+  const saveRoomButtonHandler = () => {
+    setSaveRoomMenuOpen(!saveRoomMenuOpen)
+  }
+
+  const loadRoomButtonHandler = (e) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = e => {
+      let data = JSON.parse(e.target.result)
+      data.forEach((elem) =>
+        elem.model = componentsMap[elem.name]
+      );
+      setRoomData(data)
+    };
+  }
+
+  const generateSaveRoomMenu = () => {
+    return <SaveRoomMenu closeSaveRoomMenu={saveRoomButtonHandler} roomData={roomData}/>
+  }
 
   return (
     <>
@@ -483,16 +505,19 @@ function App() {
         <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>{selectingFurniture || placingFurniture ? 'Cancel' : 'Add furniture'}</button>
         <button className="button" onClick={(e) => changeCameraPosition('left', e)}>Camera left</button>
         <button className="button" onClick={(e) => changeCameraPosition('right', e)}>Camera right</button>
+        <button className="button" onClick={(e) => saveRoomButtonHandler()}>Save Room</button>
+        <label className="button" htmlFor='loadRoom'>Load Room</label>
+        <input className="button" id="loadRoom" type="file" onChange={loadRoomButtonHandler} />
 
         {placingFurniture ?
           <div className="movesContainer">
-            <button onClick={(e) => furnitureHelperMoveButtonHandler('left', e)}>ᐊ</button>
-            <button onClick={(e) => furnitureHelperMoveButtonHandler('right', e)}>ᐅ</button>
-            <button onClick={(e) => furnitureHelperMoveButtonHandler('up', e)}>ᐃ</button>
-            <button onClick={(e) => furnitureHelperMoveButtonHandler('down', e)}>ᐁ</button>
-            <button onClick={(e) => rotateFurnitureButtonHandler('left', e)}>ROTATE LEFT</button>
-            <button onClick={(e) => rotateFurnitureButtonHandler('right', e)}>ROTATE RIGHT</button>
-            <button onClick={(e) => addFurnitureButtonHandler()}>Set</button>
+            <button className="button" onClick={(e) => furnitureHelperMoveButtonHandler('left', e)}>ᐊ</button>
+            <button className="button" onClick={(e) => furnitureHelperMoveButtonHandler('right', e)}>ᐅ</button>
+            <button className="button" onClick={(e) => furnitureHelperMoveButtonHandler('up', e)}>ᐃ</button>
+            <button className="button" onClick={(e) => furnitureHelperMoveButtonHandler('down', e)}>ᐁ</button>
+            <button className="button" onClick={(e) => rotateFurnitureButtonHandler('left', e)}>Rotate left</button>
+            <button className="button" onClick={(e) => rotateFurnitureButtonHandler('right', e)}>Rotate right</button>
+            <button className="button blue" onClick={(e) => addFurnitureButtonHandler()}>Set</button>
           </div>
           : null
         }
@@ -506,7 +531,11 @@ function App() {
         generateSelectingFurniture()
       : null }
 
-      <Canvas shadows colorManagement orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
+      { saveRoomMenuOpen ?
+        generateSaveRoomMenu() 
+      : null }
+
+      <Canvas shadows orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
 
         <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 

@@ -1,0 +1,14 @@
+:root {
+    --container-bg-color: #dcc4a2;
+
+    --button-bg-color: #f1edd8;
+    --button-shadow-color: #625c54;
+    --button-text-color: #494949;
+
+    --button-blue-bg-color: #075663;
+    --button-blue-shadow-color: #01333d;
+    --button-blue-text-color: #f9f6e5;
+    --button-blue-border-color: #075663;
+
+    --text-color-black: #1a1a1a;
+}

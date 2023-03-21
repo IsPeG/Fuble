@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Hind:wght@700&family=Varela+Round&display=swap');
+@import url('buttons/buttons.css');
+@import url('vars/colors.css');
 
 * {
     box-sizing: border-box;
@@ -27,10 +29,6 @@ canvas {
   left: 0;
   z-index: 100;
   position: fixed;
-}
-
-.button {
-  padding: 0.3rem 1rem;
 }
 
 .movesContainer {
