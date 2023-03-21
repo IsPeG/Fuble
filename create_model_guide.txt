@@ -1,0 +1,6 @@
+1. Open blockbench and select new generic model with a texture resolution of 32x32, with a snake case name (snake_case)
+2. Do the model following the guide of the image called furniture_guide.png
+3. Save a screenshot of the model in isometric view for the menu
+3. Save the model and texutre and export them to gltf
+4. Create the react component with npx gltfjsx and do the apropiate tweaks:
+5. Add itto the data.json in furnitureData
