@@ -527,15 +527,14 @@ function App() {
           intensity={2} 
           position={[0,5,0]} 
           color={'#ffd187'} 
-          distance={40} 
+          distance={35} 
           decay={10} 
           castShadow 
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
           shadow-radius={10}
-          shadow-bias={-0.005}
+          shadow-bias={-0.003}
         />
-        {/* <directionalLight angle={30} intensity={.3} position={[0,5,0]} color={'#ffd187'} distance={0} decay={5} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} /> */}
         <ambientLight intensity={0.1} />
 
         <Floor />
