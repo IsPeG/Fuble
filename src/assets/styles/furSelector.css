@@ -7,7 +7,7 @@
     margin: 0 .5rem 0 .5rem;
     scrollbar-width: none;
     scrollbar-color: #6e5b4a #353130;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 /* Chrome, Edge, and Safari */
