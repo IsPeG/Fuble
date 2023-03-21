@@ -28,5 +28,10 @@
         "id": 6,
         "name": "OldChair",
         "size": "1x1"
+    },
+    {
+        "id": 7,
+        "name": "OldTable",
+        "size": "1x1"
     }
 ]

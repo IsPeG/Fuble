@@ -11,8 +11,9 @@ import Test2x2 from './components/furniture/Test2x2'
 import Plant from './components/furniture/Plant'
 import VendingMachine from './components/furniture/VendingMachine'
 import OldChair from './components/furniture/OldChair'
+import OldTable from './components/furniture/OldTable'
 
-const componentsMap = {Coach, Test2x2, Test2x1, Plant, VendingMachine, OldChair}
+const componentsMap = {Coach, Test2x2, Test2x1, Plant, VendingMachine, OldChair, OldTable}
 
 // Selectors
 import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSelector1x1'
