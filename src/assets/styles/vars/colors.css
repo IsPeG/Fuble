@@ -8,7 +8,10 @@
     --button-blue-bg-color: #075663;
     --button-blue-shadow-color: #01333d;
     --button-blue-text-color: #f9f6e5;
-    --button-blue-border-color: #075663;
+
+    --button-yellow-bg-color: #fcee9c;
+    --button-yellow-shadow-color: #6b4e16;
+    --button-yellow-text-color: #8b6636;
 
     --text-color-black: #1a1a1a;
 }

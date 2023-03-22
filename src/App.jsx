@@ -506,8 +506,8 @@ function App() {
         <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>{selectingFurniture || placingFurniture ? 'Cancel' : 'Add furniture'}</button>
         <button className="button" onClick={(e) => changeCameraPosition('left', e)}>Camera left</button>
         <button className="button" onClick={(e) => changeCameraPosition('right', e)}>Camera right</button>
-        <button className="button" onClick={(e) => saveRoomButtonHandler()}>Save Room</button>
-        <label className="button" htmlFor='loadRoom'>Load Room</label>
+        <button className="button yellow" onClick={(e) => saveRoomButtonHandler()}>Save Room</button>
+        <label className="button yellow" htmlFor='loadRoom'>Load Room</label>
         <input className="button" id="loadRoom" type="file" onChange={loadRoomButtonHandler} />
 
         {placingFurniture ?
