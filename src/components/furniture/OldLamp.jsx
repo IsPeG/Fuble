@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 const modelsPath = '/src/assets/models'
 
-export default function OldLamp(props, furSize = '1x1') {
+export default function OldLamp(props) {
   const { nodes, materials } = useGLTF(modelsPath+'/furniture/old_lamp.gltf')
   const spotLightRef = useRef()
 

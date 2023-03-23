@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Canvas, useFrame, extend } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 
 // Room elements
 import Floor from './components/room_elements/Floor'
@@ -465,19 +465,29 @@ function App() {
     })
   }
 
-  const handleFurnitureClick = (e, key, name) => {
+  const handleFurnitureClick = (e, key, name, furProps) => {
     e.stopPropagation();
     setFurMenuOpen({
       x: e.pageX,
       y: e.pageY,
       key: key,
-      furName: name.replace(/([A-Z])/g, ' $1').trim()
+      furName: name.replace(/([A-Z])/g, ' $1').trim(),
+      furProps: furProps
     })
     //console.log(roomData.find((element) => element.key == key));
   }
 
   const generateFurMenu = () => {
-    return <FurMenu furName={furMenuOpen.furName} x={furMenuOpen.x} y={furMenuOpen.y} refKey={furMenuOpen.key} removeFur={removeFur} />
+    console.log(furMenuOpen.furProps)
+    return <FurMenu 
+    furName={furMenuOpen.furName} 
+    x={furMenuOpen.x} 
+    y={furMenuOpen.y} 
+    refKey={furMenuOpen.key}
+    furProps={furMenuOpen.furProps}
+    removeFur={removeFur}
+    toggleLightFur={toggleLightFur}
+    />
   }
 
   const generateSelectingFurniture = () => {
@@ -493,6 +503,12 @@ function App() {
 
   const removeFur = (key) => {
     setRoomData(roomData.filter((element) => element.key != key))
+    setFurMenuOpen(false)
+  }
+
+  const toggleLightFur = (key) => {
+    let toggleFurData = roomData.find((elem) => elem.key == key)
+    toggleFurData.options.lightOn = !toggleFurData.options.lightOn
     setFurMenuOpen(false)
   }
 
@@ -566,9 +582,8 @@ function App() {
             key={furniture.key} 
             position={furniture.position} 
             rotation={furniture.rotation} 
-            size={furniture.furSize}
             options={furniture.options}
-            onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name)}
+            onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name, furniture.furProps)}
           />)}
         </group>
 
