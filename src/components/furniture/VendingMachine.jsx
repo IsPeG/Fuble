@@ -14,17 +14,18 @@ export default function VendingMachine(props) {
   const west = Math.PI / 2
   
   var targetPosition = []
-  
-  switch (props.rotation[1]) {
-    case south: targetPosition = [props.position[0], 1, props.position[2]+1]; break; 
-    case east:  targetPosition = [props.position[0]+1, 1, props.position[2]]; break;
-    case north: targetPosition = [props.position[0], 1, props.position[2]-1]; break;
-    case west:  targetPosition = [props.position[0]-1, 1, props.position[2]]; break;
-  }
 
-   useEffect(() => {
-      spotLightRef.current.target.position.set(targetPosition[0], targetPosition[1], targetPosition[2])
-      spotLightRef.current.target.updateMatrixWorld()
+  useEffect(() => {
+
+    switch (props.rotation[1]) {
+      case south: targetPosition = [props.position[0], 1, props.position[2]+1]; break; 
+      case east:  targetPosition = [props.position[0]+1, 1, props.position[2]]; break;
+      case north: targetPosition = [props.position[0], 1, props.position[2]-1]; break;
+      case west:  targetPosition = [props.position[0]-1, 1, props.position[2]]; break;
+    }
+
+    spotLightRef.current.target.position.set(targetPosition[0], targetPosition[1], targetPosition[2])
+    spotLightRef.current.target.updateMatrixWorld()
   }, [])
 
   return (

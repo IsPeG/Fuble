@@ -12,8 +12,15 @@ import Plant from './components/furniture/Plant'
 import VendingMachine from './components/furniture/VendingMachine'
 import OldChair from './components/furniture/OldChair'
 import OldTable from './components/furniture/OldTable'
+import OldLamp from './components/furniture/OldLamp'
 
-const componentsMap = {Coach, Test2x2, Test2x1, Plant, VendingMachine, OldChair, OldTable}
+const componentsMap = {
+  Coach, 
+  Test2x2, Test2x1, 
+  Plant, 
+  VendingMachine, 
+  OldChair, OldTable, OldLamp
+}
 
 // Selectors
 import FurnitureSelector1x1 from './components/furniture_selectors/FurnitureSelector1x1'
@@ -34,13 +41,14 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {key: 1, name: 'VendingMachine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {key: 2, name: 'VendingMachine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1'},
-  {key: 3, name: 'Plant', model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1'},
-  {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1'},
-  {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2'},
-  {key: 6, name: 'Coach', model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1'},
-  {key: 7, name: 'Coach', model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1'},
+  {key: 1, name: 'VendingMachine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1', options: {}, furProps: []},
+  {key: 2, name: 'VendingMachine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1', options: {}, furProps: []},
+  {key: 3, name: 'Plant', model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1', options: {}, furProps: []},
+  {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1', options: {}, furProps: []},
+  {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2', options: {}, furProps: []},
+  {key: 6, name: 'Coach', model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1', options: {}, furProps: []},
+  {key: 7, name: 'Coach', model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1', options: {}, furProps: []},
+  {key: 8, name: 'OldLamp', model: OldLamp, position: [3,0,3], rotation: [0, north, 0], size: '1x1', options: {lightOn: true}, furProps: ['light']},
 ]
 
 import furnitureData from './furnitureData/data.json'
@@ -52,10 +60,10 @@ function App() {
   const [furMenuOpen, setFurMenuOpen] = useState(false)
   const [saveRoomMenuOpen, setSaveRoomMenuOpen] = useState(false)
   const [selectingFurniture, setSelectingFurniture] = useState(false)
-  const cameraIndexRef = useRef
   const [placingFurniture, setPlacingFurniture] = useState(false)
   const [placingFurnitureData, setPlacingFurnitureData] = useState({})
   const setFurnitureHelperRef = useRef()
+  const cameraIndexRef = useRef()
 
   const directions = [north, west, south, east]
   const cameraPositions = [[7,7,7], [6.5,6.5,-5.5], [-7,8,-7], [-5.5,6.5,6.5]]
@@ -83,7 +91,7 @@ function App() {
     window.addEventListener('keydown', keyHandler)
   }, [])
 
-  // console.log(roomData)
+  console.log(roomData)
  
   const escKeyHandler = () => {
     setFurMenuOpen(false)
@@ -110,6 +118,16 @@ function App() {
     const helperPosition = setFurnitureHelperRef.current.position;
     if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
       const lastKey = (roomData.slice(-1)[0]?.key ?? 0)
+
+      let furOptions = {}
+
+      for (const elem of placingFurnitureData.furProps) {
+        switch (elem) {
+          case 'light': furOptions.lightOn = true; break
+          default: break;
+        }    
+      }
+
       setRoomData([...roomData, 
         {
           key: lastKey + 1, 
@@ -117,7 +135,9 @@ function App() {
           name: placingFurnitureData.name, 
           position: [helperPosition.x, 0, helperPosition.z], 
           rotation: [0, setFurnitureHelperRef.current.rotation.y, 0], 
-          size: placingFurnitureData.size
+          size: placingFurnitureData.size,
+          furProps: placingFurnitureData.furProps,
+          options: furOptions,
         }
       ]);
       setPlacingFurniture(false);
@@ -468,7 +488,7 @@ function App() {
     setSelectingFurniture(false)
     const furSelected = furnitureData.find((element) => element.id == furId)
     setPlacingFurniture(true)
-    setPlacingFurnitureData({size: furSelected.size, component: componentsMap[furSelected.name], name: furSelected.name})
+    setPlacingFurnitureData({size: furSelected.size, component: componentsMap[furSelected.name], name: furSelected.name, furProps: furSelected.furProps})
   }
 
   const removeFur = (key) => {
@@ -533,7 +553,7 @@ function App() {
       : null }
 
       { saveRoomMenuOpen ?
-        generateSaveRoomMenu() 
+        generateSaveRoomMenu()
       : null }
 
       <Canvas shadows orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
@@ -542,11 +562,12 @@ function App() {
 
         <group>
           {roomData.map((furniture) => 
-            <furniture.model 
+            <furniture.model
             key={furniture.key} 
             position={furniture.position} 
             rotation={furniture.rotation} 
-            size={furniture.size}
+            size={furniture.furSize}
+            options={furniture.options}
             onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name)}
           />)}
         </group>
