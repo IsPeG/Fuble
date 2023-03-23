@@ -13,6 +13,7 @@
   font-size: .9rem;
   padding: .6rem 1.4rem .6rem 1.4rem;
   margin: 1px;
+  outline: none;
 }
 
 .button[type='file'] {

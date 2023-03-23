@@ -41,11 +41,11 @@ const north = 0 // up
 const east = -Math.PI / 2 //-1.57... right
 
 const roomDataExample = [
-  {key: 1, name: 'VendingMachine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1', options: {}, furProps: []},
-  {key: 2, name: 'VendingMachine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1', options: {}, furProps: []},
+  {key: 1, name: 'VendingMachine', model: VendingMachine, position: [3,0,-3], rotation: [0, south, 0], size: '1x1', options: {lightOn: true}, furProps: ['light']},
+  {key: 2, name: 'VendingMachine', model: VendingMachine, position: [2,0,-3], rotation: [0, south, 0], size: '1x1', options: {lightOn: true}, furProps: ['light']},
   {key: 3, name: 'Plant', model: Plant, position: [-3,0,3], rotation: [0, east, 0], size: '1x1', options: {}, furProps: []},
-  {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1', options: {}, furProps: []},
-  {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2', options: {}, furProps: []},
+  {key: 4, name: 'Test2x1', model: Test2x1, position: [-2,0,-2], rotation: [0, west, 0], size: '2x1', options: {}, furProps: ['surface']},
+  {key: 5, name: 'Test2x2', model: Test2x2, position: [2,0,2], rotation: [0, north, 0], size: '2x2', options: {}, furProps: ['surface']},
   {key: 6, name: 'Coach', model: Coach, position: [1,0,0], rotation: [0, east, 0], size: '1x1', options: {}, furProps: []},
   {key: 7, name: 'Coach', model: Coach, position: [0,0,-1], rotation: [0, north, 0], size: '1x1', options: {}, furProps: []},
   {key: 8, name: 'OldLamp', model: OldLamp, position: [3,0,3], rotation: [0, north, 0], size: '1x1', options: {lightOn: true}, furProps: ['light']},
@@ -116,7 +116,8 @@ function App() {
 
   const addFurnitureButtonHandler = () => {
     const helperPosition = setFurnitureHelperRef.current.position;
-    if (checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)) {
+    const canBePlaced = checkIfFurnitureCanBePlaced(setFurnitureHelperRef.current)
+    if (canBePlaced != 'no') {
       const lastKey = (roomData.slice(-1)[0]?.key ?? 0)
 
       let furOptions = {}
@@ -128,12 +129,15 @@ function App() {
         }    
       }
 
+      let newFurYAxis = 0;
+      canBePlaced == 'surface' ? newFurYAxis = 1 : newFurYAxis = 0
+
       setRoomData([...roomData, 
         {
           key: lastKey + 1, 
           model: placingFurnitureData.component, 
           name: placingFurnitureData.name, 
-          position: [helperPosition.x, 0, helperPosition.z], 
+          position: [helperPosition.x, newFurYAxis, helperPosition.z], 
           rotation: [0, setFurnitureHelperRef.current.rotation.y, 0], 
           size: placingFurnitureData.size,
           furProps: placingFurnitureData.furProps,
@@ -147,102 +151,92 @@ function App() {
     }
   }
 
-  const checkIfFurnitureCanBePlaced = (helper) => {
+  const checkSpaces2x2or2x1Item = (element, furType) => {
+    let elementSpaces = null
 
-    console.log('placingFurnitureData.size')
-    console.log(placingFurnitureData.size)
+    let rotation = element.rotation[1];
+    let position = element.position;
 
-    const checkSpaces2x2or2x1Item = (element, furType) => {
-      let elementSpaces = null
+    if (rotation == undefined) { // the furniture helper doesn't have rotation as an array, but as an euler
+      rotation = element.rotation.y
+    } else {
+      position = {x: element.position[0], y: element.position[1], z: element.position[2]};
+    }
 
-      console.log('KEKEWEKEKWE')
-      console.log(element)
-      console.log(furType)
-
-      let rotation = element.rotation[1];
-      let position = element.position;
-
-      if (rotation == undefined) { // the furniture helper doesn't have rotation as an array, but as an euler
-        rotation = element.rotation.y
-      } else {
-        position = {x: element.position[0], y: element.position[1], z: element.position[2]};
+    if (furType == '2x2') { //2x2 furniture
+      switch (rotation) {
+      case north:
+        elementSpaces = [
+          [position.x-1, position.y, position.z],
+          [position.x, position.y, position.z+1],
+          [position.x-1, position.y, position.z+1],
+          [position.x, position.y, position.z]
+        ];
+        break;
+      case east:
+        elementSpaces = [
+          [position.x, position.y, position.z],
+          [position.x-1, position.y, position.z-1],
+          [position.x-1, position.y, position.z],
+          [position.x, position.y, position.z-1]
+        ];
+        break;
+      case south:
+        elementSpaces = [
+          [position.x, position.y, position.z-1],
+          [position.x+1, position.y, position.z],
+          [position.x, position.y, position.z],
+          [position.x+1, position.y, position.z-1]
+        ];
+        break;
+      case west:
+        elementSpaces = [
+          [position.x, position.y, position.z],
+          [position.x+1, position.y, position.z+1],
+          [position.x, position.y, position.z+1],
+          [position.x+1, position.y, position.z]
+        ];
+        break;
       }
-
-      if (furType == '2x2') { //2x2 furniture
-        switch (rotation) {
+    } else if ('2x1') { //2x1 furniture
+      switch (rotation) {
         case north:
           elementSpaces = [
-            [position.x-1, position.y, position.z],
-            [position.x, position.y, position.z+1],
-            [position.x-1, position.y, position.z+1],
-            [position.x, position.y, position.z]
+            [position.x, position.y, position.z],
+            [position.x-1, position.y, position.z]
           ];
           break;
         case east:
           elementSpaces = [
             [position.x, position.y, position.z],
-            [position.x-1, position.y, position.z-1],
-            [position.x-1, position.y, position.z],
             [position.x, position.y, position.z-1]
           ];
           break;
         case south:
           elementSpaces = [
-            [position.x, position.y, position.z-1],
-            [position.x+1, position.y, position.z],
             [position.x, position.y, position.z],
-            [position.x+1, position.y, position.z-1]
+            [position.x+1, position.y, position.z]
           ];
           break;
         case west:
           elementSpaces = [
             [position.x, position.y, position.z],
-            [position.x+1, position.y, position.z+1],
-            [position.x, position.y, position.z+1],
-            [position.x+1, position.y, position.z]
+            [position.x, position.y, position.z+1]
           ];
           break;
         }
-      } else if ('2x1') { //2x1 furniture
-        switch (rotation) {
-          case north:
-            elementSpaces = [
-              [position.x, position.y, position.z],
-              [position.x-1, position.y, position.z]
-            ];
-            break;
-          case east:
-            elementSpaces = [
-              [position.x, position.y, position.z],
-              [position.x, position.y, position.z-1]
-            ];
-            break;
-          case south:
-            elementSpaces = [
-              [position.x, position.y, position.z],
-              [position.x+1, position.y, position.z]
-            ];
-            break;
-          case west:
-            elementSpaces = [
-              [position.x, position.y, position.z],
-              [position.x, position.y, position.z+1]
-            ];
-            break;
-          }
-      } else {
-        console.log('error')
-      }
+    } else {
+      console.log('error')
+    }
 
-      console.log('checkSpaces2x2or2x1Item is going to return ', elementSpaces)
-      
-      return elementSpaces;
-    } // checkSpaces2x2or2x1Item end
+    return elementSpaces;
+  }
 
-    let canBePlaced = true
+  const checkIfFurnitureCanBePlaced = (helper) => {
+
+    let canBePlaced = 'floor'
 
     if (placingFurnitureData.size != '1x1') {
-      console.log('esto no deberia aparecer')
       const helperSpaces = checkSpaces2x2or2x1Item(helper, placingFurnitureData.size);
 
       roomData.forEach((furElement) => {
@@ -251,42 +245,64 @@ function App() {
           furElementSpaces = [furElement.position[0], furElement.position[1], furElement.position[2]];
           for (let i = 0; i < helperSpaces.length; i++) {
             if (helperSpaces[i].toString() == furElementSpaces.toString()) {
-              canBePlaced = false;
+              canBePlaced = 'no';
               return;
             }   
           }
         } else {
           furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
         }
-        console.log('helperSpaces: ' + JSON.stringify(helperSpaces))
-        console.log('furElementSpaces: ' + JSON.stringify(furElementSpaces))
         for (let i = 0; i < helperSpaces.length; i++) {
           for (let j = 0; j < furElementSpaces.length; j++) {
-            // console.log(helperSpaces[i].toString() + ' == ' + furElementSpaces[j].toString())
             if (helperSpaces[i].toString() == furElementSpaces[j].toString()) {
-              canBePlaced = false;
+              canBePlaced = 'no';
               return;
             }              
           }
         }
       });
     } else {
-      console.log('este si xd')
       const helperSpace = [helper.position.x, helper.position.y, helper.position.z];
 
       roomData.forEach((furElement) => {
         let furElementSpaces = null;
+
         if (furElement.size == '1x1') {
           furElementSpaces = [furElement.position[0], furElement.position[1], furElement.position[2]];
+          if (furElement.furProps.includes('surface') && placingFurnitureData.furProps.includes('canBePlacedOnSurface')) {
+            if (helperSpace.toString() == furElementSpaces.toString()) {
+              canBePlaced = 'surface';
+              return;
+            }
+          } else if (furElement.furProps.includes('canBePlacedOnSurface') && placingFurnitureData.furProps.includes('canBePlacedOnSurface')) {
+            helperSpace[1] = 1;
+            if (helperSpace.toString() == furElementSpaces.toString()) {
+              canBePlaced = 'no';
+              return;
+            }
+          }
+          helperSpace[1] = helper.position.y;
           if (helperSpace.toString() == furElementSpaces.toString()) {
-            canBePlaced = false;
+            canBePlaced = 'no';
             return;
           }
         } else {
           furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
           for (let i = 0; i < furElementSpaces.length; i++) {
+            if (furElement.furProps.includes('surface') && placingFurnitureData.furProps.includes('canBePlacedOnSurface')) {
+              if (helperSpace.toString() == furElementSpaces[i].toString()) {
+                canBePlaced = 'surface';
+                return;
+              }
+            } else if (furElement.furProps.includes('canBePlacedOnSurface') && placingFurnitureData.furProps.includes('canBePlacedOnSurface')) {
+              helperSpace[1] = 1;
+              if (helperSpace.toString() == furElementSpaces[i].toString()) {
+                canBePlaced = 'no';
+                return;
+              }
+            }
             if (helperSpace.toString() == furElementSpaces[i].toString()) {
-              canBePlaced = false;
+              canBePlaced = 'no';
               return;
             }              
           }
@@ -370,8 +386,6 @@ function App() {
 
     const changeMoveFromCameraIndex = (cameraIndex, move) => {
 
-      console.log(placingFurnitureData.size)
-
       //  left /  \ up
       //  down \  / right
 
@@ -417,7 +431,6 @@ function App() {
 
     if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move)
 
-    console.log(move, placingFurnitureSize, lastPosition)
     // const directions = [north, west, south, east]
     // const south = -Math.PI / 1 //-3.14... down
     // const west = Math.PI / 2 //1.57... left
@@ -474,19 +487,17 @@ function App() {
       furName: name.replace(/([A-Z])/g, ' $1').trim(),
       furProps: furProps
     })
-    //console.log(roomData.find((element) => element.key == key));
   }
 
   const generateFurMenu = () => {
-    console.log(furMenuOpen.furProps)
     return <FurMenu 
-    furName={furMenuOpen.furName} 
-    x={furMenuOpen.x} 
-    y={furMenuOpen.y} 
-    refKey={furMenuOpen.key}
-    furProps={furMenuOpen.furProps}
-    removeFur={removeFur}
-    toggleLightFur={toggleLightFur}
+      furName={furMenuOpen.furName} 
+      x={furMenuOpen.x} 
+      y={furMenuOpen.y} 
+      refKey={furMenuOpen.key}
+      furProps={furMenuOpen.furProps}
+      removeFur={removeFur}
+      toggleLightFur={toggleLightFur}
     />
   }
 
@@ -502,7 +513,21 @@ function App() {
   }
 
   const removeFur = (key) => {
-    setRoomData(roomData.filter((element) => element.key != key))
+    let elemToRemove = roomData.find((element) => element.key == key);
+    let elemToRemoveSpaces = [];
+    let keysToRemove = [];
+    keysToRemove.push(elemToRemove.key)
+    if (elemToRemove.size != '1x1') {
+      elemToRemoveSpaces = checkSpaces2x2or2x1Item(elemToRemove, elemToRemove.size)
+      for (let spaces of elemToRemoveSpaces) {
+        elemToRemove = roomData.find((element) => element.position.toString() == [spaces[0], 1, spaces[2]].toString())
+        if (elemToRemove) keysToRemove.push(elemToRemove.key)
+      }
+    } else {
+      elemToRemove = roomData.find((element) => element.position.toString() == [elemToRemove.position[0], 1, elemToRemove.position[2]].toString())
+      if (elemToRemove) keysToRemove.push(elemToRemove.key)
+    }
+    setRoomData(roomData.filter((elem) => !keysToRemove.includes(elem.key)))
     setFurMenuOpen(false)
   }
 
@@ -574,38 +599,40 @@ function App() {
 
       <Canvas shadows orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
 
-        <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
+        {/* Can be used to lower all the elements in screen so in the future, the room with walls fit better in the screen */}
+        <group position={[0,0,0]}> 
+          <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 
-        <group>
-          {roomData.map((furniture) => 
-            <furniture.model
-            key={furniture.key} 
-            position={furniture.position} 
-            rotation={furniture.rotation} 
-            options={furniture.options}
-            onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name, furniture.furProps)}
-          />)}
+          <group>
+            {roomData.map((furniture) => 
+              <furniture.model
+              key={furniture.key} 
+              position={furniture.position} 
+              rotation={furniture.rotation} 
+              options={furniture.options}
+              onPointerDown={(e) => handleFurnitureClick(e, furniture.key, furniture.model.name, furniture.furProps)}
+            />)}
+          </group>
+
+          <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
+
+          <spotLight 
+            angle={30} 
+            intensity={2} 
+            position={[0,5,0]} 
+            color={'#ffd187'} 
+            distance={35} 
+            decay={10} 
+            castShadow 
+            shadow-mapSize-height={2048}
+            shadow-mapSize-width={2048}
+            shadow-radius={10}
+            shadow-bias={-0.003}
+          />
+          <ambientLight intensity={0.1} />
+
+          <Floor />
         </group>
-
-        <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
-
-        <spotLight 
-          angle={30} 
-          intensity={2} 
-          position={[0,5,0]} 
-          color={'#ffd187'} 
-          distance={35} 
-          decay={10} 
-          castShadow 
-          shadow-mapSize-height={2048}
-          shadow-mapSize-width={2048}
-          shadow-radius={10}
-          shadow-bias={-0.003}
-        />
-        <ambientLight intensity={0.1} />
-
-        <Floor />
-
         {/* <gridHelper args={[9, 9, "blue", "blue"]} /> */}
       </Canvas>
     </>

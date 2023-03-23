@@ -13,7 +13,7 @@ export default function OldLamp(props) {
             visible={props.options.lightOn}
             angle={1}
             intensity={3}
-            position={[props.position[0], .8, props.position[2]]}
+            position={[props.position[0], props.position[1]+.8, props.position[2]]}
             color={'#f7b65c'}
             distance={3}
             castShadow

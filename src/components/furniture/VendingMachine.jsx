@@ -32,6 +32,7 @@ export default function VendingMachine(props) {
     <>
     <spotLight
         ref={spotLightRef}
+        visible={props.options.lightOn}
         angle={1.6}
         intensity={3} 
         position={[props.position[0], 1, props.position[2]]}
