@@ -46,5 +46,11 @@
         "name": "OldLamp",
         "size": "1x1",
         "furProps": ["light", "canBePlacedOnSurface"]
+    },
+    {
+        "id": 9,
+        "name": "OldWardrobe",
+        "size": "2x1",
+        "furProps": []
     }
 ]

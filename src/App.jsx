@@ -13,13 +13,14 @@ import VendingMachine from './components/furniture/VendingMachine'
 import OldChair from './components/furniture/OldChair'
 import OldTable from './components/furniture/OldTable'
 import OldLamp from './components/furniture/OldLamp'
+import OldWardrobe from './components/furniture/OldWardrobe'
 
 const componentsMap = {
   Coach, 
   Test2x2, Test2x1, 
   Plant, 
   VendingMachine, 
-  OldChair, OldTable, OldLamp
+  OldChair, OldTable, OldLamp, OldWardrobe
 }
 
 // Selectors
