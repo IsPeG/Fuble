@@ -4,6 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 
 // Room elements
 import Floor from './components/room_elements/Floor'
+import Walls from './components/room_elements/Walls'
 
 // Furniture
 import Coach from './components/furniture/Coach'
@@ -69,7 +70,8 @@ function App() {
   const cameraIndexRef = useRef()
 
   const directions = [north, west, south, east]
-  const cameraPositions = [[7,7,7], [6.5,6.5,-5.5], [-7,8,-7], [-5.5,6.5,6.5]]
+  // const cameraPositions = [[7,7,7], [6.5,6.5,-5.5], [-7,8,-7], [-5.5,6.5,6.5]]
+  const cameraPositions = [[7,6,7], [6.5,5.5,-5.5], [-7,7,-7], [-5.5,5.5,6.5]]
   const lookAtCameraPositions = [[0,0,0], [.5,.5,.5], [-.5,1.5,-.5], [.5,.5,.5]]
   var placingFurnitureDirection = 0
 
@@ -156,12 +158,14 @@ function App() {
 
   const checkSpaces2x2or2x1Item = (element, furType) => {
     let elementSpaces = null
+    let isHelper = false
 
-    let rotation = element.rotation[1];
-    let position = element.position;
+    let rotation = element.rotation[1]
+    let position = element.position
 
     if (rotation == undefined) { // the furniture helper doesn't have rotation as an array, but as an euler
       rotation = element.rotation.y
+      isHelper = true
     } else {
       position = {x: element.position[0], y: element.position[1], z: element.position[2]};
     }
@@ -181,28 +185,30 @@ function App() {
           [position.x-.5, position.y, position.z],
           [position.x-.5, position.y, position.z+1],
           [position.x, position.y, position.z+.5],
-          
-          // surrounding spaces
-          [position.x-1.5, position.y, position.z-.5],
-          [position.x-1.5, position.y, position.z],
-          [position.x-1.5, position.y, position.z+.5],
-          [position.x-1.5, position.y, position.z+1],
-          [position.x-1.5, position.y, position.z+1.5],
-
-          [position.x-1, position.y, position.z+1.5],
-          [position.x-.5, position.y, position.z+1.5],
-          [position.x, position.y, position.z+1.5],
-          [position.x+.5, position.y, position.z+1.5],
-
-          [position.x+.5, position.y, position.z-.5],
-          [position.x+.5, position.y, position.z],
-          [position.x+.5, position.y, position.z+.5],
-          [position.x+.5, position.y, position.z+1],
-
-          [position.x-1, position.y, position.z-.5],
-          [position.x-.5, position.y, position.z-.5],
-          [position.x, position.y, position.z-.5],
         ];
+        if (isHelper) {
+          elementSpaces.push(
+            [position.x-1.5, position.y, position.z-.5],
+            [position.x-1.5, position.y, position.z],
+            [position.x-1.5, position.y, position.z+.5],
+            [position.x-1.5, position.y, position.z+1],
+            [position.x-1.5, position.y, position.z+1.5],
+  
+            [position.x-1, position.y, position.z+1.5],
+            [position.x-.5, position.y, position.z+1.5],
+            [position.x, position.y, position.z+1.5],
+            [position.x+.5, position.y, position.z+1.5],
+  
+            [position.x+.5, position.y, position.z-.5],
+            [position.x+.5, position.y, position.z],
+            [position.x+.5, position.y, position.z+.5],
+            [position.x+.5, position.y, position.z+1],
+  
+            [position.x-1, position.y, position.z-.5],
+            [position.x-.5, position.y, position.z-.5],
+            [position.x, position.y, position.z-.5],
+          )
+        }
         break;
       case east:
         elementSpaces = [
@@ -217,28 +223,30 @@ function App() {
           [position.x-1, position.y, position.z-1],
           [position.x-1, position.y, position.z],
           [position.x, position.y, position.z-1],
-
-          // surrounding spaces
-          [position.x-1.5, position.y, position.z-1.5],
-          [position.x-1.5, position.y, position.z-1],
-          [position.x-1.5, position.y, position.z-.5],
-          [position.x-1.5, position.y, position.z],
-          [position.x-1.5, position.y, position.z+.5],
-
-          [position.x-1, position.y, position.z+.5],
-          [position.x-.5, position.y, position.z+.5],
-          [position.x, position.y, position.z+.5],
-          [position.x+.5, position.y, position.z+.5],
-
-          [position.x+.5, position.y, position.z-1],
-          [position.x+.5, position.y, position.z-.5],
-          [position.x+.5, position.y, position.z],
-          [position.x-1, position.y, position.z-1.5],
-
-          [position.x+.5, position.y, position.z-1.5],
-          [position.x, position.y, position.z-1.5],
-          [position.x-.5, position.y, position.z-1.5],
         ];
+        if (isHelper) {
+          elementSpaces.push(
+            [position.x-1.5, position.y, position.z-1.5],
+            [position.x-1.5, position.y, position.z-1],
+            [position.x-1.5, position.y, position.z-.5],
+            [position.x-1.5, position.y, position.z],
+            [position.x-1.5, position.y, position.z+.5],
+
+            [position.x-1, position.y, position.z+.5],
+            [position.x-.5, position.y, position.z+.5],
+            [position.x, position.y, position.z+.5],
+            [position.x+.5, position.y, position.z+.5],
+
+            [position.x+.5, position.y, position.z-1],
+            [position.x+.5, position.y, position.z-.5],
+            [position.x+.5, position.y, position.z],
+            [position.x-1, position.y, position.z-1.5],
+
+            [position.x+.5, position.y, position.z-1.5],
+            [position.x, position.y, position.z-1.5],
+            [position.x-.5, position.y, position.z-1.5],
+          )
+        }
         break;
       case south:
         elementSpaces = [
@@ -253,28 +261,30 @@ function App() {
           [position.x+1, position.y, position.z],
           [position.x, position.y, position.z],
           [position.x+1, position.y, position.z-1],
-
-          // surrounding spaces
-          [position.x+1.5, position.y, position.z+.5],
-          [position.x+1.5, position.y, position.z],
-          [position.x+1.5, position.y, position.z-.5],
-          [position.x+1.5, position.y, position.z-1],
-          [position.x+1.5, position.y, position.z-1.5],
-
-          [position.x+1, position.y, position.z-1.5],
-          [position.x+.5, position.y, position.z-1.5],
-          [position.x, position.y, position.z-1.5],
-          [position.x-.5, position.y, position.z-1.5],
-
-          [position.x-.5, position.y, position.z+.5],
-          [position.x-.5, position.y, position.z],
-          [position.x-.5, position.y, position.z-.5],
-          [position.x-.5, position.y, position.z-1],
-
-          [position.x+1, position.y, position.z+.5],
-          [position.x+.5, position.y, position.z+.5],
-          [position.x, position.y, position.z+.5],
         ];
+        if (isHelper) {
+          elementSpaces.push(
+            [position.x+1.5, position.y, position.z+.5],
+            [position.x+1.5, position.y, position.z],
+            [position.x+1.5, position.y, position.z-.5],
+            [position.x+1.5, position.y, position.z-1],
+            [position.x+1.5, position.y, position.z-1.5],
+
+            [position.x+1, position.y, position.z-1.5],
+            [position.x+.5, position.y, position.z-1.5],
+            [position.x, position.y, position.z-1.5],
+            [position.x-.5, position.y, position.z-1.5],
+
+            [position.x-.5, position.y, position.z+.5],
+            [position.x-.5, position.y, position.z],
+            [position.x-.5, position.y, position.z-.5],
+            [position.x-.5, position.y, position.z-1],
+
+            [position.x+1, position.y, position.z+.5],
+            [position.x+.5, position.y, position.z+.5],
+            [position.x, position.y, position.z+.5],
+          )
+        }
         break;
       case west:
         elementSpaces = [
@@ -289,28 +299,30 @@ function App() {
           [position.x+1, position.y, position.z+1],
           [position.x+1, position.y, position.z],
           [position.x, position.y, position.z+1],
-
-          // surrounding spaces
-          [position.x+1.5, position.y, position.z+1.5],
-          [position.x+1.5, position.y, position.z+1],
-          [position.x+1.5, position.y, position.z+.5],
-          [position.x+1.5, position.y, position.z],
-          [position.x+1.5, position.y, position.z-.5],
-
-          [position.x+1, position.y, position.z-.5],
-          [position.x+.5, position.y, position.z-.5],
-          [position.x, position.y, position.z-.5],
-          [position.x-.5, position.y, position.z-.5],
-
-          [position.x-.5, position.y, position.z+1],
-          [position.x-.5, position.y, position.z+.5],
-          [position.x-.5, position.y, position.z],
-          [position.x+1, position.y, position.z+1.5],
-
-          [position.x-.5, position.y, position.z+1.5],
-          [position.x, position.y, position.z+1.5],
-          [position.x+.5, position.y, position.z+1.5],
         ];
+        if (isHelper) {
+          elementSpaces.push(
+            [position.x+1.5, position.y, position.z+1.5],
+            [position.x+1.5, position.y, position.z+1],
+            [position.x+1.5, position.y, position.z+.5],
+            [position.x+1.5, position.y, position.z],
+            [position.x+1.5, position.y, position.z-.5],
+  
+            [position.x+1, position.y, position.z-.5],
+            [position.x+.5, position.y, position.z-.5],
+            [position.x, position.y, position.z-.5],
+            [position.x-.5, position.y, position.z-.5],
+  
+            [position.x-.5, position.y, position.z+1],
+            [position.x-.5, position.y, position.z+.5],
+            [position.x-.5, position.y, position.z],
+            [position.x+1, position.y, position.z+1.5],
+  
+            [position.x-.5, position.y, position.z+1.5],
+            [position.x, position.y, position.z+1.5],
+            [position.x+.5, position.y, position.z+1.5],
+          )
+        }
         break;
       }
     } else if ('2x1') { //2x1 furniture
@@ -321,91 +333,101 @@ function App() {
             [position.x, position.y, position.z], //interior spaces
             [position.x-1, position.y, position.z], 
             [position.x-.5, position.y, position.z], 
-            
-            //surrounding spaces
-            [position.x+.5, position.y, position.z], // tight sides
-            [position.x-1.5, position.y, position.z],
-
-            [position.x+.5, position.y, position.z+.5], //wide side 1
-            [position.x, position.y, position.z+.5],
-            [position.x-.5, position.y, position.z+.5],
-            [position.x-1, position.y, position.z+.5],
-            [position.x-1.5, position.y, position.z+.5], 
-            
-            [position.x+.5, position.y, position.z-.5], //wide side 2
-            [position.x, position.y, position.z-.5],
-            [position.x-.5, position.y, position.z-.5],
-            [position.x-1, position.y, position.z-.5],
-            [position.x-1.5, position.y, position.z-.5], 
-
           ];
+          if (isHelper) {
+            elementSpaces.push(
+              //surrounding spaces
+              [position.x+.5, position.y, position.z], // tight sides
+              [position.x-1.5, position.y, position.z],
+
+              [position.x+.5, position.y, position.z+.5], //wide side 1
+              [position.x, position.y, position.z+.5],
+              [position.x-.5, position.y, position.z+.5],
+              [position.x-1, position.y, position.z+.5],
+              [position.x-1.5, position.y, position.z+.5], 
+              
+              [position.x+.5, position.y, position.z-.5], //wide side 2
+              [position.x, position.y, position.z-.5],
+              [position.x-.5, position.y, position.z-.5],
+              [position.x-1, position.y, position.z-.5],
+              [position.x-1.5, position.y, position.z-.5], 
+            )
+          }
           break;
         case east:
           elementSpaces = [
             [position.x, position.y, position.z],
             [position.x, position.y, position.z-1],
             [position.x, position.y, position.z-.5],
-
-            [position.x, position.y, position.z+.5],
-            [position.x, position.y, position.z-1.5],
-
-            [position.x+.5, position.y, position.z+.5],
-            [position.x+.5, position.y, position.z],
-            [position.x+.5, position.y, position.z-.5],
-            [position.x+.5, position.y, position.z-1],
-            [position.x+.5, position.y, position.z-1.5],
-
-            [position.x-.5, position.y, position.z+.5],
-            [position.x-.5, position.y, position.z],
-            [position.x-.5, position.y, position.z-.5],
-            [position.x-.5, position.y, position.z-1],
-            [position.x-.5, position.y, position.z-1.5],
           ];
+          if (isHelper) {
+            elementSpaces.push(
+              [position.x, position.y, position.z+.5],
+              [position.x, position.y, position.z-1.5],
+
+              [position.x+.5, position.y, position.z+.5],
+              [position.x+.5, position.y, position.z],
+              [position.x+.5, position.y, position.z-.5],
+              [position.x+.5, position.y, position.z-1],
+              [position.x+.5, position.y, position.z-1.5],
+
+              [position.x-.5, position.y, position.z+.5],
+              [position.x-.5, position.y, position.z],
+              [position.x-.5, position.y, position.z-.5],
+              [position.x-.5, position.y, position.z-1],
+              [position.x-.5, position.y, position.z-1.5],
+            )
+          }
           break;
         case south:
           elementSpaces = [
             [position.x, position.y, position.z],
             [position.x+1, position.y, position.z],
             [position.x+.5, position.y, position.z], 
-
-            [position.x-.5, position.y, position.z], 
-            [position.x+1.5, position.y, position.z],
-
-            [position.x-.5, position.y, position.z+.5], 
-            [position.x, position.y, position.z+.5],
-            [position.x+.5, position.y, position.z+.5],
-            [position.x+1, position.y, position.z+.5],
-            [position.x+1.5, position.y, position.z+.5], 
-            
-            [position.x-.5, position.y, position.z-.5], 
-            [position.x, position.y, position.z-.5],
-            [position.x+.5, position.y, position.z-.5],
-            [position.x+1, position.y, position.z-.5],
-            [position.x+1.5, position.y, position.z-.5], 
-
           ];
+          if (isHelper) {
+            elementSpaces.push(
+              [position.x-.5, position.y, position.z], 
+              [position.x+1.5, position.y, position.z],
+
+              [position.x-.5, position.y, position.z+.5], 
+              [position.x, position.y, position.z+.5],
+              [position.x+.5, position.y, position.z+.5],
+              [position.x+1, position.y, position.z+.5],
+              [position.x+1.5, position.y, position.z+.5], 
+              
+              [position.x-.5, position.y, position.z-.5], 
+              [position.x, position.y, position.z-.5],
+              [position.x+.5, position.y, position.z-.5],
+              [position.x+1, position.y, position.z-.5],
+              [position.x+1.5, position.y, position.z-.5], 
+            )
+          }
           break;
         case west:
           elementSpaces = [
             [position.x, position.y, position.z],
             [position.x, position.y, position.z+1],
             [position.x, position.y, position.z+.5],
-
-            [position.x, position.y, position.z-.5],
-            [position.x, position.y, position.z+1.5],
-
-            [position.x+.5, position.y, position.z-.5],
-            [position.x+.5, position.y, position.z],
-            [position.x+.5, position.y, position.z+.5],
-            [position.x+.5, position.y, position.z+1],
-            [position.x+.5, position.y, position.z+1.5],
-
-            [position.x-.5, position.y, position.z-.5],
-            [position.x-.5, position.y, position.z],
-            [position.x-.5, position.y, position.z+.5],
-            [position.x-.5, position.y, position.z+1],
-            [position.x-.5, position.y, position.z+1.5],
           ];
+          if (isHelper) {
+            elementSpaces.push(
+              [position.x, position.y, position.z-.5],
+              [position.x, position.y, position.z+1.5],
+
+              [position.x+.5, position.y, position.z-.5],
+              [position.x+.5, position.y, position.z],
+              [position.x+.5, position.y, position.z+.5],
+              [position.x+.5, position.y, position.z+1],
+              [position.x+.5, position.y, position.z+1.5],
+
+              [position.x-.5, position.y, position.z-.5],
+              [position.x-.5, position.y, position.z],
+              [position.x-.5, position.y, position.z+.5],
+              [position.x-.5, position.y, position.z+1],
+              [position.x-.5, position.y, position.z+1.5],
+            )
+          }
           break;
         }
     } else {
@@ -433,6 +455,7 @@ function App() {
             console.log(helperSpaces[i].toString(), furElementSpaces.toString())
             console.log(helperSpaces[i].toString() == furElementSpaces.toString())
             if (helperSpaces[i].toString() == furElementSpaces.toString()) {
+              console.log('no1')
               canBePlaced = 'no';
               return;
             }   
@@ -443,6 +466,7 @@ function App() {
         for (let i = 0; i < helperSpaces.length; i++) {
           for (let j = 0; j < furElementSpaces.length; j++) {
             if (helperSpaces[i].toString() == furElementSpaces[j].toString()) {
+              console.log('no2')
               canBePlaced = 'no';
               return;
             }              
@@ -524,7 +548,7 @@ function App() {
         }
       });
     }
-    
+    // console.log(canBePlaced)
     return canBePlaced;
   }
 
@@ -815,7 +839,7 @@ function App() {
       <Canvas shadows orthographic camera={{zoom: 100, near: 1, far: 2000}} style={{ background: "#0a0a0a" }}>
 
         {/* Can be used to lower all the elements in screen so in the future, the room with walls fit better in the screen */}
-        <group position={[0,0,0]}> 
+        <group position={[0,-.9,0]}> 
           <CameraRig positionData={cameraPositions[cameraIndex]} lookAtData={lookAtCameraPositions[cameraIndex]} />
 
           <group>
@@ -860,6 +884,7 @@ function App() {
           <ambientLight intensity={0.1} />
 
           <Floor />
+          <Walls wallName={'test'} />
         </group>
         {/* <gridHelper position={[0.5,0,0.5]} args={[8, 8, "red", "blue"]} /> */}
       </Canvas>
