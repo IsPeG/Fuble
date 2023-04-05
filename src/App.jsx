@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
+import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber';
+import { SpotLight, useDepthBuffer, useHelper } from "@react-three/drei";
 // import { Edges } from "@react-three/drei";
 
 // Room elements
@@ -70,12 +72,11 @@ function App() {
   const cameraIndexRef = useRef()
 
   const directions = [north, west, south, east]
-  // const cameraPositions = [[7,7,7], [6.5,6.5,-5.5], [-7,8,-7], [-5.5,6.5,6.5]]
   const cameraPositions = [[7,6,7], [6.5,5.5,-5.5], [-7,7,-7], [-5.5,5.5,6.5]]
   const lookAtCameraPositions = [[0,0,0], [.5,.5,.5], [-.5,1.5,-.5], [.5,.5,.5]]
   var placingFurnitureDirection = 0
 
-  cameraIndexRef.current = cameraIndex
+  cameraIndexRef.current = cameraIndex  
 
   useEffect(() => {
 
@@ -728,6 +729,36 @@ function App() {
     })
   }
 
+  const RoomSpotLight = () => {
+    
+    const spotLight = useRef();
+
+    useEffect(() => {
+      spotLight.current ? spotLight.current.target.position.set(.5, 0, .5) : null
+    }, [spotLight.current])
+
+    // useHelper(spotLight, THREE.SpotLightHelper, 'cyan');
+
+    return (
+      <SpotLight
+        visible={true}
+        angle={11.7} 
+        intensity={2.5} 
+        position={[.5,8,.5]}
+        color={'#ffd285'}
+        distance={15}
+        attenuation={0}
+        anglePower={9} 
+        shadow-mapSize-height={2048}
+        shadow-mapSize-width={2048}
+        shadow-radius={10}
+        shadow-bias={-0.003}
+        ref={spotLight}
+      />
+    )
+  }
+
+
   const generateFurMenu = () => {
     return <FurMenu 
       furName={furMenuOpen.furName} 
@@ -868,22 +899,10 @@ function App() {
 
           <SetFurnitureHelper ref={setFurnitureHelperRef} isPlacing={ placingFurniture ? true : false } />
 
-          <spotLight 
-            angle={30} 
-            intensity={2} 
-            position={[0,5,0]} 
-            color={'#ffd187'} 
-            distance={35} 
-            decay={10} 
-            castShadow 
-            shadow-mapSize-height={2048}
-            shadow-mapSize-width={2048}
-            shadow-radius={10}
-            shadow-bias={-0.003}
-          />
-          <ambientLight intensity={0.1} />
+          <RoomSpotLight />
+          <ambientLight intensity={.1} />
 
-          <Floor />
+          <Floor floorName={'wood'} />
           <Walls wallName={'test'} />
         </group>
         {/* <gridHelper position={[0.5,0,0.5]} args={[8, 8, "red", "blue"]} /> */}

@@ -9,18 +9,18 @@ export default function OldLamp(props) {
   return (
     <>
         <pointLight
-            ref={spotLightRef}
-            visible={props.options.lightOn}
-            angle={1}
-            intensity={3}
-            position={[props.position[0], props.position[1]+.8, props.position[2]]}
-            color={'#f7b65c'}
-            distance={3}
-            castShadow
-            shadow-mapSize-height={2048}
-            shadow-mapSize-width={2048}
-            shadow-radius={10}
-            shadow-bias={-0.005}
+          ref={spotLightRef}
+          visible={props.options.lightOn}
+          angle={1}
+          intensity={3}
+          position={[props.position[0], props.position[1]+.8, props.position[2]]}
+          color={'#f7b65c'}
+          distance={3}
+          castShadow
+          shadow-mapSize-height={2048}
+          shadow-mapSize-width={2048}
+          shadow-radius={10}
+          shadow-bias={-0.005}
         /> 
         <group {...props} dispose={null}>
             <mesh geometry={nodes.cylinder.geometry} material={nodes.cylinder.material} receiveShadow castShadow/>
