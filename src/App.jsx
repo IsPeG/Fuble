@@ -182,16 +182,28 @@ function App() {
     const keyHandler = (e) => {
       switch (e.key) {
         case "ArrowRight":
-          furnitureHelperMoveButtonHandler("right");
+          // furnitureHelperMoveButtonHandler("right", e);
+          document.getElementById("moveFurRight")
+            ? document.getElementById("moveFurRight").click()
+            : null;
           break;
         case "ArrowLeft":
-          furnitureHelperMoveButtonHandler("left");
+          // furnitureHelperMoveButtonHandler("left", e);
+          document.getElementById("moveFurLeft")
+            ? document.getElementById("moveFurLeft").click()
+            : null;
           break;
         case "ArrowUp":
-          furnitureHelperMoveButtonHandler("up");
+          // furnitureHelperMoveButtonHandler("up", e);
+          document.getElementById("moveFurUp")
+            ? document.getElementById("moveFurUp").click()
+            : null;
           break;
         case "ArrowDown":
-          furnitureHelperMoveButtonHandler("down");
+          // furnitureHelperMoveButtonHandler("down", e);
+          document.getElementById("moveFurDown")
+            ? document.getElementById("moveFurDown").click()
+            : null;
           break;
         case "r":
           rotateFurnitureButtonHandler();
@@ -1144,7 +1156,14 @@ function App() {
   };
 
   const handleAddFurnitureClick = (e) => {
-    setSelectingFurniture(!selectingFurniture);
+    if (selectingFurniture) {
+      setSelectingFurniture(false);
+    } else if (placingFurniture) {
+      setSelectingFurniture(false);
+      setPlacingFurniture(false);
+    } else {
+      setSelectingFurniture(true);
+    }
   };
 
   const saveRoomButtonHandler = () => {
@@ -1208,24 +1227,28 @@ function App() {
           <div className="movesContainer">
             <button
               className="button"
+              id="moveFurLeft"
               onClick={(e) => furnitureHelperMoveButtonHandler("left", e)}
             >
               ᐊ
             </button>
             <button
               className="button"
+              id="moveFurRight"
               onClick={(e) => furnitureHelperMoveButtonHandler("right", e)}
             >
               ᐅ
             </button>
             <button
               className="button"
+              id="moveFurUp"
               onClick={(e) => furnitureHelperMoveButtonHandler("up", e)}
             >
               ᐃ
             </button>
             <button
               className="button"
+              id="moveFurDown"
               onClick={(e) => furnitureHelperMoveButtonHandler("down", e)}
             >
               ᐁ
