@@ -1,56 +1,62 @@
 [
-    {
-        "id": 1,
-        "name": "Coach",
-        "size": "1x1",
-        "furProps": []
-    },
-    {
-        "id": 2,
-        "name": "Plant",
-        "size": "1x1",
-        "furProps": []
-    },
-    {
-        "id": 3,
-        "name": "Test2x1",
-        "size": "2x1",
-        "furProps": ["surface"]
-    },
-    {
-        "id": 4,
-        "name": "Test2x2",
-        "size": "2x2",
-        "furProps": ["surface"]
-    },
-    {
-        "id": 5,
-        "name": "VendingMachine",
-        "size": "1x1",
-        "furProps": ["light"]
-    },
-    {
-        "id": 6,
-        "name": "OldChair",
-        "size": "1x1",
-        "furProps": []
-    },
-    {
-        "id": 7,
-        "name": "OldTable",
-        "size": "1x1",
-        "furProps": ["surface"]
-    },
-    {
-        "id": 8,
-        "name": "OldLamp",
-        "size": "1x1",
-        "furProps": ["light", "canBePlacedOnSurface"]
-    },
-    {
-        "id": 9,
-        "name": "OldWardrobe",
-        "size": "2x1",
-        "furProps": []
-    }
+  {
+    "id": 1,
+    "name": "Coach",
+    "size": "1x1",
+    "furProps": []
+  },
+  {
+    "id": 2,
+    "name": "Plant",
+    "size": "1x1",
+    "furProps": []
+  },
+  {
+    "id": 3,
+    "name": "Test2x1",
+    "size": "2x1",
+    "furProps": ["surface"]
+  },
+  {
+    "id": 4,
+    "name": "Test2x2",
+    "size": "2x2",
+    "furProps": ["surface"]
+  },
+  {
+    "id": 5,
+    "name": "VendingMachine",
+    "size": "1x1",
+    "furProps": ["light"]
+  },
+  {
+    "id": 6,
+    "name": "OldChair",
+    "size": "1x1",
+    "furProps": []
+  },
+  {
+    "id": 7,
+    "name": "OldTable",
+    "size": "1x1",
+    "furProps": ["surface"]
+  },
+  {
+    "id": 8,
+    "name": "OldLamp",
+    "size": "1x1",
+    "furProps": ["light", "canBePlacedOnSurface"]
+  },
+  {
+    "id": 9,
+    "name": "OldWardrobe",
+    "size": "2x1",
+    "furProps": []
+  },
+  {
+    "id": 10,
+    "name": "Speaker",
+    "size": "1x1",
+    "furProps": []
+  }
 ]
