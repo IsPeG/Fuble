@@ -880,43 +880,46 @@ function App() {
       //when index 3 (camera right 3) = up > left, right > up, down > right, left, down
 
       let newMove = move;
-
+      console.log(cameraIndex);
       switch (cameraIndex) {
         case 1:
-          switch (move) {
-            case "up":
-              newMove = "left";
-              break;
-            case "right":
-              newMove = "up";
-              break;
-            case "down":
-              newMove = "right";
-              break;
-            case "left":
-              newMove = "down";
-              break;
-          }
-          break;
-
         case 2:
           switch (move) {
             case "up":
-              newMove = "down";
-              break;
-            case "right":
               newMove = "left";
               break;
-            case "down":
+            case "right":
               newMove = "up";
               break;
-            case "left":
+            case "down":
               newMove = "right";
+              break;
+            case "left":
+              newMove = "down";
               break;
           }
           break;
 
         case 3:
+        case 4:
+          switch (move) {
+            case "up":
+              newMove = "down";
+              break;
+            case "right":
+              newMove = "left";
+              break;
+            case "down":
+              newMove = "up";
+              break;
+            case "left":
+              newMove = "right";
+              break;
+          }
+          break;
+
+        case 5:
+        case 6:
           switch (move) {
             case "up":
               newMove = "right";
