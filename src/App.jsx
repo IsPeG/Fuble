@@ -52,86 +52,86 @@ const north = 0; // up
 const east = -Math.PI / 2; //-1.57... right
 
 const roomDataExample = [
-  {
-    key: 1,
-    name: "VendingMachine",
-    model: VendingMachine,
-    position: [3, 0, -3],
-    rotation: [0, south, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
-  {
-    key: 2,
-    name: "VendingMachine",
-    model: VendingMachine,
-    position: [2, 0, -3],
-    rotation: [0, south, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
-  {
-    key: 3,
-    name: "Plant",
-    model: Plant,
-    position: [0, 0, 0],
-    rotation: [0, east, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 4,
-    name: "Test2x1",
-    model: Test2x1,
-    position: [-2, 0, -2],
-    rotation: [0, west, 0],
-    size: "2x1",
-    options: {},
-    furProps: ["surface"],
-  },
-  {
-    key: 5,
-    name: "Test2x2",
-    model: Test2x2,
-    position: [2, 0, 2],
-    rotation: [0, north, 0],
-    size: "2x2",
-    options: {},
-    furProps: ["surface"],
-  },
-  {
-    key: 6,
-    name: "Coach",
-    model: Coach,
-    position: [1, 0, 0],
-    rotation: [0, east, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 7,
-    name: "Coach",
-    model: Coach,
-    position: [0, 0, -1],
-    rotation: [0, north, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 8,
-    name: "OldLamp",
-    model: OldLamp,
-    position: [3, 0, 3],
-    rotation: [0, north, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
+  // {
+  //   key: 1,
+  //   name: "VendingMachine",
+  //   model: VendingMachine,
+  //   position: [3, 0, -3],
+  //   rotation: [0, south, 0],
+  //   size: "1x1",
+  //   options: { lightOn: true },
+  //   furProps: ["light"],
+  // },
+  // {
+  //   key: 2,
+  //   name: "VendingMachine",
+  //   model: VendingMachine,
+  //   position: [2, 0, -3],
+  //   rotation: [0, south, 0],
+  //   size: "1x1",
+  //   options: { lightOn: true },
+  //   furProps: ["light"],
+  // },
+  // {
+  //   key: 3,
+  //   name: "Plant",
+  //   model: Plant,
+  //   position: [0, 0, 0],
+  //   rotation: [0, east, 0],
+  //   size: "1x1",
+  //   options: {},
+  //   furProps: [],
+  // },
+  // {
+  //   key: 4,
+  //   name: "Test2x1",
+  //   model: Test2x1,
+  //   position: [-2, 0, -2],
+  //   rotation: [0, west, 0],
+  //   size: "2x1",
+  //   options: {},
+  //   furProps: ["surface"],
+  // },
+  // {
+  //   key: 5,
+  //   name: "Test2x2",
+  //   model: Test2x2,
+  //   position: [2, 0, 2],
+  //   rotation: [0, north, 0],
+  //   size: "2x2",
+  //   options: {},
+  //   furProps: ["surface"],
+  // },
+  // {
+  //   key: 6,
+  //   name: "Coach",
+  //   model: Coach,
+  //   position: [1, 0, 0],
+  //   rotation: [0, east, 0],
+  //   size: "1x1",
+  //   options: {},
+  //   furProps: [],
+  // },
+  // {
+  //   key: 7,
+  //   name: "Coach",
+  //   model: Coach,
+  //   position: [0, 0, -1],
+  //   rotation: [0, north, 0],
+  //   size: "1x1",
+  //   options: {},
+  //   furProps: [],
+  // },
+  // {
+  //   key: 8,
+  //   name: "OldLamp",
+  //   model: OldLamp,
+  //   position: [3, 0, 3],
+  //   rotation: [0, north, 0],
+  //   size: "1x1",
+  //   options: { lightOn: true },
+  //   furProps: ["light"],
+  // },
 ];
 
 import furnitureData from "./furnitureData/data.json";
@@ -194,7 +194,7 @@ function App() {
           furnitureHelperMoveButtonHandler("down");
           break;
         case "r":
-          rotateFurnitureButtonHandler("right");
+          rotateFurnitureButtonHandler();
           break;
         case "Escape":
           escKeyHandler();
@@ -713,7 +713,7 @@ function App() {
     return canBePlaced;
   };
 
-  const rotateFurnitureButtonHandler = (rotateDirection) => {
+  const rotateFurnitureButtonHandler = () => {
     const furnitureHelperPosition = [
       setFurnitureHelperRef.current.position.x,
       setFurnitureHelperRef.current.position.z,
@@ -725,16 +725,12 @@ function App() {
     console.log(
       setFurnitureHelperRef.current.position.x,
       setFurnitureHelperRef.current.position.z,
-      setFurnitureHelperRef.current.rotation.y
+      setFurnitureHelperRef.current.rotation.y,
+      placingFurnitureDirection
     );
 
-    if (rotateDirection === "left") {
-      placingFurnitureDirection++;
-      if (placingFurnitureDirection >= 4) placingFurnitureDirection = 0;
-    } else {
-      placingFurnitureDirection--;
-      if (placingFurnitureDirection < 0) placingFurnitureDirection = 3;
-    }
+    placingFurnitureDirection--;
+    if (placingFurnitureDirection < 0) placingFurnitureDirection = 3;
 
     if (placingFurnitureSize == "2x2") {
       switch (furnitureHelperPosition[2]) {
@@ -754,6 +750,13 @@ function App() {
     }
 
     if (placingFurnitureSize == "2x1") {
+      // const directions = [north, west, south, east];
+
+      // const south = -Math.PI / 1; //-3.14... down
+      // const west = Math.PI / 2; //1.57... left
+      // const north = 0; // up
+      // const east = -Math.PI / 2; //-1.57... right
+
       let blockedRotation = false;
 
       if (furnitureHelperPosition[1] == -3 && placingFurnitureDirection == 3) {
@@ -793,6 +796,46 @@ function App() {
         //bottom left
         placingFurnitureDirection = 0;
         setFurnitureHelperRef.current.position.x += 1;
+      }
+
+      if (
+        furnitureHelperPosition[0] == 3.5 &&
+        placingFurnitureDirection == 2 &&
+        !blockedRotation
+      ) {
+        placingFurnitureDirection = 1;
+        setFurnitureHelperRef.current.position.z -= 1;
+        blockedRotation = true;
+      }
+
+      if (
+        furnitureHelperPosition[1] == 3.5 &&
+        placingFurnitureDirection == 1 &&
+        !blockedRotation
+      ) {
+        placingFurnitureDirection = 0;
+        setFurnitureHelperRef.current.position.x += 1;
+        blockedRotation = true;
+      }
+
+      if (
+        furnitureHelperPosition[1] == -2.5 &&
+        placingFurnitureDirection == 3 &&
+        !blockedRotation
+      ) {
+        placingFurnitureDirection = 2;
+        setFurnitureHelperRef.current.position.x -= 1;
+        blockedRotation = true;
+      }
+
+      if (
+        furnitureHelperPosition[0] == -2.5 &&
+        placingFurnitureDirection == 0 &&
+        !blockedRotation
+      ) {
+        placingFurnitureDirection = 3;
+        setFurnitureHelperRef.current.position.z += 1;
+        blockedRotation = true;
       }
     }
 
@@ -1189,15 +1232,9 @@ function App() {
             </button>
             <button
               className="button"
-              onClick={(e) => rotateFurnitureButtonHandler("left", e)}
+              onClick={(e) => rotateFurnitureButtonHandler(e)}
             >
-              Rotate left
-            </button>
-            <button
-              className="button"
-              onClick={(e) => rotateFurnitureButtonHandler("right", e)}
-            >
-              Rotate right
+              Rotate
             </button>
             <button
               className="button blue"
