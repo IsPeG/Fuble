@@ -1162,7 +1162,16 @@ function App() {
 
   const handleAddFurnitureClick = (e) => {
     if (selectingFurniture) {
-      setSelectingFurniture(false);
+      //plays an animation when clicking cancel
+      document
+        .getElementById("test")
+        .animate([{ bottom: "0" }, { bottom: "-40rem" }], {
+          duration: 500,
+          easing: "ease",
+        });
+      setTimeout(() => {
+        setSelectingFurniture(false);
+      }, 400);
     } else if (placingFurniture) {
       setSelectingFurniture(false);
       setPlacingFurniture(false);

@@ -1,50 +1,63 @@
 .furSelector {
-    display: flex;
-    flex-wrap: wrap;
-    overflow: auto;
-    max-height: 100%;
-    margin: 0 .5rem 0 .5rem;
-    scrollbar-width: none;
-    scrollbar-color: #6e5b4a #353130;
-    justify-content: center;
-    max-width: 40rem;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  max-height: 100%;
+  margin: 0 0.5rem 0 0.5rem;
+  scrollbar-width: none;
+  scrollbar-color: #6e5b4a #353130;
+  justify-content: center;
+  max-width: 40rem;
 }
 
 /* Chrome, Edge, and Safari */
 .furSelector::-webkit-scrollbar {
-    width: 16px;
+  width: 16px;
 }
 
 .furSelector::-webkit-scrollbar-track {
-    background: #ded5c8;
+  background: #ded5c8;
 }
 
 .furSelector::-webkit-scrollbar-thumb {
-    background-color: var(--button-blue-bg-color);
-    border-radius: 3px;
+  background-color: var(--button-blue-bg-color);
+  border-radius: 3px;
 }
 
 .furSelectorWrapper {
-    box-shadow: 0 0 0 .45em var(--button-blue-shadow-color);
-    height: 60%;
-    width: 100%;
-    border-radius: 3rem 3rem 0 0;
-    z-index: 101;
-    left: 50%;
-    transform: translate(-50%, 0);
-    bottom: 0;
-    position: fixed;
-    background-color: var(--container-bg-color);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  box-shadow: 0 0 0 0.45em var(--button-blue-shadow-color);
+  height: 60%;
+  width: 100%;
+  border-radius: 3rem 3rem 0 0;
+  z-index: 101;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 0;
+  position: fixed;
+  background-color: var(--container-bg-color);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  animation-name: furSelectorWrapper-appear;
+  animation-timing-function: ease;
+  animation-duration: 0.5s;
 }
 
 .filtersContainer {
-    justify-content: center;
-    background-color: var(--button-blue-bg-color);
-    border-radius: 2.8rem 2.8rem 0 0;
-    width: 100%;
-    display: flex;
-    margin: 0 .5rem 1rem .5rem;
+  justify-content: center;
+  background-color: var(--button-blue-bg-color);
+  border-radius: 2.8rem 2.8rem 0 0;
+  width: 100%;
+  display: flex;
+  margin: 0 0.5rem 1rem 0.5rem;
+}
+
+@keyframes furSelectorWrapper-appear {
+  from {
+    bottom: -20rem;
+  }
+  to {
+    bottom: 0;
+  }
 }
