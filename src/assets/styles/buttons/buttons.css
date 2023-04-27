@@ -1,6 +1,6 @@
 /* Button styles made by https://www.sololearn.com/compiler-playground/WZX4urB7sdT5/ */
 
-.button { 
+.button {
   background: var(--button-bg-color);
   text-align: center;
   border: 1px solid #c1b695;
@@ -10,16 +10,16 @@
   text-decoration: none;
   color: var(--button-text-color);
   font-weight: bold;
-  font-size: .9rem;
-  padding: .6rem 1.4rem .6rem 1.4rem;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.4rem 0.6rem 1.4rem;
   margin: 1px;
   outline: none;
 }
 
-.button[type='file'] {
+.button[type="file"] {
   display: none;
 }
-  
+
 .button:active {
   transform: translateY(3px);
   background: #e7dbc7;
@@ -52,5 +52,20 @@
   background: #c0b574;
   color: #8b6636;
   border: 1px solid #322f26;
+  transform: translateY(3px);
+}
+
+.button.red {
+  color: var(--button-red-text-color);
+  box-shadow: 0 3px var(--button-red-shadow-color);
+  background: var(--button-red-bg-color);
+  border: var(--button-red-bg-color) 1px solid;
+}
+
+.button.red:active {
+  box-shadow: 0 0 #361010;
+  background: #5a1407;
+  color: #a47b7b;
+  border: 1px solid #260808;
   transform: translateY(3px);
 }

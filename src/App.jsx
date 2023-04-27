@@ -39,11 +39,12 @@ import FurnitureSelector2x1 from "./components/furniture_selectors/FurnitureSele
 import FurnitureSelector2x2 from "./components/furniture_selectors/FurnitureSelector2x2";
 
 // UI
-import FurMenu from "./components/ui/furMenu";
-import SaveRoomMenu from "./components/ui/SaveRoomMenu";
+import FurMenu from "./components/ui/FurMenu/FurMenu";
+import SaveRoomMenu from "./components/ui/SaveRoomMenu/SaveRoomMenu";
+import Options from "./components/ui/Options/Options";
 
 import "./assets/styles/global.css";
-import FurSelector from "./components/ui/FurSelector";
+import FurSelector from "./components/ui/FurSelector/FurSelector";
 
 // Variables
 const south = -Math.PI / 1; //-3.14... down
@@ -180,6 +181,7 @@ function App() {
     setRoomData(roomDataExample);
 
     const keyHandler = (e) => {
+      // e.preventDefault();
       switch (e.key) {
         case "ArrowRight":
           // furnitureHelperMoveButtonHandler("right", e);
@@ -1169,24 +1171,10 @@ function App() {
     }
   };
 
-  const saveRoomButtonHandler = () => {
-    setSaveRoomMenuOpen(!saveRoomMenuOpen);
-  };
-
-  const loadRoomButtonHandler = (e) => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    fileReader.onload = (e) => {
-      let data = JSON.parse(e.target.result);
-      data.forEach((elem) => (elem.model = componentsMap[elem.name]));
-      setRoomData(data);
-    };
-  };
-
   const generateSaveRoomMenu = () => {
     return (
       <SaveRoomMenu
-        closeSaveRoomMenu={saveRoomButtonHandler}
+        closeSaveRoomMenu={(e) => setSaveRoomMenuOpen(!saveRoomMenuOpen)}
         roomData={roomData}
       />
     );
@@ -1194,6 +1182,12 @@ function App() {
 
   return (
     <>
+      <Options
+        setSaveRoomMenuOpen={setSaveRoomMenuOpen}
+        saveRoomMenuOpen={saveRoomMenuOpen}
+        componentsMap={componentsMap}
+        setRoomData={setRoomData}
+      />
       <div className="buttonsContainer">
         <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>
           {selectingFurniture || placingFurniture ? "Cancel" : "Add furniture"}
@@ -1210,21 +1204,6 @@ function App() {
         >
           Camera right
         </button>
-        <button
-          className="button yellow"
-          onClick={(e) => saveRoomButtonHandler()}
-        >
-          Save Room
-        </button>
-        <label className="button yellow" htmlFor="loadRoom">
-          Load Room
-        </label>
-        <input
-          className="button"
-          id="loadRoom"
-          type="file"
-          onChange={loadRoomButtonHandler}
-        />
 
         {placingFurniture ? (
           <div className="movesContainer">

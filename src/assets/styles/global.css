@@ -1,15 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@700&family=Varela+Round&display=swap');
-@import url('buttons/buttons.css');
-@import url('vars/colors.css');
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@700&family=Varela+Round&display=swap");
+@import url("buttons/buttons.css");
+@import url("vars/colors.css");
 
 * {
-    box-sizing: border-box;
-    font-family: "Varela Round", sans-serif;
-    font-size: bold;
+  box-sizing: border-box;
+  font-family: "Varela Round", sans-serif;
+  font-size: bold;
+  user-select: none;
 
-    cursor: url(../textures/ui/dot.png) 8 7, auto;
+  cursor: url(../textures/ui/dot.png) 8 7, auto;
 }
-  
+
 html,
 body,
 #root {
