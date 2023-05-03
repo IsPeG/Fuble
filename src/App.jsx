@@ -19,9 +19,11 @@ import OldTable from "./components/furniture/OldTable";
 import OldLamp from "./components/furniture/OldLamp";
 import OldWardrobe from "./components/furniture/OldWardrobe";
 import Speaker from "./components/furniture/Speaker";
+import Fridge from "./components/furniture/Fridge";
 
 const componentsMap = {
   Coach,
+  Fridge,
   Speaker,
   Test2x2,
   Test2x1,
@@ -1074,24 +1076,26 @@ function App() {
         : null;
     }, [spotLight.current]);
 
-    // useHelper(spotLight, THREE.SpotLightHelper, 'cyan');
+    // useHelper(spotLight, THREE.SpotLightHelper, "cyan");
 
     return (
-      <SpotLight
-        visible={true}
-        angle={11.7}
-        intensity={2.5}
-        position={[0.5, 8, 0.5]}
-        color={"#ffd285"}
-        distance={15}
-        attenuation={0}
-        anglePower={9}
-        shadow-mapSize-height={2048}
-        shadow-mapSize-width={2048}
-        shadow-radius={10}
-        shadow-bias={-0.003}
-        ref={spotLight}
-      />
+      <>
+        <SpotLight
+          visible={true}
+          angle={21}
+          intensity={10}
+          position={[0.5, 5, 0.5]}
+          color={"#ffd285"}
+          distance={7}
+          attenuation={0}
+          anglePower={20}
+          shadow-mapSize-height={2048}
+          shadow-mapSize-width={2048}
+          shadow-radius={10}
+          shadow-bias={-0.003}
+          ref={spotLight}
+        />
+      </>
     );
   };
 
@@ -1164,7 +1168,7 @@ function App() {
     if (selectingFurniture) {
       //plays an animation when clicking cancel
       document
-        .getElementById("test")
+        .getElementsByClassName("furSelectorWrapper")[0]
         .animate([{ bottom: "0" }, { bottom: "-40rem" }], {
           duration: 500,
           easing: "ease",
@@ -1317,10 +1321,10 @@ function App() {
           />
 
           <RoomSpotLight />
-          <ambientLight intensity={0.1} />
+          <ambientLight intensity={1} color={"#ffe9ad"} />
 
-          <Floor floorName={"wood"} />
-          <Walls wallName={"test"} />
+          <Floor floorName={"dark_wood"} />
+          <Walls wallName={"beige_blossoming"} />
         </group>
         {/* <gridHelper position={[0.5,0,0.5]} args={[8, 8, "red", "blue"]} /> */}
       </Canvas>

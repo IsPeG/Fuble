@@ -58,5 +58,11 @@
     "name": "Speaker",
     "size": "1x1",
     "furProps": []
+  },
+  {
+    "id": 11,
+    "name": "Fridge",
+    "size": "1x1",
+    "furProps": []
   }
 ]
