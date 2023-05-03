@@ -47,7 +47,7 @@ export default function Walls(props) {
         <meshPhongMaterial
           attach="material"
           map={texture1}
-          // normalMap={normal1}
+          normalMap={normal1}
         />
       </mesh>
       <mesh
@@ -61,7 +61,6 @@ export default function Walls(props) {
           attach="material"
           map={texture3}
           normalMap={normal3}
-          k
         />
       </mesh>
       <mesh
@@ -74,7 +73,8 @@ export default function Walls(props) {
         <meshPhongMaterial
           attach="material"
           map={texture2}
-          // normalMap={normal2}
+          normalMap={normal2}
+          transparent
         />
       </mesh>
       <mesh
@@ -87,7 +87,7 @@ export default function Walls(props) {
         <meshPhongMaterial
           attach="material"
           map={texture3}
-          // normalMap={normal3}
+          normalMap={normal3}
         />
       </mesh>
     </group>

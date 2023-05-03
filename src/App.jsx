@@ -55,86 +55,66 @@ const north = 0; // up
 const east = -Math.PI / 2; //-1.57... right
 
 const roomDataExample = [
-  // {
-  //   key: 1,
-  //   name: "VendingMachine",
-  //   model: VendingMachine,
-  //   position: [3, 0, -3],
-  //   rotation: [0, south, 0],
-  //   size: "1x1",
-  //   options: { lightOn: true },
-  //   furProps: ["light"],
-  // },
-  // {
-  //   key: 2,
-  //   name: "VendingMachine",
-  //   model: VendingMachine,
-  //   position: [2, 0, -3],
-  //   rotation: [0, south, 0],
-  //   size: "1x1",
-  //   options: { lightOn: true },
-  //   furProps: ["light"],
-  // },
-  // {
-  //   key: 3,
-  //   name: "Plant",
-  //   model: Plant,
-  //   position: [0, 0, 0],
-  //   rotation: [0, east, 0],
-  //   size: "1x1",
-  //   options: {},
-  //   furProps: [],
-  // },
-  // {
-  //   key: 4,
-  //   name: "Test2x1",
-  //   model: Test2x1,
-  //   position: [-2, 0, -2],
-  //   rotation: [0, west, 0],
-  //   size: "2x1",
-  //   options: {},
-  //   furProps: ["surface"],
-  // },
-  // {
-  //   key: 5,
-  //   name: "Test2x2",
-  //   model: Test2x2,
-  //   position: [2, 0, 2],
-  //   rotation: [0, north, 0],
-  //   size: "2x2",
-  //   options: {},
-  //   furProps: ["surface"],
-  // },
-  // {
-  //   key: 6,
-  //   name: "Coach",
-  //   model: Coach,
-  //   position: [1, 0, 0],
-  //   rotation: [0, east, 0],
-  //   size: "1x1",
-  //   options: {},
-  //   furProps: [],
-  // },
-  // {
-  //   key: 7,
-  //   name: "Coach",
-  //   model: Coach,
-  //   position: [0, 0, -1],
-  //   rotation: [0, north, 0],
-  //   size: "1x1",
-  //   options: {},
-  //   furProps: [],
-  // },
-  // {
-  //   key: 8,
-  //   name: "OldLamp",
-  //   model: OldLamp,
-  //   position: [3, 0, 3],
-  //   rotation: [0, north, 0],
-  //   size: "1x1",
-  //   options: { lightOn: true },
-  //   furProps: ["light"],
-  // },
+  {
+    key: 1,
+    name: "VendingMachine",
+    model: VendingMachine,
+    position: [3, 0, -3],
+    rotation: [0, south, 0],
+    size: "1x1",
+    options: { lightOn: true },
+    furProps: ["light"],
+  },
+  {
+    key: 2,
+    name: "VendingMachine",
+    model: VendingMachine,
+    position: [2, 0, -3],
+    rotation: [0, south, 0],
+    size: "1x1",
+    options: { lightOn: true },
+    furProps: ["light"],
+  },
+  {
+    key: 3,
+    name: "Plant",
+    model: Plant,
+    position: [0, 0, 0],
+    rotation: [0, east, 0],
+    size: "1x1",
+    options: {},
+    furProps: [],
+  },
+  {
+    key: 4,
+    name: "Coach",
+    model: Coach,
+    position: [1, 0, 0],
+    rotation: [0, east, 0],
+    size: "1x1",
+    options: {},
+    furProps: [],
+  },
+  {
+    key: 5,
+    name: "Coach",
+    model: Coach,
+    position: [0, 0, -1],
+    rotation: [0, north, 0],
+    size: "1x1",
+    options: {},
+    furProps: [],
+  },
+  {
+    key: 6,
+    name: "OldLamp",
+    model: OldLamp,
+    position: [3, 0, 3],
+    rotation: [0, north, 0],
+    size: "1x1",
+    options: { lightOn: true },
+    furProps: ["light"],
+  },
 ];
 
 import furnitureData from "./furnitureData/data.json";
@@ -1076,25 +1056,40 @@ function App() {
         : null;
     }, [spotLight.current]);
 
-    // useHelper(spotLight, THREE.SpotLightHelper, "cyan");
+    useHelper(spotLight, THREE.SpotLightHelper, "cyan");
 
     return (
       <>
-        <SpotLight
+        {/* <SpotLight
           visible={true}
-          angle={21}
+          angle={15}
           intensity={10}
-          position={[0.5, 5, 0.5]}
+          position={[0.5, 8, 0.5]}
           color={"#ffd285"}
-          distance={7}
-          attenuation={0}
+          distance={10}
+          attenuation={5}
           anglePower={20}
           shadow-mapSize-height={2048}
           shadow-mapSize-width={2048}
           shadow-radius={10}
           shadow-bias={-0.003}
+          castShadow
           ref={spotLight}
-        />
+        /> */}
+        <directionalLight
+          castShadow
+          color={"#fff"}
+          intensity={1}
+          position={[0.5, 10, 0.5]}
+          shadow-mapSize={[1024, 1024]}
+          shadow-bias={-0.0001}
+        >
+          <orthographicCamera
+            attach="shadow-camera"
+            args={[-150.5, 150.5, 150.5, -150.5]}
+          />
+        </directionalLight>
+        <ambientLight intensity={0.45} color={"#ffd5b8"} />
       </>
     );
   };
@@ -1273,7 +1268,7 @@ function App() {
       <Canvas
         shadows
         orthographic
-        camera={{ zoom: 100, near: 1, far: 2000 }}
+        camera={{ zoom: 100, near: 1, far: 2000, attach: "shadow-camera" }}
         style={{ background: "#0a0a0a" }}
         dpr={[1, 2]}
       >
@@ -1321,7 +1316,6 @@ function App() {
           />
 
           <RoomSpotLight />
-          <ambientLight intensity={1} color={"#ffe9ad"} />
 
           <Floor floorName={"dark_wood"} />
           <Walls wallName={"beige_blossoming"} />
