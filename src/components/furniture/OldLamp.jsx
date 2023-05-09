@@ -4,12 +4,12 @@ const modelsPath = "/src/assets/models";
 
 export default function OldLamp(props) {
   const { nodes, materials } = useGLTF(modelsPath + "/furniture/old_lamp.gltf");
-  const spotLightRef = useRef();
+  // const spotLightRef = useRef();
 
   return (
     <>
       <pointLight
-        ref={spotLightRef}
+        // ref={spotLightRef}
         visible={props.options.lightOn}
         angle={1}
         intensity={3}

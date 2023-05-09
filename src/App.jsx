@@ -237,12 +237,13 @@ function App() {
       const lastKey = roomData.slice(-1)[0]?.key ?? 0;
 
       let furOptions = {};
-
       for (const elem of placingFurnitureData.furProps) {
         switch (elem) {
           case "light":
             furOptions.lightOn = true;
             break;
+          case "colors":
+            furOptions.colors = placingFurnitureData.colors;
           default:
             break;
         }
@@ -261,6 +262,7 @@ function App() {
           rotation: [0, setFurnitureHelperRef.current.rotation.y, 0],
           size: placingFurnitureData.size,
           furProps: placingFurnitureData.furProps,
+          color: furOptions.colors?.[0] || null,
           options: furOptions,
         },
       ]);
@@ -1036,7 +1038,7 @@ function App() {
     });
   };
 
-  const handleFurnitureClick = (e, key, name, furProps) => {
+  const handleFurnitureClick = (e, key, name, furProps, colors) => {
     e.stopPropagation();
     setFurMenuOpen({
       x: e.pageX,
@@ -1044,6 +1046,7 @@ function App() {
       key: key,
       furName: name.replace(/([A-Z])/g, " $1").trim(),
       furProps: furProps,
+      colors: colors,
     });
   };
 
@@ -1102,26 +1105,18 @@ function App() {
         y={furMenuOpen.y}
         refKey={furMenuOpen.key}
         furProps={furMenuOpen.furProps}
+        colors={furMenuOpen.colors}
         removeFur={removeFur}
         toggleLightFur={toggleLightFur}
+        changeColor={changeColor}
       />
     );
   };
 
-  const generateSelectingFurniture = () => {
-    return <FurSelector handleItemClick={handleItemClick} />;
-  };
-
-  const handleItemClick = (furId) => {
-    setSelectingFurniture(false);
-    const furSelected = furnitureData.find((element) => element.id == furId);
-    setPlacingFurniture(true);
-    setPlacingFurnitureData({
-      size: furSelected.size,
-      component: componentsMap[furSelected.name],
-      name: furSelected.name,
-      furProps: furSelected.furProps,
-    });
+  const changeColor = (key, color) => {
+    let toggleColorFur = roomData.find((elem) => elem.key == key);
+    toggleColorFur.color = color;
+    setFurMenuOpen(false);
   };
 
   const removeFur = (key) => {
@@ -1157,6 +1152,23 @@ function App() {
     let toggleFurData = roomData.find((elem) => elem.key == key);
     toggleFurData.options.lightOn = !toggleFurData.options.lightOn;
     setFurMenuOpen(false);
+  };
+
+  const generateSelectingFurniture = () => {
+    return <FurSelector handleItemClick={handleItemClick} />;
+  };
+
+  const handleItemClick = (furId) => {
+    setSelectingFurniture(false);
+    const furSelected = furnitureData.find((element) => element.id == furId);
+    setPlacingFurniture(true);
+    setPlacingFurnitureData({
+      size: furSelected.size,
+      component: componentsMap[furSelected.name],
+      name: furSelected.name,
+      furProps: furSelected.furProps,
+      colors: furSelected.colors,
+    });
   };
 
   const handleAddFurnitureClick = (e) => {
@@ -1286,12 +1298,14 @@ function App() {
                 position={furniture.position}
                 rotation={furniture.rotation}
                 options={furniture.options}
+                color={furniture.color || null}
                 onPointerDown={(e) =>
                   handleFurnitureClick(
                     e,
                     furniture.key,
                     furniture.model.name,
-                    furniture.furProps
+                    furniture.furProps,
+                    furniture.options.colors
                   )
                 }
               />

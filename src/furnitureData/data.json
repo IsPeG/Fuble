@@ -63,6 +63,7 @@
     "id": 11,
     "name": "Fridge",
     "size": "1x1",
-    "furProps": []
+    "colors": ["white", "yellow", "green"],
+    "furProps": ["colors"]
   }
 ]

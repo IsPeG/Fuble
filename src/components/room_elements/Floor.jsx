@@ -38,7 +38,7 @@ export default function Floor(props) {
         position={[0.5, -0.12, 0.5]}
         receiveShadow
       >
-        <boxBufferGeometry attach="geometry" args={[8, 8, 0.25]} />
+        <boxGeometry attach="geometry" args={[8, 8, 0.25]} />
         <meshPhongMaterial map={textures[0]} normalMap={textures[1]} />;
       </mesh>
       <mesh
@@ -46,7 +46,7 @@ export default function Floor(props) {
         position={[0.5, -0.12, 5.5]}
         receiveShadow
       >
-        <boxBufferGeometry attach="geometry" args={[2, 2, 0.25]} />
+        <boxGeometry attach="geometry" args={[2, 2, 0.25]} />
         <meshPhongMaterial map={textures[2]} normalMap={textures[3]} />;
       </mesh>
     </>

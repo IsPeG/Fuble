@@ -43,7 +43,7 @@ export default function Walls(props) {
         castShadow
         receiveShadow
       >
-        <planeBufferGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={[8, 3]} />
         <meshPhongMaterial
           attach="material"
           map={texture1}
@@ -56,7 +56,7 @@ export default function Walls(props) {
         castShadow
         receiveShadow
       >
-        <planeBufferGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={[8, 3]} />
         <meshPhongMaterial
           attach="material"
           map={texture3}
@@ -69,7 +69,7 @@ export default function Walls(props) {
         castShadow
         receiveShadow
       >
-        <planeBufferGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={[8, 3]} />
         <meshPhongMaterial
           attach="material"
           map={texture2}
@@ -83,7 +83,7 @@ export default function Walls(props) {
         castShadow
         receiveShadow
       >
-        <planeBufferGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={[8, 3]} />
         <meshPhongMaterial
           attach="material"
           map={texture3}

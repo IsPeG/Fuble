@@ -26,6 +26,24 @@ export default function FurMenu(props) {
                 </li>
               );
               break;
+            case "colors":
+              return (
+                <li>
+                  <ul>
+                    {props.colors.map((elem, index) => (
+                      <li
+                        key={index}
+                        onPointerDown={() =>
+                          props.changeColor(props.refKey, elem)
+                        }
+                      >
+                        {elem}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              );
+              break;
             default:
               break;
           }
