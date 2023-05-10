@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import "./furMenu.css";
+import colors from "../../../_colorsData/colors";
 
 export default function FurMenu(props) {
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function FurMenu(props) {
             case "light":
               return (
                 <li
+                  className="hoverEff"
                   onPointerDown={() => props.toggleLightFur(props.refKey)}
                   key={key}
                 >
@@ -29,17 +31,28 @@ export default function FurMenu(props) {
             case "colors":
               return (
                 <li>
-                  <ul>
-                    {props.colors.map((elem, index) => (
-                      <li
-                        key={index}
-                        onPointerDown={() =>
-                          props.changeColor(props.refKey, elem)
-                        }
-                      >
-                        {elem}
-                      </li>
-                    ))}
+                  Change style
+                  <ul className="colorsList">
+                    {props.colors.map((elem, index) => {
+                      let classes =
+                        elem === props.selectedColor
+                          ? "colorIcon checkedColorIcon"
+                          : "colorIcon";
+                      return (
+                        <div
+                          key={index}
+                          className={classes}
+                          style={{
+                            backgroundColor: colors.find(
+                              (item) => item.color == elem
+                            ).value,
+                          }}
+                          onPointerDown={() =>
+                            props.changeColor(props.refKey, elem)
+                          }
+                        ></div>
+                      );
+                    })}
                   </ul>
                 </li>
               );
@@ -48,7 +61,12 @@ export default function FurMenu(props) {
               break;
           }
         })}
-        <li onPointerDown={() => props.removeFur(props.refKey)}>Remove</li>
+        <li
+          className="hoverEff"
+          onPointerDown={() => props.removeFur(props.refKey)}
+        >
+          Remove
+        </li>
       </ol>
     </div>
   );

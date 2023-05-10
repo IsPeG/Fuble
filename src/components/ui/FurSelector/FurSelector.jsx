@@ -1,7 +1,7 @@
 import React from "react";
 import FurSelectorItem from "../FurSelectorItem/FurSelectorItem";
 
-import furnitureData from "../../../furnitureData/data.json";
+import furnitureData from "../../../_furnitureData/data.json";
 
 import "./furSelector.css";
 

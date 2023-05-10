@@ -117,7 +117,7 @@ const roomDataExample = [
   },
 ];
 
-import furnitureData from "./furnitureData/data.json";
+import furnitureData from "./_furnitureData/data.json";
 
 function App() {
   const [cameraIndex, setCameraIndex] = useState(0);
@@ -1106,6 +1106,9 @@ function App() {
         refKey={furMenuOpen.key}
         furProps={furMenuOpen.furProps}
         colors={furMenuOpen.colors}
+        selectedColor={
+          roomData.find((elem) => elem.key == furMenuOpen.key).color
+        }
         removeFur={removeFur}
         toggleLightFur={toggleLightFur}
         changeColor={changeColor}
@@ -1115,7 +1118,7 @@ function App() {
 
   const changeColor = (key, color) => {
     let toggleColorFur = roomData.find((elem) => elem.key == key);
-    toggleColorFur.color = color;
+    if (toggleColorFur.color != color) toggleColorFur.color = color;
     setFurMenuOpen(false);
   };
 
