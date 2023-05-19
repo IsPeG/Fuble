@@ -10,22 +10,47 @@ import {
   BoxGeometry,
 } from "three";
 
+import wallsData from "../../_wallsData/data.json";
+
 export default function Walls(props) {
   const south = -Math.PI / 1; //-3.14... down
   const west = Math.PI / 2; //1.57... left
   const north = 0; // up
   const east = -Math.PI / 2; //-1.57... right
 
-  const url = `/src/assets/textures/walls/${props.wallName}/${props.wallName}`;
+  const wallName = [];
 
-  const texture1 = useLoader(TextureLoader, url + "1.png");
-  const normal1 = useLoader(TextureLoader, url + "Normal1.png");
-  const texture2 = useLoader(TextureLoader, url + "2.png");
-  const normal2 = useLoader(TextureLoader, url + "Normal2.png");
-  const texture3 = useLoader(TextureLoader, url + "3.png");
-  const normal3 = useLoader(TextureLoader, url + "Normal3.png");
+  console.log(props.wallIds);
 
-  const textures = [texture1, texture2, texture3, normal1, normal2, normal3];
+  wallName.push(wallsData.find((elem) => elem.id == props.wallIds[0]).name);
+  wallName.push(wallsData.find((elem) => elem.id == props.wallIds[2]).name);
+  wallName.push(wallsData.find((elem) => elem.id == props.wallIds[3]).name);
+  wallName.push(wallsData.find((elem) => elem.id == props.wallIds[1]).name);
+
+  const url1 = `/src/assets/textures/walls/${wallName[0]}/${wallName[0]}`;
+  const url2 = `/src/assets/textures/walls/${wallName[1]}/${wallName[1]}`;
+  const url3 = `/src/assets/textures/walls/${wallName[2]}/${wallName[2]}`;
+  const url4 = `/src/assets/textures/walls/${wallName[3]}/${wallName[3]}`;
+
+  const texture1 = useLoader(TextureLoader, url1 + "1.png");
+  const normal1 = useLoader(TextureLoader, url1 + "Normal1.png");
+  const texture2 = useLoader(TextureLoader, url2 + "2.png");
+  const normal2 = useLoader(TextureLoader, url2 + "Normal2.png");
+  const texture3 = useLoader(TextureLoader, url3 + "3.png");
+  const normal3 = useLoader(TextureLoader, url3 + "Normal3.png");
+  const texture4 = useLoader(TextureLoader, url4 + "3.png");
+  const normal4 = useLoader(TextureLoader, url4 + "Normal3.png");
+
+  const textures = [
+    texture1,
+    texture2,
+    texture3,
+    texture4,
+    normal1,
+    normal2,
+    normal3,
+    normal4,
+  ];
 
   textures.forEach((element) => {
     element.repeat.set(1, 1);
@@ -86,8 +111,8 @@ export default function Walls(props) {
         <planeGeometry attach="geometry" args={[8, 3]} />
         <meshPhongMaterial
           attach="material"
-          map={texture3}
-          normalMap={normal3}
+          map={texture4}
+          normalMap={normal4}
         />
       </mesh>
     </group>

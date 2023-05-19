@@ -23,6 +23,11 @@ export default function Options(props) {
     setOptionsOpen(false);
   };
 
+  const changeWallsFloorButtonHandler = () => {
+    props.setChangeWallsFloorMenuOpen(!props.changeWallsFloorMenuOpen);
+    setOptionsOpen(false);
+  };
+
   const handleDeleteRoomButton = () => {
     setConfirmationOpen("delete_room");
   };
@@ -61,12 +66,15 @@ export default function Options(props) {
               Clean room
             </button>
             <button
-              className="button yellow"
-              onClick={(e) => saveRoomButtonHandler()}
+              className="button"
+              onClick={(e) => changeWallsFloorButtonHandler()}
             >
+              Change walls & floor
+            </button>
+            <button className="button" onClick={(e) => saveRoomButtonHandler()}>
               Save Room
             </button>
-            <label className="button yellow" htmlFor="loadRoom">
+            <label className="button" htmlFor="loadRoom">
               Load Room
             </label>
             <input

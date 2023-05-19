@@ -10,8 +10,11 @@ import {
   BoxGeometry,
 } from "three";
 
+import floorsData from "../../_floorsData/data.json";
+
 export default function Floor(props) {
-  const url = `/src/assets/textures/floor/${props.floorName}/${props.floorName}`;
+  const floorName = floorsData.find((elem) => elem.id == props.floorId).name;
+  const url = `/src/assets/textures/floor/${floorName}/${floorName}`;
 
   const texture = useLoader(TextureLoader, url + ".png");
   const normal = useLoader(TextureLoader, url + "Normal.png");

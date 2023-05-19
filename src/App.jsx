@@ -43,6 +43,7 @@ import FurnitureSelector2x2 from "./components/furniture_selectors/FurnitureSele
 // UI
 import FurMenu from "./components/ui/FurMenu/FurMenu";
 import SaveRoomMenu from "./components/ui/SaveRoomMenu/SaveRoomMenu";
+import ChangeWallsFloorMenu from "./components/ui/ChangeWallsFloorMenu/ChangeWallsFloorMenu";
 import Options from "./components/ui/Options/Options";
 
 import "./assets/styles/global.css";
@@ -54,82 +55,93 @@ const west = Math.PI / 2; //1.57... left
 const north = 0; // up
 const east = -Math.PI / 2; //-1.57... right
 
-const roomDataExample = [
-  {
-    key: 1,
-    name: "VendingMachine",
-    model: VendingMachine,
-    position: [3, 0, -3],
-    rotation: [0, south, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
-  {
-    key: 2,
-    name: "VendingMachine",
-    model: VendingMachine,
-    position: [2, 0, -3],
-    rotation: [0, south, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
-  {
-    key: 3,
-    name: "Plant",
-    model: Plant,
-    position: [0, 0, 0],
-    rotation: [0, east, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 4,
-    name: "Coach",
-    model: Coach,
-    position: [1, 0, 0],
-    rotation: [0, east, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 5,
-    name: "Coach",
-    model: Coach,
-    position: [0, 0, -1],
-    rotation: [0, north, 0],
-    size: "1x1",
-    options: {},
-    furProps: [],
-  },
-  {
-    key: 6,
-    name: "OldLamp",
-    model: OldLamp,
-    position: [3, 0, 3],
-    rotation: [0, north, 0],
-    size: "1x1",
-    options: { lightOn: true },
-    furProps: ["light"],
-  },
-];
+const RoomDataExample = {
+  furniture: [
+    {
+      key: 1,
+      name: "VendingMachine",
+      model: VendingMachine,
+      position: [3, 0, -3],
+      rotation: [0, south, 0],
+      size: "1x1",
+      options: { lightOn: true },
+      furProps: ["light"],
+    },
+    {
+      key: 2,
+      name: "VendingMachine",
+      model: VendingMachine,
+      position: [2, 0, -3],
+      rotation: [0, south, 0],
+      size: "1x1",
+      options: { lightOn: true },
+      furProps: ["light"],
+    },
+    {
+      key: 3,
+      name: "Plant",
+      model: Plant,
+      position: [0, 0, 0],
+      rotation: [0, east, 0],
+      size: "1x1",
+      options: {},
+      furProps: [],
+    },
+    {
+      key: 4,
+      name: "Coach",
+      model: Coach,
+      position: [1, 0, 0],
+      rotation: [0, east, 0],
+      size: "1x1",
+      options: {},
+      furProps: [],
+    },
+    {
+      key: 5,
+      name: "Coach",
+      model: Coach,
+      position: [0, 0, -1],
+      rotation: [0, north, 0],
+      size: "1x1",
+      options: {},
+      furProps: [],
+    },
+    {
+      key: 6,
+      name: "OldLamp",
+      model: OldLamp,
+      position: [3, 0, 3],
+      rotation: [0, north, 0],
+      size: "1x1",
+      options: { lightOn: true },
+      furProps: ["light"],
+    },
+  ],
+  walls: [1, 1, 1, 1],
+  floor: 1,
+};
 
 import furnitureData from "./_furnitureData/data.json";
 
 function App() {
   const [cameraIndex, setCameraIndex] = useState(0);
-  const [roomData, setRoomData] = useState([]);
+  const [roomDataFurniture, setRoomDataFurniture] = useState([]);
+  const [roomDataWalls, setRoomDataWalls] = useState([]);
+  const [roomDataFloor, setRoomDataFloor] = useState(0);
   const [furMenuOpen, setFurMenuOpen] = useState(false);
   const [saveRoomMenuOpen, setSaveRoomMenuOpen] = useState(false);
+  const [changeWallsFloorMenuOpen, setChangeWallsFloorMenuOpen] =
+    useState(false);
   const [selectingFurniture, setSelectingFurniture] = useState(false);
   const [placingFurniture, setPlacingFurniture] = useState(false);
   const [placingFurnitureData, setPlacingFurnitureData] = useState({});
   // const [debugHelperColisions, setDebugHelperColisions] = useState([]) // DEBUG
   const setFurnitureHelperRef = useRef();
   const cameraIndexRef = useRef();
+  const buttonsContainerRef = useRef();
+  const rotateCameraRightRef = useRef();
+  const rotateCameraLeftRef = useRef();
 
   const directions = [north, west, south, east];
   // const cameraPositions = [[7,6,7], [6.5,5.5,-5.5], [-7,7,-7], [-5.5,5.5,6.5]]
@@ -160,7 +172,9 @@ function App() {
   cameraIndexRef.current = cameraIndex;
 
   useEffect(() => {
-    setRoomData(roomDataExample);
+    setRoomDataFurniture(RoomDataExample.furniture);
+    setRoomDataWalls(RoomDataExample.walls);
+    setRoomDataFloor(RoomDataExample.floor);
 
     const keyHandler = (e) => {
       // e.preventDefault();
@@ -203,7 +217,7 @@ function App() {
     window.addEventListener("keydown", keyHandler);
   }, []);
 
-  console.log(roomData);
+  console.log(roomDataFurniture);
 
   const escKeyHandler = () => {
     setFurMenuOpen(false);
@@ -234,7 +248,7 @@ function App() {
       setFurnitureHelperRef.current
     );
     if (canBePlaced != "no") {
-      const lastKey = roomData.slice(-1)[0]?.key ?? 0;
+      const lastKey = roomDataFurniture.slice(-1)[0]?.key ?? 0;
 
       let furOptions = {};
       for (const elem of placingFurnitureData.furProps) {
@@ -252,8 +266,8 @@ function App() {
       let newFurYAxis = 0;
       canBePlaced == "surface" ? (newFurYAxis = 1) : (newFurYAxis = 0);
 
-      setRoomData([
-        ...roomData,
+      setRoomDataFurniture([
+        ...roomDataFurniture,
         {
           key: lastKey + 1,
           model: placingFurnitureData.component,
@@ -571,7 +585,7 @@ function App() {
         placingFurnitureData.size
       );
 
-      roomData.forEach((furElement) => {
+      roomDataFurniture.forEach((furElement) => {
         let furElementSpaces = null;
         if (furElement.size == "1x1") {
           furElementSpaces = [
@@ -622,7 +636,7 @@ function App() {
         [helper.position.x - 0.5, helper.position.y, helper.position.z + 0.5],
       ];
 
-      roomData.forEach((furElement) => {
+      roomDataFurniture.forEach((furElement) => {
         let furElementSpaces = null;
 
         if (furElement.size == "1x1") {
@@ -1107,7 +1121,7 @@ function App() {
         furProps={furMenuOpen.furProps}
         colors={furMenuOpen.colors}
         selectedColor={
-          roomData.find((elem) => elem.key == furMenuOpen.key).color
+          roomDataFurniture.find((elem) => elem.key == furMenuOpen.key).color
         }
         removeFur={removeFur}
         toggleLightFur={toggleLightFur}
@@ -1117,13 +1131,13 @@ function App() {
   };
 
   const changeColor = (key, color) => {
-    let toggleColorFur = roomData.find((elem) => elem.key == key);
+    let toggleColorFur = roomDataFurniture.find((elem) => elem.key == key);
     if (toggleColorFur.color != color) toggleColorFur.color = color;
     setFurMenuOpen(false);
   };
 
   const removeFur = (key) => {
-    let elemToRemove = roomData.find((element) => element.key == key);
+    let elemToRemove = roomDataFurniture.find((element) => element.key == key);
     let elemToRemoveSpaces = [];
     let keysToRemove = [];
     keysToRemove.push(elemToRemove.key);
@@ -1133,26 +1147,28 @@ function App() {
         elemToRemove.size
       );
       for (let spaces of elemToRemoveSpaces) {
-        elemToRemove = roomData.find(
+        elemToRemove = roomDataFurniture.find(
           (element) =>
             element.position.toString() == [spaces[0], 1, spaces[2]].toString()
         );
         if (elemToRemove) keysToRemove.push(elemToRemove.key);
       }
     } else {
-      elemToRemove = roomData.find(
+      elemToRemove = roomDataFurniture.find(
         (element) =>
           element.position.toString() ==
           [elemToRemove.position[0], 1, elemToRemove.position[2]].toString()
       );
       if (elemToRemove) keysToRemove.push(elemToRemove.key);
     }
-    setRoomData(roomData.filter((elem) => !keysToRemove.includes(elem.key)));
+    setRoomDataFurniture(
+      roomDataFurniture.filter((elem) => !keysToRemove.includes(elem.key))
+    );
     setFurMenuOpen(false);
   };
 
   const toggleLightFur = (key) => {
-    let toggleFurData = roomData.find((elem) => elem.key == key);
+    let toggleFurData = roomDataFurniture.find((elem) => elem.key == key);
     toggleFurData.options.lightOn = !toggleFurData.options.lightOn;
     setFurMenuOpen(false);
   };
@@ -1198,7 +1214,24 @@ function App() {
     return (
       <SaveRoomMenu
         closeSaveRoomMenu={(e) => setSaveRoomMenuOpen(!saveRoomMenuOpen)}
-        roomData={roomData}
+        roomDataFurniture={roomDataFurniture}
+      />
+    );
+  };
+
+  const generateChangeWallsFloorMenu = () => {
+    return (
+      <ChangeWallsFloorMenu
+        closeSaveRoomMenu={(e) =>
+          setChangeWallsFloorMenuOpen(!changeWallsFloorMenuOpen)
+        }
+        roomDataWalls={roomDataWalls}
+        setRoomDataWalls={setRoomDataWalls}
+        roomDataFloor={roomDataFloor}
+        setRoomDataFloor={setRoomDataFloor}
+        buttonsContainerRef={buttonsContainerRef}
+        rotateCameraLeftRef={rotateCameraLeftRef}
+        rotateCameraRightRef={rotateCameraRightRef}
       />
     );
   };
@@ -1206,22 +1239,26 @@ function App() {
   return (
     <>
       <Options
+        setChangeWallsFloorMenuOpen={setChangeWallsFloorMenuOpen}
+        changeWallsFloorMenuOpen={changeWallsFloorMenuOpen}
         setSaveRoomMenuOpen={setSaveRoomMenuOpen}
         saveRoomMenuOpen={saveRoomMenuOpen}
         componentsMap={componentsMap}
-        setRoomData={setRoomData}
+        setRoomDataFurniture={setRoomDataFurniture}
       />
-      <div className="buttonsContainer">
+      <div className="buttonsContainer" ref={buttonsContainerRef}>
         <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>
           {selectingFurniture || placingFurniture ? "Cancel" : "Add furniture"}
         </button>
         <button
+          ref={rotateCameraLeftRef}
           className="button"
           onClick={(e) => changeCameraPosition("left", e)}
         >
           Camera left
         </button>
         <button
+          ref={rotateCameraRightRef}
           className="button"
           onClick={(e) => changeCameraPosition("right", e)}
         >
@@ -1280,6 +1317,8 @@ function App() {
 
       {saveRoomMenuOpen ? generateSaveRoomMenu() : null}
 
+      {changeWallsFloorMenuOpen ? generateChangeWallsFloorMenu() : null}
+
       <Canvas
         shadows
         orthographic
@@ -1295,7 +1334,7 @@ function App() {
           />
 
           <group>
-            {roomData.map((furniture) => (
+            {roomDataFurniture.map((furniture) => (
               <furniture.model
                 key={furniture.key}
                 position={furniture.position}
@@ -1334,8 +1373,8 @@ function App() {
 
           <RoomSpotLight />
 
-          <Floor floorName={"dark_wood"} />
-          <Walls wallName={"beige_blossoming"} />
+          <Floor floorId={roomDataFloor} />
+          <Walls wallIds={roomDataWalls} />
         </group>
         {/* <gridHelper position={[0.5,0,0.5]} args={[8, 8, "red", "blue"]} /> */}
       </Canvas>

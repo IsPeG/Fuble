@@ -7,7 +7,8 @@ import "react-tooltip/dist/react-tooltip.css";
 
 export default function FurSelectorItem(props) {
   const replaceImage = (e) => {
-    e.currentTarget.src = "/src/assets/textures/ui/icons/missingFurIcon.png";
+    e.currentTarget.src =
+      "/src/assets/textures/ui/icons/furniture/missingFurIcon.png";
   };
 
   return (
@@ -21,7 +22,7 @@ export default function FurSelectorItem(props) {
       >
         <img
           className="furSelectorItemImage"
-          src={`/src/assets/textures/ui/icons/${props.furName}.png`}
+          src={`/src/assets/textures/ui/icons/furniture/${props.furName}.png`}
           alt="icon"
           onError={(e) => replaceImage(e)}
         />

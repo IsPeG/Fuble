@@ -14,28 +14,28 @@ export default function FurSelector(props) {
         <div className="furSelectorItem">
           <img
             className="furSelectorItemImage"
-            src={`/src/assets/textures/ui/icons/filter1.png`}
+            src={`/src/assets/textures/ui/icons/filters/filter1.png`}
             alt="icon"
           />
         </div>
         <div className="furSelectorItem">
           <img
             className="furSelectorItemImage"
-            src={`/src/assets/textures/ui/icons/filter2.png`}
+            src={`/src/assets/textures/ui/icons/filters/filter2.png`}
             alt="icon"
           />
         </div>
         <div className="furSelectorItem">
           <img
             className="furSelectorItemImage"
-            src={`/src/assets/textures/ui/icons/filter3.png`}
+            src={`/src/assets/textures/ui/icons/filters/filter3.png`}
             alt="icon"
           />
         </div>
         <div className="furSelectorItem">
           <img
             className="furSelectorItemImage"
-            src={`/src/assets/textures/ui/icons/filter4.png`}
+            src={`/src/assets/textures/ui/icons/filters/filter4.png`}
             alt="icon"
           />
         </div>
