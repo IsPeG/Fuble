@@ -172,6 +172,7 @@ function App() {
   cameraIndexRef.current = cameraIndex;
 
   useEffect(() => {
+    // load example room data
     setRoomDataFurniture(RoomDataExample.furniture);
     setRoomDataWalls(RoomDataExample.walls);
     setRoomDataFloor(RoomDataExample.floor);
@@ -1214,7 +1215,11 @@ function App() {
     return (
       <SaveRoomMenu
         closeSaveRoomMenu={(e) => setSaveRoomMenuOpen(!saveRoomMenuOpen)}
-        roomDataFurniture={roomDataFurniture}
+        roomDataFurniture={{
+          furniture: roomDataFurniture,
+          walls: roomDataWalls,
+          floor: roomDataFloor,
+        }}
       />
     );
   };
@@ -1245,6 +1250,8 @@ function App() {
         saveRoomMenuOpen={saveRoomMenuOpen}
         componentsMap={componentsMap}
         setRoomDataFurniture={setRoomDataFurniture}
+        setRoomDataFloor={setRoomDataFloor}
+        setRoomDataWalls={setRoomDataWalls}
       />
       <div className="buttonsContainer" ref={buttonsContainerRef}>
         <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>

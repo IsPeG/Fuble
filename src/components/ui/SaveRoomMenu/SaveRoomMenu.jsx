@@ -9,10 +9,10 @@ export default function SaveRoomMenu(props) {
     if (inputRef.current.value == "") return;
 
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify(props.roomData)
+      JSON.stringify(props.roomDataFurniture)
     )}`;
 
-    console.log(props.roomData);
+    console.log(props.roomDataFurniture);
 
     const link = document.createElement("a");
     link.href = jsonString;

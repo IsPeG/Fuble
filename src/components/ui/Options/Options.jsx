@@ -12,8 +12,12 @@ export default function Options(props) {
     fileReader.readAsText(e.target.files[0], "UTF-8");
     fileReader.onload = (e) => {
       let data = JSON.parse(e.target.result);
-      data.forEach((elem) => (elem.model = props.componentsMap[elem.name]));
-      props.setRoomData(data);
+      data.furniture.forEach(
+        (elem) => (elem.model = props.componentsMap[elem.name])
+      );
+      props.setRoomDataFurniture(data.furniture);
+      props.setRoomDataFloor(data.floor);
+      props.setRoomDataWalls(data.walls);
     };
     setOptionsOpen(false);
   };
@@ -48,7 +52,7 @@ export default function Options(props) {
   };
 
   const deleteRoomData = () => {
-    props.setRoomData([]);
+    props.setRoomDataFurniture([]);
     setOptionsOpen(false);
     setConfirmationOpen(false);
   };
