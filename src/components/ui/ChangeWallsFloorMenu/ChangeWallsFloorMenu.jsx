@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Tooltip } from "react-tooltip";
 
 import "./changeWallsFloorMenu.css";
 import "react-tooltip/dist/react-tooltip.css";
@@ -10,6 +9,7 @@ import floorsData from "../../../_floorsData/data.json";
 export default function ChangeWallsFloorMenu(props) {
   const [selectingElement, setSelectingElement] = useState("");
   const [selectingElementIndex, setSelectingElementIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
     props.buttonsContainerRef.current.style.display = "none";
@@ -19,6 +19,16 @@ export default function ChangeWallsFloorMenu(props) {
   }, []);
 
   const ElementSelector = (props) => {
+    const [selected, setSelected] = useState({ marginLeft: "1rem" });
+    useEffect(() => {
+      if (
+        props.indexMainContainer != undefined &&
+        props.indexMainContainer == props.selectedIndex
+      ) {
+        setSelected({ marginLeft: "1rem", fontWeight: "bold" });
+      }
+    }, []);
+
     const replaceImage = (e) => {
       e.currentTarget.src =
         "/src/assets/textures/ui/icons/furniture/missingFurIcon.png";
@@ -26,15 +36,15 @@ export default function ChangeWallsFloorMenu(props) {
 
     return (
       <div style={{ display: "flex" }} onClick={props.onClick}>
-        <div className={`changeWallsFloorMenuButton`}>
+        <div className={"changeWallsFloorMenuButton"}>
           <img
-            className="changeWallsFloorMenuButtonImage"
+            className={"changeWallsFloorMenuButtonImage"}
             src={`/src/assets/textures/ui/icons/${props.elementType}/${props.backgroundImage}.png`}
             alt="icon"
             onError={(e) => replaceImage(e)}
           />
         </div>
-        <p style={{ marginLeft: "1rem" }}>{props.elementName}</p>
+        <p style={selected}>{props.elementName}</p>
       </div>
     );
   };
@@ -45,11 +55,6 @@ export default function ChangeWallsFloorMenu(props) {
     useEffect(() => {
       setElementsData(selectingElement == "Walls" ? wallsData : floorsData);
     }, []);
-
-    const replaceImage = (e) => {
-      e.currentTarget.src =
-        "/src/assets/textures/ui/icons/furniture/missingFurIcon.png";
-    };
 
     return (
       <div
@@ -78,9 +83,10 @@ export default function ChangeWallsFloorMenu(props) {
     );
   };
 
-  const elementSelectorHandleClick = (index, type) => {
+  const elementSelectorHandleClick = (index, type, slectedIndex) => {
     setSelectingElementIndex(index);
     setSelectingElement(type);
+    setSelectedIndex(slectedIndex);
   };
 
   const selectElementHandleClick = (index, type) => {
@@ -153,48 +159,58 @@ export default function ChangeWallsFloorMenu(props) {
           <h2>Walls</h2>
           <div className="changeWallsFloorMenuWallsContainer">
             <ElementSelector
+              indexMainContainer={0}
+              selectedIndex={selectedIndex}
               backgroundImage={
                 wallsData.find((elem) => elem.id == props.roomDataWalls[0]).name
               }
               elementType={"walls"}
               elementName={formatName(0, "wall")}
-              onClick={(e) => elementSelectorHandleClick(0, "Walls")}
+              onClick={(e) => elementSelectorHandleClick(0, "Walls", 0)}
             />
             <ElementSelector
+              indexMainContainer={1}
+              selectedIndex={selectedIndex}
               backgroundImage={
                 wallsData.find((elem) => elem.id == props.roomDataWalls[1]).name
               }
               elementType={"walls"}
               elementName={formatName(1, "wall")}
-              onClick={(e) => elementSelectorHandleClick(1, "Walls")}
+              onClick={(e) => elementSelectorHandleClick(1, "Walls", 1)}
             />
             <ElementSelector
+              indexMainContainer={2}
+              selectedIndex={selectedIndex}
               backgroundImage={
                 wallsData.find((elem) => elem.id == props.roomDataWalls[2]).name
               }
               elementType={"walls"}
               elementName={formatName(2, "wall")}
-              onClick={(e) => elementSelectorHandleClick(2, "Walls")}
+              onClick={(e) => elementSelectorHandleClick(2, "Walls", 2)}
             />
             <ElementSelector
+              indexMainContainer={3}
+              selectedIndex={selectedIndex}
               backgroundImage={
                 wallsData.find((elem) => elem.id == props.roomDataWalls[3]).name
               }
               elementType={"walls"}
               elementName={formatName(3, "wall")}
-              onClick={(e) => elementSelectorHandleClick(3, "Walls")}
+              onClick={(e) => elementSelectorHandleClick(3, "Walls", 3)}
             />
           </div>
           <h2>Floor</h2>
           <div className="changeWallsFloorMenuFloorContainer">
             <div>
               <ElementSelector
+                indexMainContainer={4}
+                selectedIndex={selectedIndex}
                 backgroundImage={
                   floorsData.find((elem) => elem.id == props.roomDataFloor).name
                 }
                 elementType={"floors"}
                 elementName={formatName(0, "floor")}
-                onClick={(e) => elementSelectorHandleClick(0, "Floors")}
+                onClick={(e) => elementSelectorHandleClick(0, "Floors", 4)}
               />
             </div>
           </div>
