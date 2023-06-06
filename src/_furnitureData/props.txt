@@ -2,3 +2,10 @@ TODO
 
 surface,
 light
+
+Furniture types: (TODO)
+sit
+plant
+table
+misc
+light

@@ -3,60 +3,70 @@
     "id": 1,
     "name": "Coach",
     "size": "1x1",
+    "type": "sit",
     "furProps": []
   },
   {
     "id": 2,
     "name": "Plant",
     "size": "1x1",
+    "type": "plant",
     "furProps": []
   },
   {
     "id": 3,
     "name": "Test2x1",
     "size": "2x1",
+    "type": "table",
     "furProps": ["surface"]
   },
   {
     "id": 4,
     "name": "Test2x2",
     "size": "2x2",
+    "type": "table",
     "furProps": ["surface"]
   },
   {
     "id": 5,
     "name": "VendingMachine",
     "size": "1x1",
+    "type": "misc",
     "furProps": ["light"]
   },
   {
     "id": 6,
     "name": "OldChair",
     "size": "1x1",
+    "type": "sit",
     "furProps": []
   },
   {
     "id": 7,
     "name": "OldTable",
     "size": "1x1",
+    "type": "table",
     "furProps": ["surface"]
   },
   {
     "id": 8,
     "name": "OldLamp",
     "size": "1x1",
+    "type": "light",
     "furProps": ["light", "canBePlacedOnSurface"]
   },
   {
     "id": 9,
     "name": "OldWardrobe",
     "size": "2x1",
+    "type": "misc",
     "furProps": []
   },
   {
     "id": 10,
     "name": "Speaker",
     "size": "1x1",
+    "type": "misc",
     "furProps": []
   },
   {
@@ -64,6 +74,7 @@
     "name": "Fridge",
     "size": "1x1",
     "colors": ["white", "yellow", "green"],
+    "type": "misc",
     "furProps": ["colors"]
   }
 ]
