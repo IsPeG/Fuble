@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useLoader } from "@react-three/fiber";
 // import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { TextureLoader } from "three";
@@ -13,8 +13,8 @@ import {
 import floorsData from "../../_floorsData/data.json";
 
 export default function Floor(props) {
-  const floorName = floorsData.find((elem) => elem.id == props.floorId).name;
-  const url = `/src/assets/textures/floor/${floorName}/${floorName}`;
+  const floor = floorsData.find((elem) => elem.id == props.floorId);
+  const url = `/src/assets/textures/floor/${floor.name}/${floor.name}`;
 
   const texture = useLoader(TextureLoader, url + ".png");
   const normal = useLoader(TextureLoader, url + "Normal.png");
@@ -25,7 +25,18 @@ export default function Floor(props) {
   const normalCopy = useMemo(() => normal.clone(), [normal]);
 
   const textures = [texture, normal, textureCopy, normalCopy];
-  const sizes = [8, 8, 2, 2];
+  const sizes = floor.type == "tiled" ? [8, 8, 2, 2] : [1, 1, 2, 2];
+
+  if (floor.type == "full") {
+    const exit = useLoader(TextureLoader, url + "_exit.png");
+    const exitNormal = useLoader(TextureLoader, url + "_exitNormal.png");
+
+    textures[2] = exit;
+    textures[3] = exitNormal;
+  }
+
+  console.log(sizes);
+
   textures.forEach((element, index) => {
     element.repeat.set(sizes[index], sizes[index]);
     element.wrapS = element.wrapT = RepeatWrapping; // tileable image
@@ -41,8 +52,43 @@ export default function Floor(props) {
         position={[0.5, -0.12, 0.5]}
         receiveShadow
       >
-        <boxGeometry attach="geometry" args={[8, 8, 0.25]} />
-        <meshPhongMaterial map={textures[0]} normalMap={textures[1]} />;
+        <boxGeometry attach="geometry" args={[8, 8, 0.25]} />;
+        <meshPhongMaterial //top material
+          attach="material-4"
+          map={textures[0]}
+          normalMap={textures[1]}
+        />
+        ;
+        <meshPhongMaterial
+          attach="material-0"
+          map={textures[2]}
+          normalMap={textures[3]}
+        />
+        ;
+        <meshPhongMaterial
+          attach="material-1"
+          map={textures[2]}
+          normalMap={textures[3]}
+        />
+        ;
+        <meshPhongMaterial
+          attach="material-2"
+          map={textures[2]}
+          normalMap={textures[3]}
+        />
+        ;
+        <meshPhongMaterial
+          attach="material-3"
+          map={textures[2]}
+          normalMap={textures[3]}
+        />
+        ;
+        <meshPhongMaterial
+          attach="material-5"
+          map={textures[2]}
+          normalMap={textures[3]}
+        />
+        ;
       </mesh>
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}

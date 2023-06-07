@@ -40,10 +40,16 @@
 .changeWallsFloorMenuWallsContainer {
   display: flex;
   flex-direction: column;
+  margin-left: 5rem;
+  width: 100%;
 }
 
 .changeWallsFloorMenuFloorContainer {
   display: flex;
+  flex-direction: column;
+  margin-left: 5rem;
+
+  width: 100%;
 }
 
 .changeWallsFloorMenuButton {

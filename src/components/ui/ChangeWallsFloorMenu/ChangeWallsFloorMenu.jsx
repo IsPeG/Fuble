@@ -201,18 +201,16 @@ export default function ChangeWallsFloorMenu(props) {
           </div>
           <h2>Floor</h2>
           <div className="changeWallsFloorMenuFloorContainer">
-            <div>
-              <ElementSelector
-                indexMainContainer={4}
-                selectedIndex={selectedIndex}
-                backgroundImage={
-                  floorsData.find((elem) => elem.id == props.roomDataFloor).name
-                }
-                elementType={"floors"}
-                elementName={formatName(0, "floor")}
-                onClick={(e) => elementSelectorHandleClick(0, "Floors", 4)}
-              />
-            </div>
+            <ElementSelector
+              indexMainContainer={4}
+              selectedIndex={selectedIndex}
+              backgroundImage={
+                floorsData.find((elem) => elem.id == props.roomDataFloor).name
+              }
+              elementType={"floors"}
+              elementName={formatName(0, "floor")}
+              onClick={(e) => elementSelectorHandleClick(0, "Floors", 4)}
+            />
           </div>
         </div>
 

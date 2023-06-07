@@ -1,4 +1,5 @@
 [
-  { "id": 1, "name": "dark_wood" },
-  { "id": 2, "name": "wood" }
+  { "id": 1, "name": "dark_wood", "type": "tiled" },
+  { "id": 2, "name": "wood", "type": "tiled" },
+  { "id": 3, "name": "dinner_tile", "type": "full" }
 ]
