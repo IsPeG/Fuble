@@ -3,9 +3,9 @@ import { useGLTF } from "@react-three/drei";
 
 const modelsPath = "/src/assets/models";
 
-export default function OldChair(props) {
+export default function OldLargeTable(props) {
   const { nodes, materials } = useGLTF(
-    modelsPath + "/furniture/old_chair.gltf"
+    modelsPath + "/furniture/old_large_table.gltf"
   );
   return (
     <group {...props} dispose={null}>
@@ -15,8 +15,14 @@ export default function OldChair(props) {
         receiveShadow
         castShadow
       />
+      <mesh
+        geometry={nodes.plane.geometry}
+        material={nodes.plane.material}
+        receiveShadow
+        castShadow
+      />
     </group>
   );
 }
 
-useGLTF.preload(modelsPath + "/furniture/old_chair.gltf");
+useGLTF.preload(modelsPath + "/furniture/old_large_table.gltf");

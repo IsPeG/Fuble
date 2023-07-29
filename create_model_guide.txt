@@ -3,4 +3,4 @@
 3. Save a screenshot of the model in isometric view for the menu and be sure that the size of the image is 128x128  
 3. Save the model and texutre and export them to gltf
 4. Create the react component with npx gltfjsx and do the apropiate tweaks:
-5. Add itto the data.json in furnitureData
+5. Add it to the data.json in furnitureData

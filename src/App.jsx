@@ -17,7 +17,9 @@ import VendingMachine from "./components/furniture/VendingMachine";
 import OldChair from "./components/furniture/OldChair";
 import OldTable from "./components/furniture/OldTable";
 import OldLamp from "./components/furniture/OldLamp";
+import OldPc from "./components/furniture/OldPc";
 import OldWardrobe from "./components/furniture/OldWardrobe";
+import OldLargeTable from "./components/furniture/OldLargeTable";
 import Speaker from "./components/furniture/Speaker";
 import Fridge from "./components/furniture/Fridge";
 
@@ -33,6 +35,8 @@ const componentsMap = {
   OldTable,
   OldLamp,
   OldWardrobe,
+  OldLargeTable,
+  OldPc,
 };
 
 // Selectors
@@ -265,7 +269,7 @@ function App() {
       }
 
       let newFurYAxis = 0;
-      canBePlaced == "surface" ? (newFurYAxis = 1) : (newFurYAxis = 0);
+      canBePlaced == "surface" ? (newFurYAxis = 1.1) : (newFurYAxis = 0);
 
       setRoomDataFurniture([
         ...roomDataFurniture,
@@ -661,7 +665,7 @@ function App() {
             furElement.furProps.includes("canBePlacedOnSurface") &&
             placingFurnitureData.furProps.includes("canBePlacedOnSurface")
           ) {
-            helperSpace.forEach((elem) => (elem[1] = 1));
+            helperSpace.forEach((elem) => (elem[1] = 1.1));
             for (let i = 0; i < helperSpace.length; i++) {
               if (helperSpace[i].toString() == furElementSpaces.toString()) {
                 canBePlaced = "no";
@@ -1150,7 +1154,8 @@ function App() {
       for (let spaces of elemToRemoveSpaces) {
         elemToRemove = roomDataFurniture.find(
           (element) =>
-            element.position.toString() == [spaces[0], 1, spaces[2]].toString()
+            element.position.toString() ==
+            [spaces[0], 1.1, spaces[2]].toString()
         );
         if (elemToRemove) keysToRemove.push(elemToRemove.key);
       }
@@ -1158,7 +1163,7 @@ function App() {
       elemToRemove = roomDataFurniture.find(
         (element) =>
           element.position.toString() ==
-          [elemToRemove.position[0], 1, elemToRemove.position[2]].toString()
+          [elemToRemove.position[0], 1.1, elemToRemove.position[2]].toString()
       );
       if (elemToRemove) keysToRemove.push(elemToRemove.key);
     }

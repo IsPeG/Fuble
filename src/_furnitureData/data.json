@@ -36,45 +36,59 @@
   },
   {
     "id": 6,
-    "name": "OldChair",
-    "size": "1x1",
-    "type": "sit",
-    "furProps": []
-  },
-  {
-    "id": 7,
-    "name": "OldTable",
-    "size": "1x1",
-    "type": "table",
-    "furProps": ["surface"]
-  },
-  {
-    "id": 8,
-    "name": "OldLamp",
-    "size": "1x1",
-    "type": "light",
-    "furProps": ["light", "canBePlacedOnSurface"]
-  },
-  {
-    "id": 9,
-    "name": "OldWardrobe",
-    "size": "2x1",
-    "type": "misc",
-    "furProps": []
-  },
-  {
-    "id": 10,
     "name": "Speaker",
     "size": "1x1",
     "type": "misc",
     "furProps": []
   },
   {
-    "id": 11,
+    "id": 7,
     "name": "Fridge",
     "size": "1x1",
     "colors": ["white", "yellow", "green"],
     "type": "misc",
     "furProps": ["colors"]
+  },
+  {
+    "id": 8,
+    "name": "OldChair",
+    "size": "1x1",
+    "type": "sit",
+    "furProps": []
+  },
+  {
+    "id": 9,
+    "name": "OldTable",
+    "size": "1x1",
+    "type": "table",
+    "furProps": ["surface"]
+  },
+  {
+    "id": 10,
+    "name": "OldLamp",
+    "size": "1x1",
+    "type": "light",
+    "furProps": ["light", "canBePlacedOnSurface"]
+  },
+  {
+    "id": 11,
+    "name": "OldWardrobe",
+    "size": "2x1",
+    "type": "misc",
+    "furProps": []
+  },
+  {
+    "id": 12,
+    "name": "OldLargeTable",
+    "size": "2x1",
+    "type": "misc",
+    "furProps": ["surface"]
+  },
+  {
+    "id": 13,
+    "name": "OldPc",
+    "size": "1x1",
+    "type": "misc",
+    "furProps": ["canBePlacedOnSurface"]
   }
 ]
