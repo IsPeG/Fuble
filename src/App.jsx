@@ -63,63 +63,13 @@ const RoomDataExample = {
   furniture: [
     {
       key: 1,
-      name: "VendingMachine",
-      model: VendingMachine,
-      position: [3, 0, -3],
-      rotation: [0, south, 0],
-      size: "1x1",
-      options: { lightOn: true },
-      furProps: ["light"],
-    },
-    {
-      key: 2,
-      name: "VendingMachine",
-      model: VendingMachine,
-      position: [2, 0, -3],
-      rotation: [0, south, 0],
-      size: "1x1",
-      options: { lightOn: true },
-      furProps: ["light"],
-    },
-    {
-      key: 3,
-      name: "Plant",
-      model: Plant,
+      name: "OldLargeTable",
+      model: OldLargeTable,
       position: [0, 0, 0],
-      rotation: [0, east, 0],
-      size: "1x1",
+      rotation: [0, south, 0],
+      size: "2x1",
       options: {},
-      furProps: [],
-    },
-    {
-      key: 4,
-      name: "Coach",
-      model: Coach,
-      position: [1, 0, 0],
-      rotation: [0, east, 0],
-      size: "1x1",
-      options: {},
-      furProps: [],
-    },
-    {
-      key: 5,
-      name: "Coach",
-      model: Coach,
-      position: [0, 0, -1],
-      rotation: [0, north, 0],
-      size: "1x1",
-      options: {},
-      furProps: [],
-    },
-    {
-      key: 6,
-      name: "OldLamp",
-      model: OldLamp,
-      position: [3, 0, 3],
-      rotation: [0, north, 0],
-      size: "1x1",
-      options: { lightOn: true },
-      furProps: ["light"],
+      furProps: ["surface"],
     },
   ],
   walls: [1, 1, 1, 1],
@@ -693,16 +643,24 @@ function App() {
               placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
               i < surfaceSpaces
             ) {
-              if (helperSpace[0].toString() == furElementSpaces[i].toString()) {
-                canBePlaced = "surface";
-                return;
+              for (let j = 0; j < 3; j++) {
+                console.log(helperSpace[0].toString());
+                console.log(furElementSpaces[j].toString());
+                if (
+                  helperSpace[0].toString() == furElementSpaces[j].toString()
+                ) {
+                  canBePlaced = "surface";
+                  return;
+                } else {
+                  canBePlaced = "no";
+                }
               }
             } else if (
               furElement.furProps.includes("canBePlacedOnSurface") &&
               placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
               i < surfaceSpaces
             ) {
-              helperSpace.forEach((elem) => (elem[1] = 1));
+              helperSpace.forEach((elem) => (elem[1] = 1.1)); //maybe this has to be 1 and not 1.1
               for (let j = 0; j < helperSpace.length; j++) {
                 if (
                   helperSpace[j].toString() == furElementSpaces[i].toString()
@@ -726,7 +684,6 @@ function App() {
         }
       });
     }
-    // console.log(canBePlaced)
     return canBePlaced;
   };
 
@@ -1100,18 +1057,18 @@ function App() {
         /> */}
         <directionalLight
           castShadow
-          color={"#fff"}
-          intensity={1}
+          intensity={0.5}
           position={[0.5, 10, 0.5]}
           shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0001}
+          color={"#ffd5b8"}
         >
           <orthographicCamera
             attach="shadow-camera"
             args={[-150.5, 150.5, 150.5, -150.5]}
           />
         </directionalLight>
-        <ambientLight intensity={0.45} color={"#ffd5b8"} />
+        <ambientLight intensity={0.5} color={"#ffd5b8"} />
       </>
     );
   };

@@ -15,7 +15,7 @@ export default function OldLamp(props) {
         intensity={3}
         position={[
           props.position[0],
-          props.position[1] + 0.8,
+          props.position[1] + 0.9,
           props.position[2],
         ]}
         color={"#f7b65c"}
