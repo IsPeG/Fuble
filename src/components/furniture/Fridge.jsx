@@ -1,7 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
-import { TextureLoader, NearestFilter, LinearMipMapLinearFilter } from "three";
-import { useLoader } from "@react-three/fiber";
+import {
+  TextureLoader,
+  NearestFilter,
+  LinearMipMapLinearFilter,
+  sRGBEncoding,
+} from "three";
 
 const modelsPath = "/src/assets/models";
 const texturePath = "/src/assets/textures/furniture/fridge";
@@ -16,6 +20,8 @@ export default function Fridge(props) {
     loader.load(texture_url, (t) => {
       t.magFilter = NearestFilter;
       t.minFilter = LinearMipMapLinearFilter;
+      t.encoding = sRGBEncoding;
+
       meshRef.current.material.map = t;
     });
   }, [props.color]);

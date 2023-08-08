@@ -91,5 +91,13 @@
     "colors": ["beige", "black", "green"],
     "type": "misc",
     "furProps": ["canBePlacedOnSurface", "colors"]
+  },
+  {
+    "id": 14,
+    "name": "Croton",
+    "size": "1x1",
+    "colors": ["amberglow", "blue", "brown", "crimson", "green"],
+    "type": "misc",
+    "furProps": ["colors"]
   }
 ]

@@ -22,6 +22,7 @@ import OldWardrobe from "./components/furniture/OldWardrobe";
 import OldLargeTable from "./components/furniture/OldLargeTable";
 import Speaker from "./components/furniture/Speaker";
 import Fridge from "./components/furniture/Fridge";
+import Croton from "./components/furniture/Croton";
 
 const componentsMap = {
   Coach,
@@ -37,6 +38,7 @@ const componentsMap = {
   OldWardrobe,
   OldLargeTable,
   OldPc,
+  Croton,
 };
 
 // Selectors
@@ -63,13 +65,15 @@ const RoomDataExample = {
   furniture: [
     {
       key: 1,
-      name: "OldLargeTable",
-      model: OldLargeTable,
+      name: "Croton",
+      model: Croton,
       position: [0, 0, 0],
       rotation: [0, south, 0],
-      size: "2x1",
-      options: {},
-      furProps: ["surface"],
+      size: "1x1",
+      options: {
+        colors: ["amberglow", "blue", "brown", "crimson", "green"],
+      },
+      furProps: ["colors"],
     },
   ],
   walls: [1, 1, 1, 1],
@@ -1068,7 +1072,7 @@ function App() {
             args={[-150.5, 150.5, 150.5, -150.5]}
           />
         </directionalLight>
-        <ambientLight intensity={0.5} color={"#ffd5b8"} />
+        <ambientLight intensity={0.65} color={"#ffd5b8"} />
       </>
     );
   };

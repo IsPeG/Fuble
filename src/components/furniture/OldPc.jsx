@@ -1,7 +1,11 @@
-import React, { useEffect, useLayoutEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
-import { TextureLoader, NearestFilter, LinearMipMapLinearFilter } from "three";
-import { useLoader } from "@react-three/fiber";
+import {
+  TextureLoader,
+  NearestFilter,
+  LinearMipMapLinearFilter,
+  sRGBEncoding,
+} from "three";
 
 const modelsPath = "/src/assets/models";
 const texturePath = "/src/assets/textures/furniture/old_pc";
@@ -18,7 +22,9 @@ export default function OldPc(props) {
       console.log(t);
       t.magFilter = NearestFilter;
       t.minFilter = LinearMipMapLinearFilter;
-      t.flipY = false; // for one reason, in this model it's necessary to flip the texture in the y axis
+      t.encoding = sRGBEncoding;
+
+      t.flipY = false; // for some reason, in this model it's necessary to flip the texture in the y axis
       meshRef.current.material.map = t;
     });
   }, [props.color]);
