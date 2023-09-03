@@ -1,5 +1,8 @@
 [
   { "id": 1, "name": "beige_blossoming" },
   { "id": 2, "name": "test" },
-  { "id": 3, "name": "tatami_wall_panels" }
+  { "id": 3, "name": "tatami_wall_panels" },
+  { "id": 4, "name": "smooth_green_wall" },
+  { "id": 5, "name": "smooth_dill_grass_wall" },
+  { "id": 6, "name": "modern_concrete_wall" }
 ]
