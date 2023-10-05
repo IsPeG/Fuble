@@ -1,7 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { SpotLight, useDepthBuffer, useHelper } from "@react-three/drei";
+import {
+  SpotLight,
+  useDepthBuffer,
+  useHelper,
+  OrbitControls,
+} from "@react-three/drei";
 // import { Edges } from "@react-three/drei";
 
 // Room elements
@@ -23,6 +28,9 @@ import OldLargeTable from "./components/furniture/OldLargeTable";
 import Speaker from "./components/furniture/Speaker";
 import Fridge from "./components/furniture/Fridge";
 import Croton from "./components/furniture/Croton";
+import ModernWoodCoffeeTable from "./components/furniture/ModernWoodCoffeeTable";
+import ModernWoodChair from "./components/furniture/ModernWoodChair";
+import ModernWoodShelf from "./components/furniture/ModernWoodShelf";
 
 const componentsMap = {
   Coach,
@@ -39,6 +47,9 @@ const componentsMap = {
   OldLargeTable,
   OldPc,
   Croton,
+  ModernWoodCoffeeTable,
+  ModernWoodChair,
+  ModernWoodShelf,
 };
 
 // Selectors
@@ -55,6 +66,8 @@ import Options from "./components/ui/Options/Options";
 import "./assets/styles/global.css";
 import FurSelector from "./components/ui/FurSelector/FurSelector";
 
+import furniturePlacedSound from "./assets/sounds/furniturePlacedSound.mp3";
+
 // Variables
 const south = -Math.PI / 1; //-3.14... down
 const west = Math.PI / 2; //1.57... left
@@ -65,18 +78,18 @@ const RoomDataExample = {
   furniture: [
     {
       key: 1,
-      name: "Croton",
-      model: Croton,
+      name: "ModernWoodShelf",
+      model: ModernWoodShelf,
       position: [0, 0, 0],
       rotation: [0, south, 0],
-      size: "1x1",
+      size: "2x1",
       options: {
-        colors: ["amberglow", "blue", "brown", "crimson", "green"],
+        colors: ["oak", "orange"],
       },
-      furProps: ["colors"],
+      furProps: ["colors", "surface"],
     },
   ],
-  walls: [1, 1, 1, 1],
+  walls: [6, 6, 6, 6],
   floor: 1,
 };
 
@@ -180,6 +193,10 @@ function App() {
 
   const escKeyHandler = () => {
     setFurMenuOpen(false);
+    setSelectingFurniture(false);
+    setChangeWallsFloorMenuOpen(false);
+    setSaveRoomMenuOpen(false);
+    setPlacingFurniture(false);
   };
 
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
@@ -211,20 +228,25 @@ function App() {
 
       let furOptions = {};
       for (const elem of placingFurnitureData.furProps) {
+        console.log(elem);
         switch (elem) {
           case "light":
             furOptions.lightOn = true;
             break;
           case "colors":
             furOptions.colors = placingFurnitureData.colors;
+            break;
           default:
             break;
         }
       }
 
       let newFurYAxis = 0;
-      canBePlaced == "surface" ? (newFurYAxis = 1.1) : (newFurYAxis = 0);
-
+      if (canBePlaced == "surface") newFurYAxis = 1.05;
+      if (canBePlaced == "lowerSurface") newFurYAxis = 0.55;
+      // TODO: implement a prop named customSurface to furniture that are surfaces
+      console.log("xdxd");
+      console.log(newFurYAxis);
       setRoomDataFurniture([
         ...roomDataFurniture,
         {
@@ -240,6 +262,7 @@ function App() {
         },
       ]);
       setPlacingFurniture(false);
+      new Audio(furniturePlacedSound).play();
       placingFurnitureDirection = 0;
     } else {
       console.log("Furniture can't be placed in this position");
@@ -616,12 +639,21 @@ function App() {
               return;
             }
           } else if (
+            furElement.furProps.includes("lowerSurface") &&
+            placingFurnitureData.furProps.includes("canBePlacedOnSurface")
+          ) {
+            if (helperSpace[0].toString() == furElementSpaces.toString()) {
+              canBePlaced = "lowerSurface";
+              return;
+            }
+          } else if (
             furElement.furProps.includes("canBePlacedOnSurface") &&
             placingFurnitureData.furProps.includes("canBePlacedOnSurface")
           ) {
             helperSpace.forEach((elem) => (elem[1] = 1.1));
             for (let i = 0; i < helperSpace.length; i++) {
               if (helperSpace[i].toString() == furElementSpaces.toString()) {
+                console.log("ha entrao 1");
                 canBePlaced = "no";
                 return;
               }
@@ -630,6 +662,7 @@ function App() {
           }
           for (let i = 0; i < helperSpace.length; i++) {
             if (helperSpace[i].toString() == furElementSpaces.toString()) {
+              console.log("ha entrao 2");
               canBePlaced = "no";
               return;
             }
@@ -656,7 +689,28 @@ function App() {
                   canBePlaced = "surface";
                   return;
                 } else {
-                  canBePlaced = "no";
+                  console.log("ha entrao 3");
+                  // This was a no before, changing it to floor seems to fix the bug.
+                  // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it thorws a canBePlaced = "no"
+                  canBePlaced = "floor";
+                }
+              }
+            } else if (
+              furElement.furProps.includes("lowerSurface") &&
+              placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
+              i < surfaceSpaces
+            ) {
+              for (let j = 0; j < 3; j++) {
+                console.log(helperSpace[0].toString());
+                console.log(furElementSpaces[j].toString());
+                if (
+                  helperSpace[0].toString() == furElementSpaces[j].toString()
+                ) {
+                  canBePlaced = "lowerSurface";
+                  return;
+                } else {
+                  console.log("ha entrao 4");
+                  canBePlaced = "floor";
                 }
               }
             } else if (
@@ -669,6 +723,7 @@ function App() {
                 if (
                   helperSpace[j].toString() == furElementSpaces[i].toString()
                 ) {
+                  console.log("ha entrao 5");
                   canBePlaced = "no";
                   return;
                 }
@@ -679,6 +734,7 @@ function App() {
                 if (
                   helperSpace[j].toString() == furElementSpaces[i].toString()
                 ) {
+                  console.log("ha entrao 6");
                   canBePlaced = "no";
                   return;
                 }
@@ -1020,6 +1076,7 @@ function App() {
 
   const handleFurnitureClick = (e, key, name, furProps, colors) => {
     e.stopPropagation();
+    if (placingFurniture) return;
     setFurMenuOpen({
       x: e.pageX,
       y: e.pageY,
@@ -1104,6 +1161,11 @@ function App() {
 
   const removeFur = (key) => {
     let elemToRemove = roomDataFurniture.find((element) => element.key == key);
+
+    let furnitureToRemoveHeight = 1.05;
+    if (elemToRemove.furProps.includes("lowerSurface"))
+      furnitureToRemoveHeight = 0.55;
+
     let elemToRemoveSpaces = [];
     let keysToRemove = [];
     keysToRemove.push(elemToRemove.key);
@@ -1116,7 +1178,7 @@ function App() {
         elemToRemove = roomDataFurniture.find(
           (element) =>
             element.position.toString() ==
-            [spaces[0], 1.1, spaces[2]].toString()
+            [spaces[0], furnitureToRemoveHeight, spaces[2]].toString()
         );
         if (elemToRemove) keysToRemove.push(elemToRemove.key);
       }
@@ -1124,7 +1186,11 @@ function App() {
       elemToRemove = roomDataFurniture.find(
         (element) =>
           element.position.toString() ==
-          [elemToRemove.position[0], 1.1, elemToRemove.position[2]].toString()
+          [
+            elemToRemove.position[0],
+            furnitureToRemoveHeight,
+            elemToRemove.position[2],
+          ].toString()
       );
       if (elemToRemove) keysToRemove.push(elemToRemove.key);
     }
@@ -1173,6 +1239,7 @@ function App() {
       setSelectingFurniture(false);
       setPlacingFurniture(false);
     } else {
+      setFurMenuOpen(false);
       setSelectingFurniture(true);
     }
   };
@@ -1293,6 +1360,7 @@ function App() {
       {changeWallsFloorMenuOpen ? generateChangeWallsFloorMenu() : null}
 
       <Canvas
+        gl={{ antialias: false }}
         shadows
         orthographic
         camera={{ zoom: 100, near: 1, far: 2000, attach: "shadow-camera" }}
@@ -1300,11 +1368,22 @@ function App() {
         dpr={[1, 2]}
       >
         {/* Can be used to lower all the elements in screen so in the future, the room with walls fit better in the screen */}
-        <group position={[0, -0.9, 0]}>
-          <CameraRig
-            positionData={cameraPositions[cameraIndex]}
-            lookAtData={lookAtCameraPositions[cameraIndex]}
-          />
+        <group position={[0, -1.1, 0]}>
+          {
+            // DEBUG CAMERA
+            true ? (
+              <CameraRig
+                positionData={cameraPositions[cameraIndex]}
+                lookAtData={lookAtCameraPositions[cameraIndex]}
+              />
+            ) : (
+              <OrbitControls
+                target={[0, 0, 0]}
+                maxDistance={20}
+                minDistance={3}
+              />
+            )
+          }
 
           <group>
             {roomDataFurniture.map((furniture) => (

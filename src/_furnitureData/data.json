@@ -99,5 +99,29 @@
     "colors": ["amberglow", "blue", "brown", "crimson", "green"],
     "type": "misc",
     "furProps": ["colors"]
+  },
+  {
+    "id": 15,
+    "name": "ModernWoodCoffeeTable",
+    "size": "2x1",
+    "colors": ["oak", "orange"],
+    "type": "table",
+    "furProps": ["colors", "lowerSurface"]
+  },
+  {
+    "id": 16,
+    "name": "ModernWoodChair",
+    "size": "1x1",
+    "colors": ["oak", "orange"],
+    "type": "sit",
+    "furProps": ["colors"]
+  },
+  {
+    "id": 17,
+    "name": "ModernWoodShelf",
+    "size": "2x1",
+    "colors": ["oak", "orange"],
+    "type": "shelf",
+    "furProps": ["colors", "surface"]
   }
 ]

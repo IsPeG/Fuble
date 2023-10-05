@@ -18,6 +18,8 @@ export default function Walls(props) {
   const north = 0; // up
   const east = -Math.PI / 2; //-1.57... right
 
+  const planeGeometryArgs = [8, 3.5];
+
   const wallName = [];
 
   console.log(props.wallIds);
@@ -63,12 +65,12 @@ export default function Walls(props) {
   return (
     <group>
       <mesh
-        position={[0.5, 1.5, -3.5]}
+        position={[0.5, 1.7, -3.5]}
         rotation={[0, north, 0]}
         castShadow
         receiveShadow
       >
-        <planeGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={planeGeometryArgs} />
         <meshPhongMaterial
           attach="material"
           map={texture1}
@@ -76,12 +78,12 @@ export default function Walls(props) {
         />
       </mesh>
       <mesh
-        position={[-3.5, 1.5, 0.5]}
+        position={[-3.5, 1.7, 0.5]}
         rotation={[0, west, 0]}
         castShadow
         receiveShadow
       >
-        <planeGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={planeGeometryArgs} />
         <meshPhongMaterial
           attach="material"
           map={texture3}
@@ -89,12 +91,12 @@ export default function Walls(props) {
         />
       </mesh>
       <mesh
-        position={[0.5, 1.5, 4.5]}
+        position={[0.5, 1.7, 4.5]}
         rotation={[0, south, 0]}
         castShadow
         receiveShadow
       >
-        <planeGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={planeGeometryArgs} />
         <meshPhongMaterial
           attach="material"
           map={texture2}
@@ -103,12 +105,12 @@ export default function Walls(props) {
         />
       </mesh>
       <mesh
-        position={[4.5, 1.5, 0.5]}
+        position={[4.5, 1.7, 0.5]}
         rotation={[0, east, 0]}
         castShadow
         receiveShadow
       >
-        <planeGeometry attach="geometry" args={[8, 3]} />
+        <planeGeometry attach="geometry" args={planeGeometryArgs} />
         <meshPhongMaterial
           attach="material"
           map={texture4}

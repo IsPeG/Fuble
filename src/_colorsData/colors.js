@@ -8,6 +8,8 @@ const colors = [
   { color: "amberglow", value: "#c88049" },
   { color: "blue", value: "#196ae3" },
   { color: "crimson", value: "#dc143c" },
+  { color: "orange", value: "#f07118" },
+  { color: "oak", value: "#d1b087" },
 ];
 
 export default colors;
