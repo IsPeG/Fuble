@@ -22,7 +22,7 @@ export default function Walls(props) {
 
   const wallName = [];
 
-  console.log(props.wallIds);
+  // console.log(props.wallIds);
 
   wallName.push(wallsData.find((elem) => elem.id == props.wallIds[0]).name);
   wallName.push(wallsData.find((elem) => elem.id == props.wallIds[2]).name);

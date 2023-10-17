@@ -83,3 +83,7 @@
   align-items: center;
   box-shadow: 0 0 0 0.45em #271c0e;
 }
+
+.elementSelector:hover {
+  font-weight: bold;
+}

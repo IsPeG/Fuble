@@ -35,7 +35,11 @@ export default function ChangeWallsFloorMenu(props) {
     };
 
     return (
-      <div style={{ display: "flex" }} onClick={props.onClick}>
+      <div
+        style={{ display: "flex" }}
+        onClick={props.onClick}
+        className="elementSelector"
+      >
         <div className={"changeWallsFloorMenuButton"}>
           <img
             className={"changeWallsFloorMenuButtonImage"}
@@ -159,6 +163,16 @@ export default function ChangeWallsFloorMenu(props) {
           <h2>Walls</h2>
           <div className="changeWallsFloorMenuWallsContainer">
             <ElementSelector
+              indexMainContainer={3}
+              selectedIndex={selectedIndex}
+              backgroundImage={
+                wallsData.find((elem) => elem.id == props.roomDataWalls[3]).name
+              }
+              elementType={"walls"}
+              elementName={formatName(3, "wall")}
+              onClick={(e) => elementSelectorHandleClick(3, "Walls", 3)}
+            />
+            <ElementSelector
               indexMainContainer={0}
               selectedIndex={selectedIndex}
               backgroundImage={
@@ -187,16 +201,6 @@ export default function ChangeWallsFloorMenu(props) {
               elementType={"walls"}
               elementName={formatName(2, "wall")}
               onClick={(e) => elementSelectorHandleClick(2, "Walls", 2)}
-            />
-            <ElementSelector
-              indexMainContainer={3}
-              selectedIndex={selectedIndex}
-              backgroundImage={
-                wallsData.find((elem) => elem.id == props.roomDataWalls[3]).name
-              }
-              elementType={"walls"}
-              elementName={formatName(3, "wall")}
-              onClick={(e) => elementSelectorHandleClick(3, "Walls", 3)}
             />
           </div>
           <h2>Floor</h2>

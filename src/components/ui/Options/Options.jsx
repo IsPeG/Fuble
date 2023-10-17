@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ConfirmationMenu from "../ConfirmationMenu/ConfirmationMenu";
+import { playButtonHoverSound } from "../../../sounds";
 
 import "./options.css";
 
@@ -65,17 +66,26 @@ export default function Options(props) {
           <>
             <button
               className="button red"
-              onClick={(e) => handleDeleteRoomButton()}
+              onClick={(e) => {
+                handleDeleteRoomButton(), playButtonHoverSound();
+              }}
             >
               Clean room
             </button>
             <button
               className="button"
-              onClick={(e) => changeWallsFloorButtonHandler()}
+              onClick={(e) => {
+                changeWallsFloorButtonHandler(), playButtonHoverSound();
+              }}
             >
               Change walls & floor
             </button>
-            <button className="button" onClick={(e) => saveRoomButtonHandler()}>
+            <button
+              className="button"
+              onClick={(e) => {
+                saveRoomButtonHandler(), playButtonHoverSound();
+              }}
+            >
               Save Room
             </button>
             <label className="button" htmlFor="loadRoom">
@@ -89,7 +99,9 @@ export default function Options(props) {
             />
             <button
               className="button yellow"
-              onClick={(e) => setOptionsOpen(false)}
+              onClick={(e) => {
+                setOptionsOpen(false), playButtonHoverSound();
+              }}
             >
               Cancel Options
             </button>
@@ -97,7 +109,9 @@ export default function Options(props) {
         ) : (
           <button
             className="button yellow"
-            onClick={(e) => setOptionsOpen(true)}
+            onClick={(e) => {
+              setOptionsOpen(true), playButtonHoverSound();
+            }}
           >
             Options
           </button>

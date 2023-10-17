@@ -49,6 +49,6 @@ export default function ModernWoodShelf(props) {
   );
 }
 
-useGLTF.preload("/modern_wood_shelf.gltf");
-useTexture.preload(texturePath + `/modern_wood_coffee_shelf_oak.png`);
+useGLTF.preload(modelsPath + "/furniture/modern_wood_shelf.gltf");
+useTexture.preload(texturePath + `/modern_wood_shelf_oak.png`);
 // useTexture.preload(texturePath + `/modern_wood_coffee_shelf_orange.png`);

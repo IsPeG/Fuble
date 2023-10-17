@@ -1,25 +1,23 @@
 import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useHelper } from "@react-three/drei";
 const modelsPath = "/src/assets/models";
+import { PointLightHelper } from "three";
 
 export default function OldLamp(props) {
   const { nodes, materials } = useGLTF(modelsPath + "/furniture/old_lamp.gltf");
-  // const spotLightRef = useRef();
+  const spotLightRef = useRef();
+
+  // useHelper(spotLightRef, PointLightHelper, 0.5);
 
   return (
     <>
       <pointLight
-        // ref={spotLightRef}
+        ref={spotLightRef}
         visible={props.options.lightOn}
-        angle={1}
         intensity={3}
-        position={[
-          props.position[0],
-          props.position[1] + 0.9,
-          props.position[2],
-        ]}
+        position={[props.position[0], props.position[1] + 2, props.position[2]]}
         color={"#f7b65c"}
-        distance={3}
+        distance={10}
         castShadow
         shadow-mapSize-height={2048}
         shadow-mapSize-width={2048}
@@ -30,8 +28,8 @@ export default function OldLamp(props) {
         <mesh
           geometry={nodes.cylinder.geometry}
           material={nodes.cylinder.material}
-          receiveShadow
-          castShadow
+          castShadow={false}
+          receiveShadow={true}
         />
       </group>
     </>

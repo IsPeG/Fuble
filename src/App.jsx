@@ -65,8 +65,7 @@ import Options from "./components/ui/Options/Options";
 
 import "./assets/styles/global.css";
 import FurSelector from "./components/ui/FurSelector/FurSelector";
-
-import furniturePlacedSound from "./assets/sounds/furniturePlacedSound.mp3";
+import { furniturePlacedSound, playButtonHoverSound } from "./sounds";
 
 // Variables
 const south = -Math.PI / 1; //-3.14... down
@@ -83,10 +82,24 @@ const RoomDataExample = {
       position: [0, 0, 0],
       rotation: [0, south, 0],
       size: "2x1",
+      color: "oak",
       options: {
         colors: ["oak", "orange"],
       },
       furProps: ["colors", "surface"],
+    },
+    {
+      key: 2,
+      name: "OldLamp",
+      model: OldLamp,
+      position: [0, 0, 3],
+      rotation: [0, 0, 0],
+      size: "1x1",
+      furProps: ["light", "canBePlacedOnSurface"],
+      color: null,
+      options: {
+        lightOn: true,
+      },
     },
   ],
   walls: [6, 6, 6, 6],
@@ -187,6 +200,15 @@ function App() {
       }
     };
     window.addEventListener("keydown", keyHandler);
+
+    // const buttons = document.querySelectorAll("button");
+    // buttons.forEach((element) => {
+    //   element.addEventListener("click", () => {
+    //     buttonHoverSound.pause();
+    //     buttonHoverSound.currentTime = 0;
+    //     buttonHoverSound.play();
+    //   });
+    // });
   }, []);
 
   console.log(roomDataFurniture);
@@ -262,7 +284,8 @@ function App() {
         },
       ]);
       setPlacingFurniture(false);
-      new Audio(furniturePlacedSound).play();
+      // new Audio(furniturePlacedSound).play();
+      furniturePlacedSound.play();
       placingFurnitureDirection = 0;
     } else {
       console.log("Furniture can't be placed in this position");
@@ -1287,20 +1310,29 @@ function App() {
         setRoomDataWalls={setRoomDataWalls}
       />
       <div className="buttonsContainer" ref={buttonsContainerRef}>
-        <button className="button" onClick={(e) => handleAddFurnitureClick(e)}>
+        <button
+          className="button"
+          onClick={(e) => {
+            handleAddFurnitureClick(e), playButtonHoverSound();
+          }}
+        >
           {selectingFurniture || placingFurniture ? "Cancel" : "Add furniture"}
         </button>
         <button
           ref={rotateCameraLeftRef}
           className="button"
-          onClick={(e) => changeCameraPosition("left", e)}
+          onClick={(e) => {
+            changeCameraPosition("left", e), playButtonHoverSound();
+          }}
         >
           Camera left
         </button>
         <button
           ref={rotateCameraRightRef}
           className="button"
-          onClick={(e) => changeCameraPosition("right", e)}
+          onClick={(e) => {
+            changeCameraPosition("right", e), playButtonHoverSound();
+          }}
         >
           Camera right
         </button>
@@ -1310,40 +1342,56 @@ function App() {
             <button
               className="button"
               id="moveFurLeft"
-              onClick={(e) => furnitureHelperMoveButtonHandler("left", e)}
+              onClick={(e) => {
+                furnitureHelperMoveButtonHandler("left", e),
+                  playButtonHoverSound();
+              }}
             >
               ᐊ
             </button>
             <button
               className="button"
               id="moveFurRight"
-              onClick={(e) => furnitureHelperMoveButtonHandler("right", e)}
+              onClick={(e) => {
+                furnitureHelperMoveButtonHandler("right", e),
+                  playButtonHoverSound();
+              }}
             >
               ᐅ
             </button>
             <button
               className="button"
               id="moveFurUp"
-              onClick={(e) => furnitureHelperMoveButtonHandler("up", e)}
+              onClick={(e) => {
+                furnitureHelperMoveButtonHandler("up", e),
+                  playButtonHoverSound();
+              }}
             >
               ᐃ
             </button>
             <button
               className="button"
               id="moveFurDown"
-              onClick={(e) => furnitureHelperMoveButtonHandler("down", e)}
+              onClick={(e) => {
+                furnitureHelperMoveButtonHandler("down", e),
+                  playButtonHoverSound();
+              }}
             >
               ᐁ
             </button>
             <button
               className="button"
-              onClick={(e) => rotateFurnitureButtonHandler(e)}
+              onClick={(e) => {
+                rotateFurnitureButtonHandler(e), playButtonHoverSound();
+              }}
             >
               Rotate
             </button>
             <button
               className="button blue"
-              onClick={(e) => addFurnitureButtonHandler()}
+              onClick={(e) => {
+                addFurnitureButtonHandler(), playButtonHoverSound();
+              }}
             >
               Set
             </button>

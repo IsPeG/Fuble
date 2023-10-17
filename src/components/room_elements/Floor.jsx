@@ -35,7 +35,7 @@ export default function Floor(props) {
     textures[3] = exitNormal;
   }
 
-  console.log(sizes);
+  // console.log(sizes);
 
   textures.forEach((element, index) => {
     element.repeat.set(sizes[index], sizes[index]);
