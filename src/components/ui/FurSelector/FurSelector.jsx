@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FurSelectorItem from "../FurSelectorItem/FurSelectorItem";
+import IconItemElement from "../IconItemElement/IconItemElement";
 
 import furnitureData from "../../../_furnitureData/data.json";
 
@@ -47,22 +47,40 @@ export default function FurSelector(props) {
           {filter
             ? furData.map((furniture, key) =>
                 filter == furniture.type ? (
-                  <FurSelectorItem
-                    key={key}
-                    furId={furniture.id}
-                    furName={furniture.name}
-                    furSize={furniture.size}
-                    handleItemClick={props.handleItemClick}
+                  // <FurSelectorItem
+                  //   key={key}
+                  //   furId={furniture.id}
+                  //   furName={furniture.name}
+                  //   furSize={furniture.size}
+                  //   handleItemClick={props.handleItemClick}
+                  // />
+                  <IconItemElement
+                    backgroundImage={elem.name}
+                    elementType={selectingElement.toLowerCase()}
+                    elementName={formatNameFromString(elem.name)}
+                    onClick={(e) =>
+                      selectElementHandleClick(
+                        elem.id,
+                        selectingElement.toLowerCase()
+                      )
+                    }
                   />
                 ) : null
               )
             : furData.map((furniture, key) => (
-                <FurSelectorItem
+                // <FurSelectorItem
+                //   key={key}
+                //   furId={furniture.id}
+                //   furName={furniture.name}
+                //   furSize={furniture.size}
+                //   handleItemClick={props.handleItemClick}
+                // />
+                <IconItemElement
                   key={key}
-                  furId={furniture.id}
-                  furName={furniture.name}
-                  furSize={furniture.size}
-                  handleItemClick={props.handleItemClick}
+                  backgroundImage={furniture.name}
+                  elementType={"furniture"}
+                  elementName={furniture.name}
+                  onClick={(e) => props.handleItemClick(furniture.id)}
                 />
               ))}
         </div>

@@ -165,31 +165,52 @@ function App() {
       // e.preventDefault();
       switch (e.key) {
         case "ArrowRight":
+        case "d":
           // furnitureHelperMoveButtonHandler("right", e);
           document.getElementById("moveFurRight")
             ? document.getElementById("moveFurRight").click()
             : null;
           break;
         case "ArrowLeft":
+        case "a":
           // furnitureHelperMoveButtonHandler("left", e);
           document.getElementById("moveFurLeft")
             ? document.getElementById("moveFurLeft").click()
             : null;
           break;
         case "ArrowUp":
+        case "w":
           // furnitureHelperMoveButtonHandler("up", e);
           document.getElementById("moveFurUp")
             ? document.getElementById("moveFurUp").click()
             : null;
           break;
         case "ArrowDown":
+        case "s":
           // furnitureHelperMoveButtonHandler("down", e);
           document.getElementById("moveFurDown")
             ? document.getElementById("moveFurDown").click()
             : null;
           break;
         case "r":
-          rotateFurnitureButtonHandler();
+          document.getElementById("rotateFur")
+            ? document.getElementById("rotateFur").click()
+            : null;
+          break;
+        case "q":
+          document.getElementById("rotateCameraLeft")
+            ? document.getElementById("rotateCameraLeft").click()
+            : null;
+          break;
+        case "e":
+          document.getElementById("rotateCameraRight")
+            ? document.getElementById("rotateCameraRight").click()
+            : null;
+          break;
+        case " ": //spacebar
+          document.getElementById("placeFur")
+            ? document.getElementById("placeFur").click()
+            : null;
           break;
         case "Escape":
           escKeyHandler();
@@ -733,7 +754,7 @@ function App() {
                   return;
                 } else {
                   console.log("ha entrao 4");
-                  canBePlaced = "floor";
+                  canBePlaced = "surface";
                 }
               }
             } else if (
@@ -1319,6 +1340,7 @@ function App() {
           {selectingFurniture || placingFurniture ? "Cancel" : "Add furniture"}
         </button>
         <button
+          id="rotateCameraLeft"
           ref={rotateCameraLeftRef}
           className="button"
           onClick={(e) => {
@@ -1328,6 +1350,7 @@ function App() {
           Camera left
         </button>
         <button
+          id="rotateCameraRight"
           ref={rotateCameraRightRef}
           className="button"
           onClick={(e) => {
@@ -1380,6 +1403,7 @@ function App() {
               ᐁ
             </button>
             <button
+              id="rotateFur"
               className="button"
               onClick={(e) => {
                 rotateFurnitureButtonHandler(e), playButtonHoverSound();
@@ -1388,6 +1412,7 @@ function App() {
               Rotate
             </button>
             <button
+              id="placeFur"
               className="button blue"
               onClick={(e) => {
                 addFurnitureButtonHandler(), playButtonHoverSound();

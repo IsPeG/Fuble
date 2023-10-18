@@ -1,0 +1,50 @@
+.IconItemElementWF {
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  width: 16rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: flex-start;
+}
+
+.IconItemElementWF p {
+  padding-left: 0.5rem;
+}
+
+.changeWallsFloorMenuButton {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.5rem;
+}
+
+.IconItemElementImageWF {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.5rem;
+  border: 0.3rem solid var(--button-shadow-color);
+}
+
+.changeWallsFloorMenuButton:hover {
+  transform: translateY(-0.2rem);
+}
+
+.IconItemElementImageFur {
+  margin: 0.7rem;
+  background-size: cover;
+  padding: 0.3rem;
+  background-color: var(--container-second-color);
+  border: solid 0.2rem #c3b9ac;
+  /* background-color: #00000090; */
+  border-radius: 1rem;
+  overflow: hidden;
+  width: 5rem;
+  height: 5rem;
+}
+
+.IconItemElementImageWFasd {
+  max-width: 4.5rem;
+  max-height: 4.5rem;
+  width: 100%;
+  height: 100%;
+}
