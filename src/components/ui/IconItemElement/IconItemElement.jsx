@@ -11,7 +11,7 @@ export default function IconItemElement(props) {
   return (
     <>
       <div
-        data-tooltip-id={`tooltip-${props.furId}`}
+        data-tooltip-id={`tooltip-${props.furnitureId}`}
         data-tooltip-content={props.elementName
           .replace(/([A-Z])/g, " $1")
           .trim()}
@@ -59,7 +59,7 @@ export default function IconItemElement(props) {
         ) : null}
       </div>
       {props.elementType != "furniture" ? null : (
-        <Tooltip id={`tooltip-${props.furId}`} />
+        <Tooltip id={`tooltip-${props.furnitureId}`} />
       )}
     </>
   );

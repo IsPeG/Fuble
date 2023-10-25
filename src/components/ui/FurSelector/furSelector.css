@@ -1,13 +1,16 @@
 .furSelector {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 0.5rem;
+  /* grid-auto-rows: minmax(100px, auto); */
+
   overflow: auto;
   max-height: 100%;
-  margin: 0 0.5rem 0 0.5rem;
+  margin: 0 auto 0 auto;
   scrollbar-width: none;
   scrollbar-color: #6e5b4a #353130;
-  justify-content: center;
   max-width: 40rem;
+  margin: 1rem 1.3rem;
 }
 
 /* Chrome, Edge, and Safari */
@@ -15,23 +18,18 @@
   width: 16px;
 }
 
-.furSelector::-webkit-scrollbar-track {
-  background: #ded5c8;
-}
-
 .furSelector::-webkit-scrollbar-thumb {
-  background-color: var(--button-blue-bg-color);
+  background-color: #b8b0a5;
   border-radius: 3px;
 }
 
 .furSelectorWrapper {
   box-shadow: 0 0 0 0.45em var(--button-blue-shadow-color);
-  height: 60%;
-  width: 100%;
-  border-radius: 3rem 3rem 0 0;
+  height: 90%;
+  width: 30rem;
+  border-radius: 0 3rem 0 0;
   z-index: 101;
-  left: 50%;
-  transform: translate(-50%, 0);
+  left: 0;
   bottom: 0;
   position: fixed;
   background-color: var(--container-bg-color);
@@ -39,23 +37,37 @@
   align-items: center;
   flex-direction: column;
 
+  background: repeating-linear-gradient(
+    45deg,
+    #fcfae4,
+    #fcfae4 10px,
+    #f1e2ce 10px,
+    #f1e2ce 20px
+  );
+
   animation-name: furSelectorWrapper-appear;
-  animation-timing-function: ease;
+  animation-timing-function: linear;
   animation-duration: 0.5s;
 }
 
 .filtersContainer {
   justify-content: center;
   background-color: var(--button-blue-bg-color);
-  border-radius: 2.8rem 2.8rem 0 0;
+  border-radius: 0 2.8rem 0 0;
+  border-bottom: 0.45em solid #b8b0a5;
   width: 100%;
   display: flex;
-  margin: 0 0.5rem 1rem 0.5rem;
+  flex-direction: column;
+  padding: 1rem 2rem;
+}
+
+.filtersContainer > div:not(:last-child) {
+  padding-bottom: 1rem;
 }
 
 @keyframes furSelectorWrapper-appear {
   from {
-    bottom: -20rem;
+    bottom: -100%;
   }
   to {
     bottom: 0;

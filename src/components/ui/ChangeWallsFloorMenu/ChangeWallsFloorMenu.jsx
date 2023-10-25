@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import IconItemElement from "../IconItemElement/IconItemElement";
 
 import "./changeWallsFloorMenu.css";
@@ -22,7 +22,7 @@ export default function ChangeWallsFloorMenu(props) {
   const ElementsList = (props) => {
     const [elementsData, setElementsData] = useState(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       setElementsData(selectingElement == "Walls" ? wallsData : floorsData);
     }, []);
 
@@ -38,16 +38,19 @@ export default function ChangeWallsFloorMenu(props) {
     return (
       <div
         onPointerDown={(e) => e.stopPropagation()}
-        className="changeWallsFloorMenuMainContainer"
+        className="changeWallsFloorMenu__MainContainer"
       >
-        <h1>{selectingElement}</h1>
-        {selectingElement == "Walls" ? (
-          <small>
-            * Press the alt key while clicking an option <br /> to set it to all
-            the walls
-          </small>
-        ) : null}
-        <div className="changeWallsFloorMenuElementsListGrid">
+        <div className="changeWallsFloorMenu__TitleContainer">
+          <h1>{selectingElement}</h1>
+          {selectingElement == "Walls" ? (
+            <small style={{ display: "block" }}>
+              * Press the alt key while clicking an option <br /> to set it to
+              all the walls
+            </small>
+          ) : null}
+        </div>
+
+        <div className="changeWallsFloorMenu__ElementsListGrid">
           {elementsData
             ? elementsData.map((elem, index) => (
                 <IconItemElement
@@ -119,7 +122,7 @@ export default function ChangeWallsFloorMenu(props) {
 
   return (
     <div
-      className="changeWallsFloorMenuBackground"
+      className="changeWallsFloorMenu__Background"
       style={{ flexDirection: selectingElement ? "row" : "row-reverse" }}
       onPointerDown={props.closeSaveRoomMenu}
     >
@@ -140,32 +143,35 @@ export default function ChangeWallsFloorMenu(props) {
           }}
         >
           <button
-            className="button blue"
+            className="button"
             onClick={(e) => props.rotateCameraLeftRef.current.click()}
           >
             Rotate camera left
           </button>
           <button
             onClick={(e) => props.rotateCameraRightRef.current.click()}
-            className="button blue"
+            className="button"
           >
             Rotate camera right
           </button>
         </div>
         <div
-          className="changeWallsFloorMenuMainContainer"
+          className="changeWallsFloorMenu__MainContainer MainContainer2"
           onPointerDown={(e) => e.stopPropagation()}
         >
-          <h1>Change Walls & Floor</h1>
+          <div className="changeWallsFloorMenu__TitleContainer TitleContainer2">
+            <h1>Change Walls & Floor</h1>
+          </div>
+
           <h2 style={{ marginBottom: "0rem" }}>Walls</h2>
           <hr
             style={{
-              borderTop: "solid #271c0e .3rem",
+              borderTop: "solid #e0d5c3 .3rem",
               borderRadius: "2rem",
               width: "100%",
             }}
           />
-          <div className="changeWallsFloorMenuWallsContainer">
+          <div className="changeWallsFloorMenu__WallsContainer">
             <IconItemElement
               selected={selectedIndex == 3}
               backgroundImage={
@@ -203,15 +209,15 @@ export default function ChangeWallsFloorMenu(props) {
               onClick={(e) => elementSelectorHandleClick(2, "Walls", 2)}
             />
           </div>
-          <h2 style={{ marginBottom: "0rem", marginTop: "3rem" }}>Floor</h2>
+          <h2 style={{ marginBottom: "0rem", marginTop: "1.5rem" }}>Floor</h2>
           <hr
             style={{
-              borderTop: "solid #271c0e .3rem",
+              borderTop: "solid #e0d5c3 .3rem",
               borderRadius: "2rem",
               width: "100%",
             }}
           />
-          <div className="changeWallsFloorMenuFloorContainer">
+          <div className="changeWallsFloorMenu__FloorContainer">
             <IconItemElement
               selected={selectedIndex == 4}
               backgroundImage={

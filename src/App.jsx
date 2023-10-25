@@ -84,7 +84,7 @@ const RoomDataExample = {
       size: "2x1",
       color: "oak",
       options: {
-        colors: ["oak", "orange"],
+        colors: ["oak", "orange", "blue"],
       },
       furProps: ["colors", "surface"],
     },
@@ -163,6 +163,9 @@ function App() {
 
     const keyHandler = (e) => {
       // e.preventDefault();
+      if (e.target.type == "text" && e.key != "Escape") {
+        return;
+      }
       switch (e.key) {
         case "ArrowRight":
         case "d":
@@ -1272,9 +1275,9 @@ function App() {
       //plays an animation when clicking cancel
       document
         .getElementsByClassName("furSelectorWrapper")[0]
-        .animate([{ bottom: "0" }, { bottom: "-40rem" }], {
+        .animate([{ bottom: "0" }, { bottom: "-100%" }], {
           duration: 500,
-          easing: "ease",
+          easing: "linear",
         });
       setTimeout(() => {
         setSelectingFurniture(false);
@@ -1321,6 +1324,7 @@ function App() {
   return (
     <>
       <Options
+        setSelectingFurniture={setSelectingFurniture}
         setChangeWallsFloorMenuOpen={setChangeWallsFloorMenuOpen}
         changeWallsFloorMenuOpen={changeWallsFloorMenuOpen}
         setSaveRoomMenuOpen={setSaveRoomMenuOpen}
@@ -1452,8 +1456,8 @@ function App() {
             ) : (
               <OrbitControls
                 target={[0, 0, 0]}
-                maxDistance={20}
-                minDistance={3}
+                maxDistance={5000}
+                minDistance={50}
               />
             )
           }

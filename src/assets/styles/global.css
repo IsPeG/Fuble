@@ -8,7 +8,7 @@
   font-size: bold;
   user-select: none;
 
-  cursor: url(../textures/ui/dot.png) 8 7, auto;
+  cursor: url(../textures/ui/dot.png) 8 7, auto !important;
 }
 
 html,

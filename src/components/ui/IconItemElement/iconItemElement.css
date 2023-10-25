@@ -1,10 +1,11 @@
 .IconItemElementWF {
+  width: 100%;
   border-radius: 1.5rem;
   display: flex;
   align-items: center;
-  width: 16rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  margin-bottom: 0.3rem;
   justify-content: flex-start;
 }
 

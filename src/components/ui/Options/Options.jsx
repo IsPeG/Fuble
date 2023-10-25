@@ -24,16 +24,19 @@ export default function Options(props) {
   };
 
   const saveRoomButtonHandler = () => {
+    props.setSelectingFurniture(false);
     props.setSaveRoomMenuOpen(!props.saveRoomMenuOpen);
     setOptionsOpen(false);
   };
 
   const changeWallsFloorButtonHandler = () => {
+    props.setSelectingFurniture(false);
     props.setChangeWallsFloorMenuOpen(!props.changeWallsFloorMenuOpen);
     setOptionsOpen(false);
   };
 
   const handleDeleteRoomButton = () => {
+    props.setSelectingFurniture(false);
     setConfirmationOpen("delete_room");
   };
 

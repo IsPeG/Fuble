@@ -103,24 +103,27 @@
   {
     "id": 15,
     "name": "ModernWoodCoffeeTable",
+    "series": "1",
     "size": "2x1",
-    "colors": ["oak", "orange"],
+    "colors": ["oak", "orange", "blue"],
     "type": "table",
     "furProps": ["colors", "lowerSurface"]
   },
   {
     "id": 16,
     "name": "ModernWoodChair",
+    "series": "1",
     "size": "1x1",
-    "colors": ["oak", "orange"],
+    "colors": ["oak", "orange", "blue"],
     "type": "sit",
     "furProps": ["colors"]
   },
   {
     "id": 17,
     "name": "ModernWoodShelf",
+    "series": "1",
     "size": "2x1",
-    "colors": ["oak", "orange"],
+    "colors": ["oak", "orange", "blue"],
     "type": "shelf",
     "furProps": ["colors", "surface"]
   }

@@ -1,83 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import IconItemElement from "../IconItemElement/IconItemElement";
+import StylizedSelect from "../StylizedInputs/Select/StylizedSelect";
+import StylizedTextInput from "../StylizedInputs/Text/StylizedTextInput";
 
 import furnitureData from "../../../_furnitureData/data.json";
 
 import "./furSelector.css";
+import useDebounce from "../../../customHooks/useDebounce";
 
 export default function FurSelector(props) {
-  const [filter, setFilter] = useState(null);
+  const [seriesFilter, setSeriesFilter] = useState(null);
+  const [nameFilter, setNameFilter] = useState("");
+  const debNameFilter = useDebounce(nameFilter, 500);
   const furData = [...furnitureData];
 
-  console.log(filter);
-
   const Filters = () => {
-    const filtersTypes = ["sit", "table", "plant", "light", "misc"];
-
-    const handleFilterClick = (filterName) => {
-      setFilter(filter == filterName ? null : filterName);
-    };
-
     return (
       <div className="filtersContainer">
-        {filtersTypes.map((element, key) => (
-          <div
-            id={`${element}FilterButton`}
-            className={
-              filter == element ? "furSelectorItem selected" : "furSelectorItem"
-            }
-            onClick={(e) => handleFilterClick(element)}
-          >
-            <img
-              className="furSelectorItemImage"
-              src={`/src/assets/textures/ui/icons/filters/filter${key}.png`}
-              alt="icon"
-            />
-          </div>
-        ))}
+        <StylizedTextInput
+          handleChange={setNameFilter}
+          nameFilter={nameFilter}
+        />
+        <StylizedSelect
+          handleChange={setSeriesFilter}
+          seriesFilter={seriesFilter}
+        />
       </div>
     );
   };
 
+  const gerenateFilteredFurIcons = () => {
+    let furDataFiltered = furData;
+    if (debNameFilter) {
+      furDataFiltered = furDataFiltered.filter((elem) =>
+        elem.name
+          .toLocaleLowerCase()
+          .includes(debNameFilter.toLocaleLowerCase())
+      );
+    }
+    if (seriesFilter) {
+      furDataFiltered = furDataFiltered.filter(
+        (elem) => elem.series == seriesFilter
+      );
+    }
+    return furDataFiltered.map((furniture, key) => (
+      <IconItemElement
+        key={key}
+        backgroundImage={furniture.name}
+        furnitureId={furniture.id}
+        elementType={"furniture"}
+        elementName={furniture.name}
+        onClick={(e) => props.handleItemClick(furniture.id)}
+      />
+    ));
+  };
+
+  console.log(nameFilter);
+
   return (
     <>
-      <div className="furSelectorWrapper">
+      <div className="furSelectorWrapper" key={2134}>
         <Filters />
         <div className="furSelector">
-          {filter
-            ? furData.map((furniture, key) =>
-                filter == furniture.type ? (
-                  // <FurSelectorItem
-                  //   key={key}
-                  //   furId={furniture.id}
-                  //   furName={furniture.name}
-                  //   furSize={furniture.size}
-                  //   handleItemClick={props.handleItemClick}
-                  // />
-                  <IconItemElement
-                    backgroundImage={elem.name}
-                    elementType={selectingElement.toLowerCase()}
-                    elementName={formatNameFromString(elem.name)}
-                    onClick={(e) =>
-                      selectElementHandleClick(
-                        elem.id,
-                        selectingElement.toLowerCase()
-                      )
-                    }
-                  />
-                ) : null
-              )
+          {seriesFilter || debNameFilter != ""
+            ? gerenateFilteredFurIcons()
             : furData.map((furniture, key) => (
-                // <FurSelectorItem
-                //   key={key}
-                //   furId={furniture.id}
-                //   furName={furniture.name}
-                //   furSize={furniture.size}
-                //   handleItemClick={props.handleItemClick}
-                // />
                 <IconItemElement
                   key={key}
                   backgroundImage={furniture.name}
+                  furnitureId={furniture.id}
                   elementType={"furniture"}
                   elementName={furniture.name}
                   onClick={(e) => props.handleItemClick(furniture.id)}

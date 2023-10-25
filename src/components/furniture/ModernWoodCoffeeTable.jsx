@@ -48,3 +48,4 @@ export default function ModernWoodCoffeeTable(props) {
 useGLTF.preload(modelsPath + "/furniture/modern_wood_coffee_table.gltf");
 useTexture.preload(texturePath + `/modern_wood_coffee_table_oak.png`);
 useTexture.preload(texturePath + `/modern_wood_coffee_table_orange.png`);
+useTexture.preload(texturePath + `/modern_wood_coffee_table_blue.png`);

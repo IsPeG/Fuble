@@ -47,3 +47,4 @@ export default function ModernWoodChair(props) {
 useGLTF.preload(modelsPath + "/furniture/modern_wood_chair.gltf");
 useTexture.preload(texturePath + `/modern_wood_chair_oak.png`);
 useTexture.preload(texturePath + `/modern_wood_chair_orange.png`);
+useTexture.preload(texturePath + `/modern_wood_chair_blue.png`);
