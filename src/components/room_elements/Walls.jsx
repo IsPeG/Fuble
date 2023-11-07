@@ -67,7 +67,7 @@ export default function Walls(props) {
       <mesh
         position={[0.5, 1.7, -3.5]}
         rotation={[0, north, 0]}
-        castShadow
+        // castShadow
         receiveShadow
       >
         <planeGeometry attach="geometry" args={planeGeometryArgs} />
@@ -80,7 +80,7 @@ export default function Walls(props) {
       <mesh
         position={[-3.5, 1.7, 0.5]}
         rotation={[0, west, 0]}
-        castShadow
+        // castShadow
         receiveShadow
       >
         <planeGeometry attach="geometry" args={planeGeometryArgs} />
@@ -93,7 +93,7 @@ export default function Walls(props) {
       <mesh
         position={[0.5, 1.7, 4.5]}
         rotation={[0, south, 0]}
-        castShadow
+        // castShadow
         receiveShadow
       >
         <planeGeometry attach="geometry" args={planeGeometryArgs} />
@@ -107,7 +107,7 @@ export default function Walls(props) {
       <mesh
         position={[4.5, 1.7, 0.5]}
         rotation={[0, east, 0]}
-        castShadow
+        // castShadow
         receiveShadow
       >
         <planeGeometry attach="geometry" args={planeGeometryArgs} />

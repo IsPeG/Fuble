@@ -77,8 +77,8 @@ const RoomDataExample = {
   furniture: [
     {
       key: 1,
-      name: "ModernWoodShelf",
-      model: ModernWoodShelf,
+      name: "ModernWoodCoffeeTable",
+      model: ModernWoodCoffeeTable,
       position: [0, 0, 0],
       rotation: [0, south, 0],
       size: "2x1",
@@ -86,23 +86,10 @@ const RoomDataExample = {
       options: {
         colors: ["oak", "orange", "blue"],
       },
-      furProps: ["colors", "surface"],
-    },
-    {
-      key: 2,
-      name: "OldLamp",
-      model: OldLamp,
-      position: [0, 0, 3],
-      rotation: [0, 0, 0],
-      size: "1x1",
-      furProps: ["light", "canBePlacedOnSurface"],
-      color: null,
-      options: {
-        lightOn: true,
-      },
+      furProps: ["colors", "lowerSurface"],
     },
   ],
-  walls: [6, 6, 6, 6],
+  walls: [1, 1, 1, 1],
   floor: 1,
 };
 
@@ -609,6 +596,7 @@ function App() {
     let canBePlaced = "floor";
 
     if (placingFurnitureData.size != "1x1") {
+      // if the placing furniture is not 1x1
       const helperSpaces = checkSpaces2x2or2x1Item(
         helper,
         placingFurnitureData.size
@@ -653,6 +641,7 @@ function App() {
         }
       });
     } else {
+      // if the placing furniture is 1x1
       const helperSpace = [
         [helper.position.x, helper.position.y, helper.position.z],
         [helper.position.x + 0.5, helper.position.y, helper.position.z],
@@ -666,6 +655,7 @@ function App() {
       ];
 
       roomDataFurniture.forEach((furElement) => {
+        if (canBePlaced != "floor") return;
         let furElementSpaces = null;
 
         if (furElement.size == "1x1") {
@@ -675,6 +665,7 @@ function App() {
             furElement.position[2],
           ];
 
+          console.log("---");
           console.log(helperSpace, furElementSpaces);
 
           if (
@@ -682,6 +673,7 @@ function App() {
             placingFurnitureData.furProps.includes("canBePlacedOnSurface")
           ) {
             if (helperSpace[0].toString() == furElementSpaces.toString()) {
+              console.log("hola hola 3");
               canBePlaced = "surface";
               return;
             }
@@ -690,6 +682,7 @@ function App() {
             placingFurnitureData.furProps.includes("canBePlacedOnSurface")
           ) {
             if (helperSpace[0].toString() == furElementSpaces.toString()) {
+              console.log("hola hola 2");
               canBePlaced = "lowerSurface";
               return;
             }
@@ -719,8 +712,11 @@ function App() {
             furElement,
             furElement.size
           );
+          console.log("helperSpace + furElementSpaces: ");
+          console.log(helperSpace, furElementSpaces);
+
           const surfaceSpaces = furElement.size == "2x1" ? 3 : 9;
-          for (let i = 0; i < furElementSpaces.length; i++) {
+          for (let i = 0; i < furElementSpaces.length + 1; i++) {
             console.log(i);
             if (
               furElement.furProps.includes("surface") &&
@@ -736,10 +732,12 @@ function App() {
                   canBePlaced = "surface";
                   return;
                 } else {
-                  console.log("ha entrao 3");
-                  // This was a no before, changing it to floor seems to fix the bug.
-                  // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it thorws a canBePlaced = "no"
-                  canBePlaced = "floor";
+                  for (let k = 0; k < 6; k++) {
+                    console.log("ha entrao 3");
+                    // This was a no before, changing it to floor seems to fix the bug.
+                    // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it throws a canBePlaced = "no"
+                    canBePlaced = "no";
+                  }
                 }
               }
             } else if (
@@ -748,6 +746,7 @@ function App() {
               i < surfaceSpaces
             ) {
               for (let j = 0; j < 3; j++) {
+                console.log("son estos");
                 console.log(helperSpace[0].toString());
                 console.log(furElementSpaces[j].toString());
                 if (
@@ -757,7 +756,7 @@ function App() {
                   return;
                 } else {
                   console.log("ha entrao 4");
-                  canBePlaced = "surface";
+                  canBePlaced = "no";
                 }
               }
             } else if (
@@ -777,13 +776,27 @@ function App() {
               }
               helperSpace.forEach((elem) => (elem[1] = helper.position.y));
             } else {
-              for (let j = 0; j < helperSpace.length; j++) {
-                if (
-                  helperSpace[j].toString() == furElementSpaces[i].toString()
-                ) {
-                  console.log("ha entrao 6");
-                  canBePlaced = "no";
-                  return;
+              // for (let j = 0; j < helperSpace.length; j++) {
+              //   if (
+              //     helperSpace[j].toString() == furElementSpaces[i].toString()
+              //   ) {
+              //     console.log("ha entrao 6");
+              //     canBePlaced = "no";
+              //     return;
+              //   }
+              // }
+              for (let k = 0; k < helperSpace.length; k++) {
+                for (let l = 0; l < furElementSpaces.length; l++) {
+                  if (
+                    helperSpace[k].toString() != furElementSpaces[l].toString()
+                  ) {
+                    console.log("fiumba");
+                    canBePlaced = "floor";
+                  } else {
+                    console.log("nop");
+                    canBePlaced = "no";
+                    return;
+                  }
                 }
               }
             }
@@ -791,6 +804,7 @@ function App() {
         }
       });
     }
+    console.log("ha llegado al final");
     return canBePlaced;
   };
 
@@ -1165,18 +1179,19 @@ function App() {
         /> */}
         <directionalLight
           castShadow
-          intensity={0.5}
-          position={[0.5, 10, 0.5]}
+          intensity={1}
+          position={[0, 5, 0]}
           shadow-mapSize={[1024, 1024]}
-          shadow-bias={-0.0001}
-          color={"#ffd5b8"}
+          shadow-bias={-0.00001}
+          color={"#FFE6D1"}
         >
           <orthographicCamera
             attach="shadow-camera"
-            args={[-150.5, 150.5, 150.5, -150.5]}
+            // args={[-150.5, 150.5, 150.5, -150.5]}
+            args={[-20, 20, 20, -20]}
           />
         </directionalLight>
-        <ambientLight intensity={0.65} color={"#ffd5b8"} />
+        <ambientLight intensity={0.7} color={"#FFE6D1"} />
       </>
     );
   };
@@ -1437,7 +1452,7 @@ function App() {
       {changeWallsFloorMenuOpen ? generateChangeWallsFloorMenu() : null}
 
       <Canvas
-        gl={{ antialias: false }}
+        gl={{ antialias: false, logarithmicDepthBuffer: true }}
         shadows
         orthographic
         camera={{ zoom: 100, near: 1, far: 2000, attach: "shadow-camera" }}
