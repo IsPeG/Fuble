@@ -77,16 +77,14 @@ const RoomDataExample = {
   furniture: [
     {
       key: 1,
-      name: "ModernWoodCoffeeTable",
-      model: ModernWoodCoffeeTable,
-      position: [0, 0, 0],
-      rotation: [0, south, 0],
-      size: "2x1",
+      name: "Test2x2",
+      model: Test2x2,
+      position: [-0.5, 0, 0.5],
+      rotation: [0, north, 0],
+      size: "2x2",
       color: "oak",
-      options: {
-        colors: ["oak", "orange", "blue"],
-      },
-      furProps: ["colors", "lowerSurface"],
+      options: {},
+      furProps: ["surface"],
     },
   ],
   walls: [1, 1, 1, 1],
@@ -592,6 +590,33 @@ function App() {
     return elementSpaces;
   };
 
+  const checkIfThereIsFurnitureClose = (helperPositions, surfaceProps) => {
+    let furYAxis = 0;
+    let canBePlaced = true;
+    if (surfaceProps.includes("lowerSurface")) furYAxis = 0.55;
+    if (surfaceProps.includes("surface")) furYAxis = 1.05;
+
+    roomDataFurniture.forEach((furElement) => {
+      console.log(furYAxis);
+      console.log(furElement.position[1]);
+      if (furElement.position[1] == furYAxis) {
+        for (let i = 0; i < helperPositions.length; i++) {
+          console.log(furElement.position.toString());
+          console.log(helperPositions[i].toString());
+          if (
+            furElement.position[0] == helperPositions[i][0] &&
+            furElement.position[2] == helperPositions[i][2]
+          ) {
+            console.log("choca con algun mueble");
+            canBePlaced = false;
+            return canBePlaced;
+          }
+        }
+      }
+    });
+    return canBePlaced;
+  };
+
   const checkIfFurnitureCanBePlaced = (helper) => {
     let canBePlaced = "floor";
 
@@ -729,8 +754,15 @@ function App() {
                 if (
                   helperSpace[0].toString() == furElementSpaces[j].toString()
                 ) {
-                  canBePlaced = "surface";
-                  return;
+                  if (
+                    checkIfThereIsFurnitureClose(
+                      helperSpace,
+                      furElement.furProps
+                    )
+                  ) {
+                    canBePlaced = "surface";
+                    return;
+                  }
                 } else {
                   for (let k = 0; k < 6; k++) {
                     console.log("ha entrao 3");
@@ -752,11 +784,27 @@ function App() {
                 if (
                   helperSpace[0].toString() == furElementSpaces[j].toString()
                 ) {
-                  canBePlaced = "lowerSurface";
-                  return;
+                  console.log("ha entrao 4 a");
+                  if (
+                    checkIfThereIsFurnitureClose(
+                      helperSpace,
+                      furElement.furProps
+                    )
+                  ) {
+                    canBePlaced = "lowerSurface";
+                    return;
+                  }
                 } else {
-                  console.log("ha entrao 4");
-                  canBePlaced = "no";
+                  console.log("ha entrao 4 b");
+                  if (
+                    !checkIfThereIsFurnitureClose(
+                      helperSpace,
+                      furElement.furProps
+                    )
+                  ) {
+                    canBePlaced = "no";
+                    return;
+                  }
                 }
               }
             } else if (
@@ -805,6 +853,7 @@ function App() {
       });
     }
     console.log("ha llegado al final");
+    console.log(canBePlaced);
     return canBePlaced;
   };
 
