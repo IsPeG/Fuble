@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ConfirmationMenu from "../ConfirmationMenu/ConfirmationMenu";
 import { playButtonHoverSound } from "../../../sounds";
-
 import "./options.css";
 
 export default function Options(props) {
@@ -40,6 +39,11 @@ export default function Options(props) {
     setConfirmationOpen("delete_room");
   };
 
+  const handleChangeCameraButton = () => {
+    props.setFreeCamera(!props.freeCamera);
+    setOptionsOpen(false);
+  };
+
   const generateConfirmationMenu = () => {
     switch (confirmationOpen) {
       case "delete_room":
@@ -74,6 +78,14 @@ export default function Options(props) {
               }}
             >
               Clean room
+            </button>
+            <button
+              className="button"
+              onClick={(e) => {
+                handleChangeCameraButton(), playButtonHoverSound();
+              }}
+            >
+              Change camera
             </button>
             <button
               className="button"

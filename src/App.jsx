@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   SpotLight,
   useDepthBuffer,
@@ -97,6 +97,7 @@ function App() {
   const [cameraIndex, setCameraIndex] = useState(0);
   const [roomDataFurniture, setRoomDataFurniture] = useState([]);
   const [roomDataWalls, setRoomDataWalls] = useState([]);
+  const [freeCamera, setFreeCamera] = useState(false);
   const [roomDataFloor, setRoomDataFloor] = useState(0);
   const [furMenuOpen, setFurMenuOpen] = useState(false);
   const [saveRoomMenuOpen, setSaveRoomMenuOpen] = useState(false);
@@ -209,6 +210,10 @@ function App() {
       }
     };
     window.addEventListener("keydown", keyHandler);
+    //prevent user from using right click on the app
+    document.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+    });
 
     // const buttons = document.querySelectorAll("button");
     // buttons.forEach((element) => {
@@ -743,17 +748,112 @@ function App() {
           const surfaceSpaces = furElement.size == "2x1" ? 3 : 9;
           for (let i = 0; i < furElementSpaces.length + 1; i++) {
             console.log(i);
-            if (
-              furElement.furProps.includes("surface") &&
-              placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
-              i < surfaceSpaces
-            ) {
-              for (let j = 0; j < 3; j++) {
-                console.log(helperSpace[0].toString());
-                console.log(furElementSpaces[j].toString());
+            if (surfaceSpaces == 3) {
+              if (i == 0) {
+                for (let j = 0; j < 9; j++) {
+                  for (let k = 0; k < 3; k++) {
+                    if (
+                      helperSpace[j].toString() ==
+                      furElementSpaces[k].toString()
+                    ) {
+                      canBePlaced = "no";
+                    }
+                  }
+                }
+              }
+              if (
+                furElement.furProps.includes("surface") &&
+                placingFurnitureData.furProps.includes("canBePlacedOnSurface")
+              ) {
+                for (let j = 0; j < 3; j++) {
+                  console.log(helperSpace[0].toString());
+                  console.log(furElementSpaces[j].toString());
+                  if (
+                    helperSpace[0].toString() == furElementSpaces[j].toString()
+                  ) {
+                    if (
+                      checkIfThereIsFurnitureClose(
+                        helperSpace,
+                        furElement.furProps
+                      )
+                    ) {
+                      canBePlaced = "surface";
+                      return;
+                    }
+                  } else {
+                    for (let k = 0; k < 6; k++) {
+                      console.log("ha entrao 3");
+                      // This was a no before, changing it to floor seems to fix the bug.
+                      // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it throws a canBePlaced = "no"
+                      canBePlaced = "no";
+                    }
+                  }
+                }
+              } else if (
+                furElement.furProps.includes("lowerSurface") &&
+                placingFurnitureData.furProps.includes("canBePlacedOnSurface")
+              ) {
+                for (let j = 0; j < 3; j++) {
+                  console.log("son estos");
+                  console.log(helperSpace[0].toString());
+                  console.log(furElementSpaces[j].toString());
+                  if (
+                    helperSpace[0].toString() == furElementSpaces[j].toString()
+                  ) {
+                    console.log("ha entrao 4 a");
+                    if (
+                      checkIfThereIsFurnitureClose(
+                        helperSpace,
+                        furElement.furProps
+                      )
+                    ) {
+                      canBePlaced = "lowerSurface";
+                      return;
+                    }
+                  } else {
+                    console.log("ha entrao 4 b");
+                    if (
+                      !checkIfThereIsFurnitureClose(
+                        helperSpace,
+                        furElement.furProps
+                      )
+                    ) {
+                      canBePlaced = "no";
+                      return;
+                    }
+                  }
+                }
+              } else if (
+                furElement.furProps.includes("canBePlacedOnSurface") &&
+                placingFurnitureData.furProps.includes("canBePlacedOnSurface")
+              ) {
+                helperSpace.forEach((elem) => (elem[1] = 1.1)); //maybe this has to be 1 and not 1.1
+                for (let j = 0; j < helperSpace.length; j++) {
+                  if (
+                    helperSpace[j].toString() == furElementSpaces[i].toString()
+                  ) {
+                    console.log("ha entrao 5");
+                    canBePlaced = "no";
+                    return;
+                  }
+                }
+                helperSpace.forEach((elem) => (elem[1] = helper.position.y));
+              }
+            } else {
+              for (let j = 0; j < 9; j++) {
+                for (let k = 0; k < 9; k++) {
+                  if (
+                    helperSpace[j].toString() == furElementSpaces[k].toString()
+                  ) {
+                    canBePlaced = "no";
+                  }
+                }
+              }
+              for (let j = 0; j < 9; j++) {
                 if (
                   helperSpace[0].toString() == furElementSpaces[j].toString()
                 ) {
+                  console.log("ha entrao 6");
                   if (
                     checkIfThereIsFurnitureClose(
                       helperSpace,
@@ -762,91 +862,25 @@ function App() {
                   ) {
                     canBePlaced = "surface";
                     return;
-                  }
-                } else {
-                  for (let k = 0; k < 6; k++) {
-                    console.log("ha entrao 3");
-                    // This was a no before, changing it to floor seems to fix the bug.
-                    // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it throws a canBePlaced = "no"
+                  } else {
                     canBePlaced = "no";
                   }
                 }
               }
-            } else if (
-              furElement.furProps.includes("lowerSurface") &&
-              placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
-              i < surfaceSpaces
-            ) {
-              for (let j = 0; j < 3; j++) {
-                console.log("son estos");
-                console.log(helperSpace[0].toString());
-                console.log(furElementSpaces[j].toString());
-                if (
-                  helperSpace[0].toString() == furElementSpaces[j].toString()
-                ) {
-                  console.log("ha entrao 4 a");
-                  if (
-                    checkIfThereIsFurnitureClose(
-                      helperSpace,
-                      furElement.furProps
-                    )
-                  ) {
-                    canBePlaced = "lowerSurface";
-                    return;
-                  }
-                } else {
-                  console.log("ha entrao 4 b");
-                  if (
-                    !checkIfThereIsFurnitureClose(
-                      helperSpace,
-                      furElement.furProps
-                    )
-                  ) {
-                    canBePlaced = "no";
-                    return;
-                  }
-                }
-              }
-            } else if (
-              furElement.furProps.includes("canBePlacedOnSurface") &&
-              placingFurnitureData.furProps.includes("canBePlacedOnSurface") &&
-              i < surfaceSpaces
-            ) {
-              helperSpace.forEach((elem) => (elem[1] = 1.1)); //maybe this has to be 1 and not 1.1
-              for (let j = 0; j < helperSpace.length; j++) {
-                if (
-                  helperSpace[j].toString() == furElementSpaces[i].toString()
-                ) {
-                  console.log("ha entrao 5");
-                  canBePlaced = "no";
-                  return;
-                }
-              }
-              helperSpace.forEach((elem) => (elem[1] = helper.position.y));
-            } else {
-              // for (let j = 0; j < helperSpace.length; j++) {
-              //   if (
-              //     helperSpace[j].toString() == furElementSpaces[i].toString()
-              //   ) {
-              //     console.log("ha entrao 6");
-              //     canBePlaced = "no";
-              //     return;
+              // for (let k = 0; k < helperSpace.length; k++) {
+              //   for (let l = 0; l < furElementSpaces.length; l++) {
+              //     if (
+              //       helperSpace[k].toString() != furElementSpaces[l].toString()
+              //     ) {
+              //       console.log("fiumba");
+              //       canBePlaced = "floor";
+              //     } else {
+              //       console.log("nop");
+              //       canBePlaced = "no";
+              //       return;
+              //     }
               //   }
               // }
-              for (let k = 0; k < helperSpace.length; k++) {
-                for (let l = 0; l < furElementSpaces.length; l++) {
-                  if (
-                    helperSpace[k].toString() != furElementSpaces[l].toString()
-                  ) {
-                    console.log("fiumba");
-                    canBePlaced = "floor";
-                  } else {
-                    console.log("nop");
-                    canBePlaced = "no";
-                    return;
-                  }
-                }
-              }
             }
           }
         }
@@ -1177,10 +1211,26 @@ function App() {
   };
 
   const CameraRig = ({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) => {
+    const camera = useThree();
+    camera.camera.zoom = 100;
     useFrame((state) => {
       state.camera.position.lerp({ x, y, z }, 0.05);
       state.camera.lookAt(x2, y2, z2);
       state.camera.updateProjectionMatrix();
+    });
+  };
+
+  const CameraZoomHandler = () => {
+    const state = useThree();
+    document.addEventListener("wheel", (event) => {
+      const delta = Math.sign(event.deltaY);
+      if (delta < 0) {
+        if (state.camera.zoom > 120) return;
+        state.camera.zoom = state.camera.zoom + 0.5;
+      } else {
+        if (state.camera.zoom < 80) return;
+        state.camera.zoom = state.camera.zoom - 0.5;
+      }
     });
   };
 
@@ -1397,6 +1447,8 @@ function App() {
         setRoomDataFurniture={setRoomDataFurniture}
         setRoomDataFloor={setRoomDataFloor}
         setRoomDataWalls={setRoomDataWalls}
+        setFreeCamera={setFreeCamera}
+        freeCamera={freeCamera}
       />
       <div className="buttonsContainer" ref={buttonsContainerRef}>
         <button
@@ -1504,15 +1556,21 @@ function App() {
         gl={{ antialias: false, logarithmicDepthBuffer: true }}
         shadows
         orthographic
-        camera={{ zoom: 100, near: 1, far: 2000, attach: "shadow-camera" }}
+        camera={{
+          zoom: 100,
+          near: 1,
+          far: 2000,
+          attach: "shadow-camera",
+        }}
         style={{ background: "#0a0a0a" }}
         dpr={[1, 2]}
       >
+        <CameraZoomHandler />
         {/* Can be used to lower all the elements in screen so in the future, the room with walls fit better in the screen */}
-        <group position={[0, -1.1, 0]}>
+        <group position={[0, -1.2, 0]}>
           {
             // DEBUG CAMERA
-            true ? (
+            !freeCamera ? (
               <CameraRig
                 positionData={cameraPositions[cameraIndex]}
                 lookAtData={lookAtCameraPositions[cameraIndex]}
