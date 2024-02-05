@@ -4,8 +4,9 @@
   { "id": 3, "name": "tatami_wall_panels" },
   { "id": 4, "name": "smooth_green_wall" },
   { "id": 5, "name": "smooth_dill_grass_wall" },
-  { "id": 6, "name": "modern_concrete_wall" },
-  { "id": 7, "name": "striped_yellow_wall" },
-  { "id": 8, "name": "striped_green_wall" },
-  { "id": 9, "name": "striped_blue_wall" }
+  { "id": 6, "name": "smooth_white_wall" },
+  { "id": 7, "name": "modern_concrete_wall" },
+  { "id": 8, "name": "striped_yellow_wall" },
+  { "id": 9, "name": "striped_green_wall" },
+  { "id": 10, "name": "striped_blue_wall" }
 ]

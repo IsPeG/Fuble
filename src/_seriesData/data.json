@@ -1,1 +1,4 @@
-[{ "id": 1, "name": "ModernWood" }]
+[
+  { "id": 1, "name": "ModernWood" },
+  { "id": 2, "name": "Plants" }
+]

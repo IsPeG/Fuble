@@ -3,5 +3,6 @@
   { "id": 2, "name": "wood", "type": "tiled" },
   { "id": 3, "name": "dinner_tile", "type": "full" },
   { "id": 4, "name": "beige_moroccan", "type": "full" },
-  { "id": 5, "name": "tatami", "type": "full" }
+  { "id": 5, "name": "tatami", "type": "full" },
+  { "id": 6, "name": "tiles", "type": "full" }
 ]

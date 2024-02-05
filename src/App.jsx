@@ -31,6 +31,8 @@ import Croton from "./components/furniture/Croton";
 import ModernWoodCoffeeTable from "./components/furniture/ModernWoodCoffeeTable";
 import ModernWoodChair from "./components/furniture/ModernWoodChair";
 import ModernWoodShelf from "./components/furniture/ModernWoodShelf";
+import FicusLyrata from "./components/furniture/FicusLyrata";
+import SmallCactaceae from "./components/furniture/SmallCactaceae";
 
 const componentsMap = {
   Coach,
@@ -50,6 +52,8 @@ const componentsMap = {
   ModernWoodCoffeeTable,
   ModernWoodChair,
   ModernWoodShelf,
+  FicusLyrata,
+  SmallCactaceae,
 };
 
 // Selectors
@@ -87,8 +91,8 @@ const RoomDataExample = {
       furProps: ["surface"],
     },
   ],
-  walls: [1, 1, 1, 1],
-  floor: 1,
+  walls: [6, 6, 6, 6],
+  floor: 6,
 };
 
 import furnitureData from "./_furnitureData/data.json";
@@ -974,6 +978,7 @@ function App() {
         //bottom left
         placingFurnitureDirection = 0;
         setFurnitureHelperRef.current.position.x += 1;
+        blockedRotation = true;
       }
 
       if (
@@ -1220,9 +1225,12 @@ function App() {
     });
   };
 
+  // TODO: change the event in the wheel to buttons. Ex: when changing walls, if you scroll
+  // in the menu the zoom will activate
   const CameraZoomHandler = () => {
     const state = useThree();
     document.addEventListener("wheel", (event) => {
+      if (changeWallsFloorMenuOpen) return;
       const delta = Math.sign(event.deltaY);
       if (delta < 0) {
         if (state.camera.zoom > 120) return;

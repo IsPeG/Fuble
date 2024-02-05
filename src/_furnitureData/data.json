@@ -95,6 +95,7 @@
   {
     "id": 14,
     "name": "Croton",
+    "series": "2",
     "size": "1x1",
     "colors": ["amberglow", "blue", "brown", "crimson", "green"],
     "type": "misc",
@@ -126,5 +127,21 @@
     "colors": ["oak", "orange", "blue"],
     "type": "shelf",
     "furProps": ["colors", "surface"]
+  },
+  {
+    "id": 18,
+    "name": "FicusLyrata",
+    "series": "2",
+    "size": "1x1",
+    "colors": ["beige", "orange"],
+    "type": "misc",
+    "furProps": ["colors"]
+  },
+  {
+    "id": 19,
+    "name": "SmallCactaceae",
+    "size": "1x1",
+    "type": "misc",
+    "furProps": ["canBePlacedOnSurface"]
   }
 ]
