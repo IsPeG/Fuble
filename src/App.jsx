@@ -14,47 +14,8 @@ import Floor from "./components/room_elements/Floor";
 import Walls from "./components/room_elements/Walls";
 
 // Furniture
-import Coach from "./components/furniture/Coach";
-import Test2x1 from "./components/furniture/Test2x1";
-import Test2x2 from "./components/furniture/Test2x2";
-import Plant from "./components/furniture/Plant";
-import VendingMachine from "./components/furniture/VendingMachine";
-import OldChair from "./components/furniture/OldChair";
-import OldTable from "./components/furniture/OldTable";
-import OldLamp from "./components/furniture/OldLamp";
-import OldPc from "./components/furniture/OldPc";
-import OldWardrobe from "./components/furniture/OldWardrobe";
-import OldLargeTable from "./components/furniture/OldLargeTable";
-import Speaker from "./components/furniture/Speaker";
-import Fridge from "./components/furniture/Fridge";
-import Croton from "./components/furniture/Croton";
-import ModernWoodCoffeeTable from "./components/furniture/ModernWoodCoffeeTable";
-import ModernWoodChair from "./components/furniture/ModernWoodChair";
-import ModernWoodShelf from "./components/furniture/ModernWoodShelf";
-import FicusLyrata from "./components/furniture/FicusLyrata";
-import SmallCactaceae from "./components/furniture/SmallCactaceae";
-
-const componentsMap = {
-  Coach,
-  Fridge,
-  Speaker,
-  Test2x2,
-  Test2x1,
-  Plant,
-  VendingMachine,
-  OldChair,
-  OldTable,
-  OldLamp,
-  OldWardrobe,
-  OldLargeTable,
-  OldPc,
-  Croton,
-  ModernWoodCoffeeTable,
-  ModernWoodChair,
-  ModernWoodShelf,
-  FicusLyrata,
-  SmallCactaceae,
-};
+import * as FURNITURE from "./components/furniture/_models_index.js";
+import componentsMap from "./components/furniture/_componentsMap.js";
 
 // Selectors
 import FurnitureSelector1x1 from "./components/furniture_selectors/FurnitureSelector1x1";
@@ -82,7 +43,7 @@ const RoomDataExample = {
     {
       key: 1,
       name: "Test2x2",
-      model: Test2x2,
+      model: FURNITURE.Test2x2,
       position: [-0.5, 0, 0.5],
       rotation: [0, north, 0],
       size: "2x2",
@@ -1452,6 +1413,7 @@ function App() {
         setSaveRoomMenuOpen={setSaveRoomMenuOpen}
         saveRoomMenuOpen={saveRoomMenuOpen}
         componentsMap={componentsMap}
+        FURNITURE={FURNITURE}
         setRoomDataFurniture={setRoomDataFurniture}
         setRoomDataFloor={setRoomDataFloor}
         setRoomDataWalls={setRoomDataWalls}

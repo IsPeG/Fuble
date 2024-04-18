@@ -11,6 +11,13 @@ import {
 const modelsPath = "/src/assets/models";
 const texturePath = "/src/assets/textures/furniture/croton";
 
+useGLTF.preload(modelsPath + "/furniture/croton.gltf");
+useTexture.preload(texturePath + `/croton_amberglow.png`);
+useTexture.preload(texturePath + `/croton_blue.png`);
+useTexture.preload(texturePath + `/croton_brown.png`);
+useTexture.preload(texturePath + `/croton_crimson.png`);
+useTexture.preload(texturePath + `/croton_green.png`);
+
 export default function Croton(props) {
   const { nodes, materials } = useGLTF(modelsPath + "/furniture/croton.gltf");
 
@@ -20,7 +27,6 @@ export default function Croton(props) {
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load(texture_url, (t) => {
-      console.log(t);
       t.magFilter = NearestFilter;
       t.minFilter = LinearMipMapLinearFilter;
       t.encoding = sRGBEncoding;
@@ -46,10 +52,3 @@ export default function Croton(props) {
     </group>
   );
 }
-
-useGLTF.preload(modelsPath + "/furniture/croton.gltf");
-useTexture.preload(texturePath + `/croton_amberglow.png`);
-useTexture.preload(texturePath + `/croton_blue.png`);
-useTexture.preload(texturePath + `/croton_brown.png`);
-useTexture.preload(texturePath + `/croton_crimson.png`);
-useTexture.preload(texturePath + `/croton_green.png`);

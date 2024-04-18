@@ -1,4 +1,5 @@
 .stylizedSelect {
   width: 100%;
   display: block;
+  user-select: none;
 }
