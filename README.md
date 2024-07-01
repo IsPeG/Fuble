@@ -1,7 +1,7 @@
 
-# Room Editor
+# Fuble
 
-A simple application for designing a room. It is highly inspired by Animal Crossing and the way of designing the rooms of your house in the game.
+Fuble is a simple web application for designing a room. It is highly inspired by Animal Crossing and the way of designing the rooms of your house in the game.
 
 The room is a grid-based square of 8x8 with 2 subdivisions in each cell. It can be customizable with furniture with the sizes of 1x1, 2x1 and 2x2.
 
