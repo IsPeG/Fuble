@@ -4,7 +4,8 @@
   z-index: 200;
   font-weight: bold;
   border-radius: 1rem;
-
+  animation: furMenuCreateAnimation .2s ;
+  animation-iteration-count: 1;
   padding-top: 0.5rem;
   background: var(--button-blue-bg-color);
   border-radius: 1em;
@@ -12,6 +13,24 @@
   top: 0.5rem;
   left: 0.5rem;
   display: inline-block;
+}
+
+@keyframes furMenuCreateAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.furMenuBackdrop {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  z-index: 99;
 }
 
 .furMenu > span {

@@ -77,6 +77,7 @@ function App() {
   const buttonsContainerRef = useRef();
   const rotateCameraRightRef = useRef();
   const rotateCameraLeftRef = useRef();
+  const zoomLevelRef = useRef();
 
   const directions = [north, west, south, east];
   // const cameraPositions = [[7,6,7], [6.5,5.5,-5.5], [-7,7,-7], [-5.5,5.5,6.5]]
@@ -105,6 +106,8 @@ function App() {
   var placingFurnitureDirection = 0;
 
   cameraIndexRef.current = cameraIndex;
+  console.log("hola");
+  console.log(zoomLevelRef.current);
 
   useEffect(() => {
     // load example room data
@@ -198,6 +201,11 @@ function App() {
     setChangeWallsFloorMenuOpen(false);
     setSaveRoomMenuOpen(false);
     setPlacingFurniture(false);
+    setPlacingFurniture(false);
+    const confMenus = document.querySelectorAll(
+      ".confirmationMenuBackground button.red"
+    );
+    confMenus[0].click();
   };
 
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
@@ -1178,7 +1186,7 @@ function App() {
 
   const CameraRig = ({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) => {
     const camera = useThree();
-    camera.camera.zoom = 100;
+    camera.camera.zoom = zoomLevelRef.current || 100; //prevents zoom from reseting every render
     useFrame((state) => {
       state.camera.position.lerp({ x, y, z }, 0.05);
       state.camera.lookAt(x2, y2, z2);
@@ -1191,7 +1199,27 @@ function App() {
   const CameraZoomHandler = () => {
     const state = useThree();
     document.addEventListener("wheel", (event) => {
-      if (changeWallsFloorMenuOpen) return;
+      console.log(changeWallsFloorMenuOpen);
+      // prevent zoom when menus are open
+      const changeWallsFloorMenuIsOpen = document.querySelectorAll(
+        ".changeWallsFloorMenu__MainContainer"
+      ).length;
+      const furSelectorMenuOpen = document.querySelectorAll(
+        ".furSelectorWrapper"
+      ).length;
+      const saveRoomWindowOpen = document.querySelectorAll(
+        ".saveRoomMainContainer"
+      ).length;
+      const confirmationMenuOpen = document.querySelectorAll(
+        ".confirmationMenuMainContainer"
+      ).length;
+      if (
+        changeWallsFloorMenuIsOpen ||
+        furSelectorMenuOpen ||
+        saveRoomWindowOpen ||
+        confirmationMenuOpen
+      )
+        return;
       const delta = Math.sign(event.deltaY);
       if (delta < 0) {
         if (state.camera.zoom > 120) return;
@@ -1200,6 +1228,7 @@ function App() {
         if (state.camera.zoom < 80) return;
         state.camera.zoom = state.camera.zoom - 0.5;
       }
+      zoomLevelRef.current = state.camera.zoom; // persist current zoom level
     });
   };
 
@@ -1279,6 +1308,7 @@ function App() {
         removeFur={removeFur}
         toggleLightFur={toggleLightFur}
         changeColor={changeColor}
+        setFurMenuOpen={setFurMenuOpen}
       />
     );
   };
@@ -1337,7 +1367,12 @@ function App() {
   };
 
   const generateSelectingFurniture = () => {
-    return <FurSelector handleItemClick={handleItemClick} />;
+    return (
+      <FurSelector
+        handleAddFurnitureClick={handleAddFurnitureClick}
+        handleItemClick={handleItemClick}
+      />
+    );
   };
 
   const handleItemClick = (furId) => {
@@ -1536,6 +1571,7 @@ function App() {
         dpr={[1, 2]}
       >
         <CameraZoomHandler />
+
         {/* Can be used to lower all the elements in screen so in the future, the room with walls fit better in the screen */}
         <group position={[0, -1.2, 0]}>
           {

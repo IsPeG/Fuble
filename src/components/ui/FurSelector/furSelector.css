@@ -1,3 +1,14 @@
+.furSelectorBackground {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 501;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .furSelector {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -28,7 +39,7 @@
   height: 90%;
   width: 30rem;
   border-radius: 0 3rem 0 0;
-  z-index: 101;
+  z-index: 502;
   left: 0;
   bottom: 0;
   position: fixed;

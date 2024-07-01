@@ -59,21 +59,29 @@ export default function FurSelector(props) {
 
   return (
     <>
-      <div className="furSelectorWrapper" key={2134}>
-        <Filters />
-        <div className="furSelector">
-          {seriesFilter || debNameFilter != ""
-            ? gerenateFilteredFurIcons()
-            : furData.map((furniture, key) => (
-                <IconItemElement
-                  key={key}
-                  backgroundImage={furniture.name}
-                  furnitureId={furniture.id}
-                  elementType={"furniture"}
-                  elementName={furniture.name}
-                  onClick={(e) => props.handleItemClick(furniture.id)}
-                />
-              ))}
+      <div
+        className="furSelectorBackground"
+        onPointerDown={(e) => props.handleAddFurnitureClick()}
+      >
+        <div
+          className="furSelectorWrapper"
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          <Filters />
+          <div className="furSelector">
+            {seriesFilter || debNameFilter != ""
+              ? gerenateFilteredFurIcons()
+              : furData.map((furniture, key) => (
+                  <IconItemElement
+                    key={key}
+                    backgroundImage={furniture.name}
+                    furnitureId={furniture.id}
+                    elementType={"furniture"}
+                    elementName={furniture.name}
+                    onClick={(e) => props.handleItemClick(furniture.id)}
+                  />
+                ))}
+          </div>
         </div>
       </div>
     </>

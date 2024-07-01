@@ -34,7 +34,7 @@ export default function SaveRoomMenu(props) {
           Save
         </button>
         <p>
-          Note: This will download a json file in your machine. Later, you can
+          Note: This will download a json file in your device. Later, you can
           load this file to get the room in the editor.
         </p>
       </div>
