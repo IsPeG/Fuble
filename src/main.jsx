@@ -6,8 +6,10 @@ const App = React.lazy(() => import("./App"));
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.Suspense fallback={<LoadingScreen />}>
-    <StrictMode>
-      <App />
-    </StrictMode>
+    {/* Problems with strictmode: */}
+    {/* 1- E and Q keys fire the onClick function twice */}
+    {/* <StrictMode> */}
+    <App />
+    {/* </StrictMode> */}
   </React.Suspense>
 );

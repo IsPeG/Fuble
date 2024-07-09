@@ -21,6 +21,7 @@ import componentsMap from "./components/furniture/_componentsMap.js";
 import FurnitureSelector1x1 from "./components/furniture_selectors/FurnitureSelector1x1";
 import FurnitureSelector2x1 from "./components/furniture_selectors/FurnitureSelector2x1";
 import FurnitureSelector2x2 from "./components/furniture_selectors/FurnitureSelector2x2";
+import DinFurSelector from "./components/furniture_selectors/DinFurSelector";
 
 // UI
 import FurMenu from "./components/ui/FurMenu/FurMenu";
@@ -40,20 +41,20 @@ const east = -Math.PI / 2; //-1.57... right
 
 const RoomDataExample = {
   furniture: [
-    {
-      key: 1,
-      name: "Test2x2",
-      model: FURNITURE.Test2x2,
-      position: [-0.5, 0, 0.5],
-      rotation: [0, north, 0],
-      size: "2x2",
-      color: "oak",
-      options: {},
-      furProps: ["surface"],
-    },
+    // {
+    //   key: 1,
+    //   name: "Test2x2",
+    //   model: FURNITURE.Test2x2,
+    //   position: [-0.5, 0, 0.5],
+    //   rotation: [0, north, 0],
+    //   size: "2x2",
+    //   color: "oak",
+    //   options: {},
+    //   furProps: ["surface"],
+    // },
   ],
   walls: [6, 6, 6, 6],
-  floor: 6,
+  floor: 1,
 };
 
 import furnitureData from "./_furnitureData/data.json";
@@ -211,12 +212,33 @@ function App() {
   const SetFurnitureHelper = React.forwardRef((props, ref) => {
     const selectorSwitch = () => {
       switch (placingFurnitureData.size) {
+        // case "1x1":
+        //   return <FurnitureSelector1x1 name={"1x1"} />;
+        // case "2x1":
+        //   return <FurnitureSelector2x1 name={"2x1"} />;
+        // case "2x2":
+        //   return <FurnitureSelector2x2 name={"2x2"} />;
         case "1x1":
-          return <FurnitureSelector1x1 name={"1x1"} />;
+          return (
+            <DinFurSelector
+              placingFurnitureData={placingFurnitureData}
+              size={"1x1"}
+            />
+          );
         case "2x1":
-          return <FurnitureSelector2x1 name={"2x1"} />;
+          return (
+            <DinFurSelector
+              placingFurnitureData={placingFurnitureData}
+              size={"2x1"}
+            />
+          );
         case "2x2":
-          return <FurnitureSelector2x2 name={"2x2"} />;
+          return (
+            <DinFurSelector
+              placingFurnitureData={placingFurnitureData}
+              size={"2x2"}
+            />
+          );
       }
     };
 
@@ -1611,9 +1633,9 @@ function App() {
             ))}
           </group>
 
-          {/* {debugHelperColisions ? 
+          {/* {debugHelperColisions ?
             <group>
-              {debugHelperColisions.map((coords, key) => 
+              {debugHelperColisions.map((coords, key) =>
                 <mesh position={coords} key={key}>
                   <boxGeometry args={[1, 1, 1]} />
                   <meshStandardMaterial color={'orange'} opacity={0.2} transparent />

@@ -13,9 +13,13 @@ export default function OldLamp(props) {
     <>
       <pointLight
         ref={spotLightRef}
-        visible={props.options.lightOn}
+        visible={props.options?.lightOn || false}
         intensity={3}
-        position={[props.position[0], props.position[1] + 2, props.position[2]]}
+        position={
+          props.isBeingPlaced
+            ? [0, 9999999, 0]
+            : [props.position[0], props.position[1] + 2, props.position[2]]
+        }
         color={"#f7b65c"}
         distance={10}
         castShadow
