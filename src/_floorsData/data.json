@@ -4,5 +4,12 @@
   { "id": 3, "name": "dinner_tile", "type": "full" },
   { "id": 4, "name": "beige_moroccan", "type": "full" },
   { "id": 5, "name": "tatami", "type": "full" },
-  { "id": 6, "name": "tiles", "type": "full" }
+  { "id": 6, "name": "tiles", "type": "full" },
+  { "id": 7, "name": "arab_tiles", "type": "full" },
+  { "id": 8, "name": "black_tiles", "type": "full" },
+  { "id": 9, "name": "white_tiles", "type": "full" },
+  { "id": 10, "name": "zigzag_wood", "type": "tiled" },
+  { "id": 11, "name": "dark_zigzag_wood", "type": "tiled" },
+  { "id": 12, "name": "machuca_tiles", "type": "tiled" },
+  { "id": 13, "name": "grass_floor", "type": "full" }
 ]

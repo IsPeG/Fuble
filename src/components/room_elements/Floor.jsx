@@ -14,10 +14,10 @@ import floorsData from "../../_floorsData/data.json";
 
 export default function Floor(props) {
   const floor = floorsData.find((elem) => elem.id == props.floorId);
-  const url = `/src/assets/textures/floor/${floor.name}/${floor.name}`;
+  const url = `/src/assets/textures/floor/${floor.name}/floor`;
 
   const texture = useLoader(TextureLoader, url + ".png");
-  const normal = useLoader(TextureLoader, url + "Normal.png");
+  const normal = useLoader(TextureLoader, url + "_n.png");
 
   // using useMemo because useLoader load the image in some sort of cache keys and this make the app use the same texture reference 2 times
   // in consecuence, this mess with the sizes of the texture (element.repeat.set(sizes[index], sizes[index]))
@@ -29,7 +29,7 @@ export default function Floor(props) {
 
   if (floor.type == "full") {
     const exit = useLoader(TextureLoader, url + "_exit.png");
-    const exitNormal = useLoader(TextureLoader, url + "_exitNormal.png");
+    const exitNormal = useLoader(TextureLoader, url + "_exit_n.png");
 
     textures[2] = exit;
     textures[3] = exitNormal;

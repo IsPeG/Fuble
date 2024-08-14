@@ -8,5 +8,6 @@
   { "id": 7, "name": "modern_concrete_wall" },
   { "id": 8, "name": "striped_yellow_wall" },
   { "id": 9, "name": "striped_green_wall" },
-  { "id": 10, "name": "striped_blue_wall" }
+  { "id": 10, "name": "striped_blue_wall" },
+  { "id": 11, "name": "smooth_purple_wall" }
 ]

@@ -189,7 +189,7 @@ function App() {
     //   element.addEventListener("click", () => {
     //     buttonHoverSound.pause();
     //     buttonHoverSound.currentTime = 0;
-    //     buttonHoverSound.play();
+    //     buttonHoverSound.play();º
     //   });
     // });
   }, []);
@@ -222,28 +222,34 @@ function App() {
           return (
             <DinFurSelector
               placingFurnitureData={placingFurnitureData}
-              size={"1x1"}
+              name={"1x1"}
             />
           );
         case "2x1":
           return (
             <DinFurSelector
               placingFurnitureData={placingFurnitureData}
-              size={"2x1"}
+              name={"2x1"}
             />
           );
         case "2x2":
           return (
             <DinFurSelector
               placingFurnitureData={placingFurnitureData}
-              size={"2x2"}
+              name={"2x2"}
             />
           );
       }
     };
 
+    if (props.isPlacing) changeHeightOfHelper();
+
     return (
-      <mesh ref={ref} visible={props.isPlacing}>
+      <mesh
+        ref={ref}
+        visible={props.isPlacing}
+        position={ref.current?.position || [0, 0, 0]}
+      >
         {selectorSwitch()}
       </mesh>
     );
@@ -275,7 +281,6 @@ function App() {
       let newFurYAxis = 0;
       if (canBePlaced == "surface") newFurYAxis = 1.05;
       if (canBePlaced == "lowerSurface") newFurYAxis = 0.55;
-      // TODO: implement a prop named customSurface to furniture that are surfaces
       console.log("xdxd");
       console.log(newFurYAxis);
       setRoomDataFurniture([
@@ -619,6 +624,9 @@ function App() {
 
   const checkIfFurnitureCanBePlaced = (helper) => {
     let canBePlaced = "floor";
+    helper.visible = false;
+    const previousY = helper.position.y;
+    helper.position.y = 0;
 
     if (placingFurnitureData.size != "1x1") {
       // if the placing furniture is not 1x1
@@ -698,6 +706,13 @@ function App() {
             placingFurnitureData.furProps.includes("canBePlacedOnSurface")
           ) {
             if (helperSpace[0].toString() == furElementSpaces.toString()) {
+              if (
+                !checkIfThereIsFurnitureClose(helperSpace, furElement.furProps)
+              ) {
+                // if 1x1 surface have fur on top, it wont let you place another fur on the same position
+                canBePlaced = "no";
+                return;
+              }
               console.log("hola hola 3");
               canBePlaced = "surface";
               return;
@@ -775,14 +790,14 @@ function App() {
                       canBePlaced = "surface";
                       return;
                     }
-                  } else {
-                    for (let k = 0; k < 6; k++) {
-                      console.log("ha entrao 3");
-                      // This was a no before, changing it to floor seems to fix the bug.
-                      // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it throws a canBePlaced = "no"
-                      canBePlaced = "no";
-                    }
                   }
+                  // else {
+                  //   for (let k = 0; k < 6; k++) {
+                  //     console.log("ha entrao 3");
+                  //     // This was a no before, changing it to floor seems to fix the bug.
+                  //     // BUG: If a surface 2x1 was in the room and the user tried to place a lamp (for ex.) on the floor, it throws a canBePlaced = "no"
+                  //   }
+                  // }
                 }
               } else if (
                 furElement.furProps.includes("lowerSurface") &&
@@ -883,6 +898,9 @@ function App() {
     }
     console.log("ha llegado al final");
     console.log(canBePlaced);
+    helper.visible = true;
+    helper.position.y = previousY;
+
     return canBePlaced;
   };
 
@@ -1115,26 +1133,34 @@ function App() {
 
     if (cameraIndex > 0) move = changeMoveFromCameraIndex(cameraIndex, move);
 
-    // const directions = [north, west, south, east]
-    // const south = -Math.PI / 1 //-3.14... down
-    // const west = Math.PI / 2 //1.57... left
-    // const north = 0 // up
-    // const east = -Math.PI / 2 //-1.57... right
+    // const directions = [north, west, south, east];
+    // const south = -Math.PI / 1; //-3.14... down
+    // const west = Math.PI / 2; //1.57... left
+    // const north = 0; // up
+    // const east = -Math.PI / 2; //-1.57... right
+
     switch (move) {
       case "left":
-        if (lastPosition[0] - 1 == -4) invalidMove = true;
+        if (lastPosition[0] - 1 == -4) {
+          console.log("1 1");
+          invalidMove = true;
+        }
         if (
           placingFurnitureSize == "2x1" &&
           lastPosition[0] == -2 &&
           lastPosition[2] == directions[0]
-        )
+        ) {
+          console.log("1 2");
           invalidMove = true;
+        }
         if (
           placingFurnitureSize == "2x2" &&
           ((lastPosition[0] == -2 && lastPosition[2] == directions[3]) ||
             (lastPosition[0] == -2 && lastPosition[2] == directions[0]))
-        )
+        ) {
+          console.log("1 3");
           invalidMove = true;
+        }
         break;
       case "right":
         if (lastPosition[0] + 1 == 5) invalidMove = true;
@@ -1200,10 +1226,69 @@ function App() {
         break;
     }
 
+    changeHeightOfHelper();
+
     console.log(
       setFurnitureHelperRef.current.position.x,
       setFurnitureHelperRef.current.position.z
     );
+  };
+
+  const changeHeightOfHelper = () => {
+    roomDataFurniture.forEach((furElement) => {
+      setFurnitureHelperRef.current.position.y = 0;
+      var furElementSpaces = null;
+      if (furElement.size == "1x1") {
+        furElementSpaces = [
+          furElement.position[0],
+          furElement.position[1],
+          furElement.position[2],
+        ];
+      } else {
+        furElementSpaces = checkSpaces2x2or2x1Item(furElement, furElement.size);
+      }
+
+      const helperPos = [
+        setFurnitureHelperRef.current.position.x,
+        setFurnitureHelperRef.current.position.y,
+        setFurnitureHelperRef.current.position.z,
+      ];
+
+      console.log("furElementSpaces");
+      console.log(furElementSpaces);
+      console.log("helperPos.toString()");
+      console.log(helperPos.toString());
+
+      if (
+        furElement.furProps.includes("lowerSurface") ||
+        furElement.furProps.includes("surface")
+      ) {
+        if (furElement.size == "1x1") {
+          if (helperPos.toString() == furElementSpaces.toString()) {
+            if (furElement.furProps.includes("surface")) {
+              setFurnitureHelperRef.current.position.y = 1.05;
+              return;
+            } else {
+              setFurnitureHelperRef.current.position.y = 0.55;
+              return;
+            }
+          }
+        }
+        for (let i = 0; i < furElementSpaces.length; i++) {
+          if (helperPos.toString() == furElementSpaces[i].toString()) {
+            if (furElement.furProps.includes("surface")) {
+              console.log("entra y se la pela");
+              setFurnitureHelperRef.current.position.y = 1.05;
+              return;
+            } else {
+              console.log("entra y se la pela");
+              setFurnitureHelperRef.current.position.y = 0.55;
+              return;
+            }
+          }
+        }
+      }
+    });
   };
 
   const CameraRig = ({ positionData: [x, y, z], lookAtData: [x2, y2, z2] }) => {
@@ -1379,6 +1464,8 @@ function App() {
     setRoomDataFurniture(
       roomDataFurniture.filter((elem) => !keysToRemove.includes(elem.key))
     );
+
+    setFurnitureHelperRef.current.position.y = 0;
     setFurMenuOpen(false);
   };
 
@@ -1615,6 +1702,9 @@ function App() {
           <group>
             {roomDataFurniture.map((furniture) => (
               <furniture.model
+                onPointerOver={() =>
+                  console.log("TODO: Change cursor to some pointer")
+                } //TODO: Change cursor to some pointer
                 key={furniture.key}
                 position={furniture.position}
                 rotation={furniture.rotation}

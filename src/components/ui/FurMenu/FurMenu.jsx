@@ -11,7 +11,9 @@ export default function FurMenu(props) {
     >
       <div
         className="furMenu"
-        style={{ transform: `translate(${props.x}px, ${props.y}px)` }}
+        style={{
+          transform: `translate(${props.x}px, calc(${props.y}px - 110%))`,
+        }}
         onPointerDown={(e) => e.stopPropagation()}
       >
         <span>{props.furName}</span>

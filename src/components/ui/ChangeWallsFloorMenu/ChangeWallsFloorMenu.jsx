@@ -4,16 +4,33 @@ import IconItemElement from "../IconItemElement/IconItemElement";
 import "./changeWallsFloorMenu.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-import wallsData from "../../../_wallsData/data.json";
-import floorsData from "../../../_floorsData/data.json";
+import wallsData1 from "../../../_wallsData/data.json";
+import floorsData1 from "../../../_floorsData/data.json";
+import { useMemo } from "react";
 
 export default function ChangeWallsFloorMenu(props) {
   const [selectingElement, setSelectingElement] = useState("");
   const [selectingElementIndex, setSelectingElementIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
+  function orderAlphabetically(a, b) {
+    a = a.toLowerCase();
+    b = b.toLowerCase();
+
+    return a < b ? -1 : a > b ? 1 : 0;
+  }
+
+  const wallsData = wallsData1.sort(function (a, b) {
+    return orderAlphabetically(a.name, b.name);
+  });
+
+  const floorsData = floorsData1.sort(function (a, b) {
+    return orderAlphabetically(a.name, b.name);
+  });
+
   useEffect(() => {
     props.buttonsContainerRef.current.style.display = "none";
+
     return () => {
       props.buttonsContainerRef.current.style.display = "block";
     };
@@ -26,8 +43,7 @@ export default function ChangeWallsFloorMenu(props) {
       setElementsData(selectingElement == "Walls" ? wallsData : floorsData);
     }, []);
 
-    const test = (data, elem) => {
-      console.log(data);
+    const test = (data, elem, index) => {
       if (selectedIndex != 4) {
         return elem.id == data[selectedIndex];
       } else {
@@ -54,11 +70,13 @@ export default function ChangeWallsFloorMenu(props) {
           {elementsData
             ? elementsData.map((elem, index) => (
                 <IconItemElement
+                  id={`IconItemElement_${index}`}
                   selected={test(
                     selectingElement == "Floors"
                       ? props.roomDataFloor
                       : props.roomDataWalls,
-                    elem
+                    elem,
+                    index
                   )}
                   backgroundImage={elem.name}
                   elementType={selectingElement.toLowerCase()}

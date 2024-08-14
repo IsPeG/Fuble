@@ -6,7 +6,7 @@ const modelsPath = "/src/assets/models";
 export default function DinFurSelector(props) {
   const { nodes, materials } = useGLTF(
     modelsPath +
-      `/furniture_selectors/furnitureSelector${props.size || "1x1"}.gltf`
+      `/furniture_selectors/furnitureSelector${props.name || "1x1"}.gltf`
   );
   return (
     <group {...props} dispose={null}>

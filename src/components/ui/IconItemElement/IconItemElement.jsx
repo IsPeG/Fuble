@@ -1,6 +1,7 @@
 import React from "react";
 import "./IconItemElement.css";
 import { Tooltip } from "react-tooltip";
+import { useEffect } from "react";
 
 export default function IconItemElement(props) {
   const replaceImage = (e) => {
@@ -8,9 +9,17 @@ export default function IconItemElement(props) {
       "/src/assets/textures/ui/icons/furniture/missingFurIcon.png";
   };
 
+  useEffect(() => {
+    if (props.selected && props.id) {
+      console.log(document.getElementById(props.id));
+      document.getElementById(props.id).scrollIntoView();
+    }
+  }, []);
+
   return (
     <>
       <div
+        id={props.id}
         data-tooltip-id={`tooltip-${props.furnitureId}`}
         data-tooltip-content={props.elementName
           .replace(/([A-Z])/g, " $1")

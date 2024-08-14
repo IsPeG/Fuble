@@ -10,6 +10,11 @@ import {
 const modelsPath = "/src/assets/models";
 const texturePath = "/src/assets/textures/furniture/old_pc";
 
+useGLTF.preload(modelsPath + "/furniture/old_pc.gltf");
+useTexture.preload(texturePath + `/old_pc_black.png`);
+useTexture.preload(texturePath + `/old_pc_beige.png`);
+useTexture.preload(texturePath + `/old_pc_green.png`);
+
 export default function OldPc(props) {
   const { nodes, materials } = useGLTF(modelsPath + "/furniture/old_pc.gltf");
 
@@ -19,7 +24,6 @@ export default function OldPc(props) {
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load(texture_url, (t) => {
-      console.log(t);
       t.magFilter = NearestFilter;
       t.minFilter = LinearMipMapLinearFilter;
       t.encoding = sRGBEncoding;
@@ -37,8 +41,3 @@ export default function OldPc(props) {
     </group>
   );
 }
-
-useGLTF.preload(modelsPath + "/furniture/old_pc.gltf");
-useTexture.preload(texturePath + `/old_pc_black.png`);
-useTexture.preload(texturePath + `/old_pc_beige.png`);
-useTexture.preload(texturePath + `/old_pc_green.png`);
